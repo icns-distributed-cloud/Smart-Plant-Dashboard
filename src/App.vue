@@ -2,7 +2,7 @@
   <div class="main-container">
     <SideBar></SideBar>
     <div class="contents">
-      <div class="header">Header<i class="bi bi-search"></i></div>
+      <div class="header">Smart Monitor<i class="bi bi-search"></i></div>
       <div class="main-contents">
         <router-view></router-view>
       </div>
@@ -28,7 +28,7 @@ body {
   height: 100%;
 }
 body {
-  background-color: #787878;
+  background-color: #13233c;
 }
 
 .main-container {
@@ -46,9 +46,9 @@ body {
   color: #c8d9f8;
   text-align: left;
   padding: 10px;
-  box-shadow: 1px 0px 10px 3px grey;
   position: relative;
   overflow: hidden;
+  border-right: #464d5c 1px solid;
 }
 
 .contents {
@@ -59,23 +59,14 @@ body {
 .header {
   width: 100%;
   height: 60px;
+
   background-color: #1a233a;
-}
-.side-bar {
-  width: 300px;
-  height: 900px;
-  background-color: #1a233a;
-  color: #c8d9f8;
-  text-align: left;
-  padding: 10px;
-  box-shadow: 1px 0px 10px 3px grey;
-  overflow: auto;
 }
 
 .main-contents {
   height: calc(100% - 120px);
   padding: 15px;
-  background-color: antiquewhite;
+  background-color: #1a233a;
 }
 
 .footer {
