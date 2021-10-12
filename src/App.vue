@@ -41,6 +41,7 @@ body {
   order: 1;
   float: left;
   width: 300px;
+  height: 900px;
   background-color: #1a233a;
   color: #c8d9f8;
   text-align: left;
@@ -62,7 +63,7 @@ body {
 }
 .side-bar {
   width: 300px;
-  height: 100%;
+  height: 900px;
   background-color: #1a233a;
   color: #c8d9f8;
   text-align: left;
@@ -95,7 +96,7 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+
   color: #2c3e50;
 }
 </style>
