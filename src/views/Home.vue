@@ -16,20 +16,20 @@
       "
     >
       <DustChart :colorList="colorList"></DustChart>
-      <TempChart :colorList="colorList" :temp=90></TempChart>
+      <TempChart :colorList="colorList" :temp="90"></TempChart>
       <HumidityChart :colorList="colorList" :humidity="80"></HumidityChart>
     </div>
   </div>
 </template>
 
 <script>
-import ShowCCTV from "./Charts/ShowCCTV.vue";
-import MultiChart from "./Charts/MultiChart.vue";
-import GasChart from "./Charts/GasChart.vue";
-import AlarmLog from "./Charts/AlarmLog.vue";
-import DustChart from "./Charts/DustChart.vue";
-import TempChart from "./Charts/TempChart.vue";
-import HumidityChart from "./Charts/HumidityChart.vue";
+import ShowCCTV from "@/components/Charts/ShowCCTV.vue";
+import MultiChart from "@/components/Charts/MultiChart.vue";
+import GasChart from "@/components/Charts/GasChart.vue";
+import AlarmLog from "@/components/Charts/AlarmLog.vue";
+import DustChart from "@/components/Charts/DustChart.vue";
+import TempChart from "@/components/Charts/TempChart.vue";
+import HumidityChart from "@/components/Charts/HumidityChart.vue";
 
 export default {
   name: "Home",
