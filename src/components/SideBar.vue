@@ -1,80 +1,85 @@
 <template>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-<div class="side-bar" >
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+  />
+  <div class="side-bar">
     <div class="home" @click="$router.push('/')">
-        <i class="bi bi-globe2"></i>
-        Smart M
+      <i class="bi bi-globe2"></i>
+      Smart M
     </div>
     <div class="menu">
-        <div class="menu1" >
-            <i class="bi bi-display" style="font-size: 1.5rem;"></i>
-            대시보드
-        </div>
-        <div class="menu2" style="cursor:pointer;">
-            <p @click="$router.push('/')"><i class="bi bi-arrow-right" ></i> 지능형 이상감지</p>
-            <p @click="$router.push('/cctv')">CCTV 영상인식</p>
-            <p @click="$router.push('/monitoring')">IoT 모니터링</p>
-        </div>
+      <div class="menu1">
+        <i class="bi bi-display" style="font-size: 1.5rem;"></i>
+        대시보드
+      </div>
+      <div class="menu2" style="cursor:pointer;">
+        <p @click="$router.push('/')">
+          <i class="bi bi-arrow-right"></i> 지능형 이상감지
+        </p>
+        <p @click="$router.push('/cctv')">CCTV 영상인식</p>
+        <p @click="$router.push('/monitoring')">IoT 모니터링</p>
+      </div>
     </div>
 
     <div class="menu">
-        <div class="menu1" >
-            <i class="bi bi-gear" style="font-size: 1.5rem;"></i>
-            IoT 관리
-        </div>
-        <div class="menu2" style="cursor:pointer;">
-            <p>센서 관리</p>
-            <p>센서 위치 등록</p>
-        </div>
+      <div class="menu1">
+        <i class="bi bi-gear" style="font-size: 1.5rem;"></i>
+        IoT 관리
+      </div>
+      <div class="menu2" style="cursor:pointer;">
+        <p @click="$router.push('/sensor-manage')">센서 관리</p>
+
+        <p>센서 위치 등록</p>
+      </div>
     </div>
 
     <div class="menu">
-        <div class="menu1">
-            <i class="bi bi-clipboard-check" style="font-size: 1.5rem;"></i>
-            e-SOP 관리
-        </div>
-        <div class="menu2" style="cursor:pointer;">
-            <p>e-SOP 에디터</p>
-            <p>담당자 관리</p>
-            <p>문자메시지 기록</p>
-        </div>
+      <div class="menu1">
+        <i class="bi bi-clipboard-check" style="font-size: 1.5rem;"></i>
+        e-SOP 관리
+      </div>
+      <div class="menu2" style="cursor:pointer;">
+        <p>e-SOP 에디터</p>
+        <p>담당자 관리</p>
+        <p>문자메시지 기록</p>
+      </div>
     </div>
 
     <div class="menu">
-        <div class="menu1">
-            <i class="bi bi-exclamation-triangle" style="font-size: 1.5rem;"></i>
-            이상 감지 관리
-        </div>
-        <div class="menu2" style="cursor:pointer;">
-            <p>이상 경고 설정</p>
-            <p>이상 감지 이력</p>
-        </div>
+      <div class="menu1">
+        <i class="bi bi-exclamation-triangle" style="font-size: 1.5rem;"></i>
+        이상 감지 관리
+      </div>
+      <div class="menu2" style="cursor:pointer;">
+        <p>이상 경고 설정</p>
+        <p>이상 감지 이력</p>
+      </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'SideBar',
-}
+  name: "SideBar",
+};
 </script>
 
 <style>
 .home {
-color: #517BCD;
-padding:20px;
-text-align:center;
-font-size:20px;
-font-weight:bold;
-transition: color .5s;
+  color: #517bcd;
+  padding: 20px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  transition: color 0.5s;
 }
 
 p {
-    transition: color .5s;
+  transition: color 0.5s;
 }
 
 p:hover {
-    color: #517BCD;
+  color: #517bcd;
 }
-
 </style>
