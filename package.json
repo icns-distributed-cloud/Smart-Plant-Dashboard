@@ -3,19 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --host 163.180.117.38",
+    "serve": "vue-cli-service serve  --host 163.180.117.38",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@syncfusion/ej2-circulargauge": "^19.3.44",
     "@syncfusion/ej2-vue-circulargauge": "^19.3.44",
+    "apexcharts": "^3.29.0",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
+    "vue-canvas-gauges": "0.0.0",
     "vue-class-component": "^7.2.6",
     "vue-router": "^4.0.11",
+    "jqwidgets-scripts": "^8.1.4",
     "vuejs-thermometer": "^0.1.3"
   },
   "devDependencies": {
+    "@iconify/vue": "^3.0.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-service": "~4.5.0",

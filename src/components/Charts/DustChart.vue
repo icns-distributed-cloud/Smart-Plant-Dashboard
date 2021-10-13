@@ -1,7 +1,7 @@
 <template>
   <!-- 분진 -->
   <div class="box">
-    <div class="box_title">우드펠릿 버킷엘리베이터 - 분진</div>
+    <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   분진</div>
     <div id="dust" class="dust_circle">
       <div
         id="dust"
@@ -14,7 +14,7 @@
           flex-direction: column;
         "
       >
-        <div id="dust" style="font-weight: bold">{{ dust }}</div>
+        <div id="dust" class="value_text">{{ dust }}</div>
         <div
           style="
             font-size: 20px;
@@ -28,6 +28,10 @@
         </div>
       </div>
     </div>
+    <div id="dust" class="status">
+      <span v-html="icon"></span>
+      <span style="margin-left: 4px;">{{ status }}</span>
+    </div>
   </div>
 </template>
 
@@ -37,6 +41,8 @@ export default {
   data() {
     return {
       color: "aqua",
+      icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+      status: "안전"
     };
   },
   props: {
@@ -50,7 +56,7 @@ export default {
         return [50, 100, 110, 120, 130, 150];
       },
     },
-    colorList: Array,
+    infoList: Object,
   },
   methods: {},
   watch: {
@@ -58,7 +64,9 @@ export default {
       var d = this.dust;
       for (var i = 0; i < 5; i++) {
         if (d >= this.dustArray[i] && d < this.dustArray[i + 1]) {
-          this.color = this.colorList[i];
+          this.color = this.infoList[i].color;
+          this.icon = this.infoList[i].icon;
+          this.status = this.infoList[i].status;
           break;
         }
       }
