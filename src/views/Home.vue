@@ -2,12 +2,11 @@
   <div style="display: flex">
     <ShowCCTV></ShowCCTV>
     <MultiChart></MultiChart>
-    <GasChart></GasChart>
+    <GasChart :infoList="infoList" :gas=90></GasChart>
     <AlarmLog></AlarmLog>
     <div
       style="
         width: 250px;
-        height: 70%;
         right: 30px;
         position: absolute;
         display: flex;
@@ -15,10 +14,23 @@
         align-items: flex-end;
       "
     >
-      <DustChart :colorList="colorList"></DustChart>
-      <TempChart :colorList="colorList" :temp="90"></TempChart>
-      <HumidityChart :colorList="colorList" :humidity="80"></HumidityChart>
+      <DustChart :infoList="infoList"></DustChart>
+      <TempChart :infoList="infoList" :temp="temp"></TempChart>
+      <HumidityChart :infoList="infoList" :humidity="humidity"></HumidityChart>
     </div>
+    <div style="display: flex; flex-direction: column">
+    <div>
+    <span style="padding-left: 20px; color: white;">여기에 습도를 입력하세요 : </span>
+    <input style="height: 40px;" v-model="humidity">
+    </div>
+  <div>
+    <span style="padding-left: 20px; color: white;">여기에 온도를 입력하세요 : </span>
+    <input style="height: 40px;" v-model="temp">
+  </div>
+    </div>
+
+
+
   </div>
 </template>
 
@@ -35,7 +47,35 @@ export default {
   name: "Home",
   data() {
     return {
-      colorList: ["#5a8dee", "#00cfdd", "#39da8a", "#fdac41", "#ff5b5c"],
+      humidity: 50,
+      temp: 60,
+      infoList: [
+        {
+          color: "#5a8dee",
+          status: "안전",
+          icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+        },
+        {
+          color: "#00cfdd",
+          status: "관심",
+          icon: "<i class='bi bi-emoji-smile-fill'></i>",
+        },
+        {
+          color: "#39da8a",
+          status: "주의",
+          icon: "<i class='bi bi-emoji-neutral-fill'></i>",
+        },
+        {
+          color: "#fdac41",
+          status: "경고",
+          icon: "<i class='bi bi-emoji-frown-fill'></i>",
+        },
+        {
+          color: "#ff5b5c",
+          status: "심각",
+          icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
+        },
+      ],
     };
   },
   components: {
@@ -66,10 +106,11 @@ export default {
 .box_title {
   color: white;
   text-align: left;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: bold;
   margin-top: 5px;
   margin-bottom: 10px;
+  margin-left: 10px;
 }
 
 .title_div {
@@ -85,6 +126,7 @@ export default {
   font-size: 40px;
   font-weight: bold;
   position: relative;
+  text-shadow: 5px 5px 5px #1b1f22;
 }
 
 .dust_circle {
@@ -100,6 +142,7 @@ export default {
   font-weight: 8px;
   font-size: 40px;
   text-align: center;
+  box-shadow: 5px 5px 5px #1b1f22;
 }
 
 .humid {
@@ -108,9 +151,24 @@ export default {
   border-radius: 0 50% 50% 50%;
   border: 3px solid black;
   transform: rotate(45deg);
-  margin-top: 30px;
+  margin-top: 40px;
   margin-left: 30px;
   border-width: 9px;
   border-color: aqua;
+  box-shadow: 5px 5px 5px #1b1f22;
+}
+
+.status {
+  width: 60px;
+  height: 23px;
+  border-radius: 10px;
+  color: aqua;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 3px;
+  text-align: center;
+  margin: 2px;
+  position: absolute;
+  bottom: 10px;
 }
 </style>

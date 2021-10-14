@@ -16,13 +16,16 @@
 
         <div>
           <div class="table-main__content">
-            센싱 장비를 관리하는 화면입니다.
+            <div class="table-main__content-intro">
+              센싱 장비를 관리하는 화면입니다.
+            </div>
 
             <div>
               <button
                 type="button"
                 class="btn btn-primary"
                 style="margin-bottom: 12px; float:right"
+                @click.stop="openModal"
               >
                 신규 등록
               </button>
@@ -174,13 +177,31 @@
       </div>
     </div>
   </div>
+  <Modal v-if="showModal" @close="closeModal" />
 </template>
 
 <script>
+import { ref } from "vue";
 import { Icon } from "@iconify/vue";
+import Modal from "@/components/Modal.vue";
 export default {
   components: {
     Icon,
+    Modal,
+  },
+  setup() {
+    const showModal = ref(false);
+    const openModal = () => {
+      showModal.value = true;
+    };
+    const closeModal = () => {
+      showModal.value = false;
+    };
+    return {
+      showModal,
+      openModal,
+      closeModal,
+    };
   },
 };
 </script>
@@ -199,7 +220,7 @@ export default {
 .table-main {
   margin: 20px;
   background-color: #272e48;
-  color: #a9c7f0;
+  color: #bdd1f8;
   border-radius: 9px;
   height: 600px;
 }
@@ -209,7 +230,11 @@ export default {
 }
 
 .table-main__content {
-  margin: 20px;
+  margin: 0 20px;
+  color: #8a99b5;
+}
+table-main__content-intro {
+  color: #8a99b5;
 }
 table {
   text-align: center;
@@ -254,6 +279,11 @@ tfoot > tr {
 }
 nav {
   border: none;
+}
+.btn-primary {
+  background-color: #5a8dee !important;
+  font-weight: 600;
+  border: #5a8dee 1px solid;
 }
 .page-link {
   border: #7c8ba6 2px solid;

@@ -1,34 +1,52 @@
 <template>
-  <div>CCTV 화면입니다.</div>
-  <div >
-    <canvas id="video" style="width: 640px; height: 480px;"></canvas>
+  <div class="wrapper">
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <div class="table-header">
+      CCTV 영상인식 | <Icon icon="bx:bx-home-alt" />
+    </div>
+
+    <div class="table-main">
+      <div>
+        <div class="table-main__header">CCTV 스트리밍 화면</div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-import JSMpeg from 'jsmpeg'
+import { Icon } from "@iconify/vue";
 export default {
-    name: 'CCTV',
-  components: {},
-  data() {
-    return {
-    }
-  },
-  mounted() {
-      this.getVideos()
-  },
+  name: "CCTV",
 
-  methods: {
-    getVideos(){
-      let canvas = document.getElementById('video');
-      let url = new WebSocket('ws://163.180.117.40:9999');
-      new JSMpeg(url, {canvas: canvas});
-
-    }
-  }
-}
+  components: {
+    Icon,
+  },
+};
 </script>
 
-<style scoped>
+<style>
+.wrapper {
+  margin: 10px;
+}
+.table-header {
+  color: #727e8c;
+  font-size: 20px;
+}
 
+
+.table-main {
+  margin: 20px;
+  background-color: #272e48;
+  color: #a9c7f0;
+  border-radius: 9px;
+  height: 600px;
+}
+.table-main__header {
+  padding: 20px;
+  font-size: 20px;
+}
 </style>
