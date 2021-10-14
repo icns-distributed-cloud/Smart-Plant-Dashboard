@@ -4,44 +4,15 @@ import CCTV from "@/components/Dashboard/CCTV.vue";
 import Detection from "@/components/Dashboard/Detection.vue";
 import Monitoring from "@/components/Dashboard/Monitoring.vue";
 import SensorManage from "@/views/SensorManage.vue";
-/*
-let dashboardMenu = {
-    path: '/dashboard',
-    component: Home,
-    children: [
-        {
-            path: 'detection',
-            name: 'Detection',
-            components: Detection,
-        },
-        {
-            path: 'cctv',
-            name: 'CCTV',
-            components: CCTV,
-        },
-        {
-            path: 'monitoring',
-            name: 'Monitoring',
-            components: Monitoring,
-        }
-    ]
-};
-
-let iotMenu = {
-
-};
-
-let esopMenu = {
-
-};
-
-let abnormalMenu = {
-
-};
-*/
+import AlertSettings from "@/components/AbnormalDetection/AlertSettings.vue";
 
 const routes = [
   // dashboardMenu,
+  {
+    path: "/alertsettings",
+    name: "AlertSettings",
+    component: AlertSettings,
+  },
   {
     path: "/detection",
     name: "Detection",

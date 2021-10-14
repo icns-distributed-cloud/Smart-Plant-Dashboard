@@ -2,22 +2,52 @@
   <div class="main-container">
     <SideBar></SideBar>
     <div class="contents">
-      <div class="header">Smart Monitor<i class="bi bi-search"></i></div>
+      <div class="header">
+        <div class="header-left">
+          <h3 style="color: #daa520; font-weight: 800">
+            지능형 이상감지 - 대시보드
+
+            <i
+              class="bi bi-search"
+              style="color: #6e6e6e; padding-left: 900px; font-size: 20px"
+            ></i>
+            <i
+              class="bi bi-bell"
+              style="color: #6e6e6e; padding-left: 30px; font-size: 20px"
+            ></i>
+          </h3>
+        </div>
+      </div>
       <div class="main-contents">
         <router-view></router-view>
       </div>
-      <div class="footer">경희대학교</div>
+      <div class="footer">2021 Smart Monitoring system</div>
     </div>
   </div>
 </template>
 
 <script>
+//import Stomp from 'webstomp-client'
+//import SockJS from 'sockjs-client'
 import SideBar from "./components/SideBar.vue";
+
 export default {
   name: "App",
   components: {
     SideBar: SideBar,
   },
+
+  /*
+  created() {
+    this.connect()
+  },
+  methods: {
+    connect() {
+      const serverURL = "http://localhost:8080"
+      let
+    }
+  }
+  */
 };
 </script>
 
@@ -28,7 +58,7 @@ body {
   height: 100%;
 }
 body {
-  background-color: #13233c;
+  background-color: black;
 }
 
 .main-container {
@@ -41,7 +71,7 @@ body {
   order: 1;
   float: left;
   width: 300px;
-  height: 900px;
+  height: 100%;
   background-color: #1a233a;
   color: #c8d9f8;
   text-align: left;
@@ -54,25 +84,33 @@ body {
 .contents {
   order: 2;
   width: 100%;
+  overflow: hidden;
 }
 
 .header {
   width: 100%;
-  height: 60px;
-
+  height: 40px;
   background-color: #1a233a;
 }
 
+.header-left {
+  padding-top: 13px;
+  padding-left: 13px;
+}
+
 .main-contents {
-  height: calc(100% - 120px);
+  height: calc(100% - 80px);
   padding: 15px;
   background-color: #1a233a;
 }
 
 .footer {
   width: 100%;
-  background-color: white;
-  height: 60px;
+  background-color: #1a233a;
+  height: 40px;
+  margin: 0 auto;
+  text-align: right;
+  padding-right: 15px;
 }
 .menu1 {
   color: aqua;
@@ -87,7 +125,8 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
+  font-family: "Nanum Gothic", sans-serif;
+  height: 100%;
   color: #2c3e50;
 }
 </style>

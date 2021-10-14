@@ -1,7 +1,10 @@
 <template>
   <!--온도-->
   <div class="box" style="top: 10px">
-    <div class="box_title">우드펠릿 버킷엘리베이터 - 온도</div>
+    <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   온도</div>
+    <div id="temp" class="value_text" style="position: absolute; left: 25px">
+      {{ temp }} <span style="font-size: 20px; position: relative; left: -5px; color:white;">°C</span>
+      </div>
 
     <div class="vue-thermometer" :class="customClass">
       <svg xmlns="http://www.w3.org/2000/svg" :width="width" :height="height">
@@ -109,6 +112,11 @@
         </g>
       </svg>
     </div>
+    <div id="temp" class="status">
+        <span v-html="icon"></span>
+        <span style="margin-left: 4px;">{{ status }}</span>
+    </div>
+
   </div>
 </template>
 
@@ -119,6 +127,7 @@ export default {
   name: "TempChart",
 
   props: {
+
     temp: {
       type: Number,
       default: 0,
@@ -154,6 +163,7 @@ export default {
       },
     },
     colorList: Array,
+    infoList: Object,
   },
   created() {
     this.defaultOptions = {
@@ -167,10 +177,10 @@ export default {
       thermo: {
         color: "aqua",
         backgroundColor: "#fcf9f9",
-        frameColor: "black",
+        frameColor: "#28243D",
         ticks: 5,
         ticksEnabled: true,
-        tickColor: "black",
+        tickColor: "#c8d9f8",
         tickWidth: "1",
       },
       layout: {
@@ -188,6 +198,8 @@ export default {
     return {
       defaultOptions: Object,
       color: "aqua",
+      icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+      status: "안전"
     };
   },
   computed: {
@@ -314,7 +326,10 @@ export default {
       var d = this.temp;
       for (var i = 0; i < 5; i++) {
         if (d >= this.tempArray[i] && d < this.tempArray[i + 1]) {
-          this.defaultOptions.thermo.color = this.colorList[i];
+          this.defaultOptions.thermo.color = this.infoList[i].color;
+          this.color = this.infoList[i].color;
+          this.icon = this.infoList[i].icon;
+          this.status = this.infoList[i].status;
           break;
         }
       }
@@ -324,4 +339,12 @@ export default {
 </script>
 
 <style>
+#temp {
+  color: v-bind(color)
+}
+
+.vue-thermometer {
+  position: relative;
+  left: 30px;
+}
 </style>
