@@ -13,6 +13,7 @@
         <div class="table-main__header">CCTV 스트리밍 화면</div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -35,6 +36,7 @@ export default {
   color: #727e8c;
   font-size: 20px;
 }
+
 
 .table-main {
   margin: 20px;
