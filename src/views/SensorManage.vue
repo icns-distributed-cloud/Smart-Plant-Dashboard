@@ -25,7 +25,7 @@
                 type="button"
                 class="btn btn-primary"
                 style="margin-bottom: 12px; float:right"
-                @click.stop="openModal"
+                @click="showModal=true;"
               >
                 신규 등록
               </button>
@@ -177,31 +177,43 @@
       </div>
     </div>
   </div>
-  <Modal v-if="showModal" @close="closeModal" />
+  <Modal v-if="showModal" @close="showModal=false;"/>
+
+                  <button type="button" class="btn btn-light"
+                  @click="sensorModalOpen=true;">
+                    <i class="bi bi-wrench"></i>  센서 종류 수정
+                    </button>
+                  <button type="button" class="btn btn-light"
+                  @click="placeModalOpen=true;">
+                    <i class="bi bi-wrench"></i>  장소 수정
+                    </button>
+
+  <SensorModal v-if="sensorModalOpen" @close="sensorModalOpen=false;"/>
+  <PlaceModal v-if="placeModalOpen" @close="placeModalOpen=false;"/>
+
 </template>
 
 <script>
-import { ref } from "vue";
 import { Icon } from "@iconify/vue";
 import Modal from "@/components/Modal.vue";
+import PlaceModal from "@/components/IoTManage/PlaceModal.vue";
+import SensorModal from "@/components/IoTManage/SensorModal.vue";
 export default {
   components: {
     Icon,
     Modal,
+    PlaceModal,
+    SensorModal,
   },
-  setup() {
-    const showModal = ref(false);
-    const openModal = () => {
-      showModal.value = true;
-    };
-    const closeModal = () => {
-      showModal.value = false;
-    };
+  data() {
     return {
-      showModal,
-      openModal,
-      closeModal,
+      showModal: false,
+      sensorModalOpen: false,
+      placeModalOpen: false,
     };
+  },
+  methods: {
+
   },
 };
 </script>
@@ -294,4 +306,9 @@ nav {
   background-color: #5a8ded;
   color: white;
 }
+
+.edit-input {
+  border-radius: 5px;
+}
+
 </style>

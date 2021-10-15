@@ -37,7 +37,7 @@
           <i v-if="menuOpen==3" class="bi bi-arrow-right"></i> 센서 관리
         </p>
 
-        <p @click="menuOpen=4;">
+        <p @click="$router.push('/sensorpos'); menuOpen=4;">
           <i v-if="menuOpen==4" class="bi bi-arrow-right"></i> 센서 위치 등록
         </p>
       </div>
@@ -49,13 +49,13 @@
         e-SOP 관리
       </div>
       <div class="menu2" style="cursor:pointer;">
-        <p @click="menuOpen=5;">
+        <p @click="$router.push('/esop-editor'); menuOpen=5;">
           <i v-if="menuOpen==5" class="bi bi-arrow-right"></i> e-SOP 에디터
         </p>
-        <p @click="menuOpen=6;">
+        <p @click="$router.push('/esop-manager'); menuOpen=6;">
           <i v-if="menuOpen==6" class="bi bi-arrow-right"></i> 담당자 관리
         </p>
-        <p @click="menuOpen=7;">
+        <p @click="$router.push('/msglog'); menuOpen=7;">
           <i v-if="menuOpen==7" class="bi bi-arrow-right"></i> 문자메시지 기록
         </p>
       </div>

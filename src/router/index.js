@@ -5,6 +5,11 @@ import Detection from "@/components/Dashboard/Detection.vue";
 import Monitoring from "@/components/Dashboard/Monitoring.vue";
 import SensorManage from "@/views/SensorManage.vue";
 import AlertSettings from "@/components/AbnormalDetection/AlertSettings.vue";
+import SensorPos from "@/components/IoTManage/SensorPos.vue";
+import EsopEidtor from "@/components/Esop/EsopEditor.vue";
+import EsopManager from "@/components/Esop/EsopManager.vue";
+import MsgLog from "@/components/Esop/MsgLog.vue";
+
 
 const routes = [
   // dashboardMenu,
@@ -29,9 +34,30 @@ const routes = [
     component: Monitoring,
   },
   {
+    path: "/esop-editor",
+    name: "EsopEditor",
+    component: EsopEidtor,
+  },
+  {
+    path: "/esop-manager",
+    name: "EsopManager",
+    component: EsopManager,
+  },
+  {
+    path: "/msglog",
+    name: "MsgLog",
+    component: MsgLog,
+  },
+  {
     path: "/",
     name: "Home",
     component: Home,
+  },
+  {
+    path: "/sensorpos",
+    name: "sensorPos",
+    component: SensorPos,
+
   },
   {
     path: "/sensor-manage",

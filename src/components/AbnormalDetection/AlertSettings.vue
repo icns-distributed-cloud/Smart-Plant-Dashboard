@@ -31,7 +31,7 @@
 
               <div>
                 <SensorChart :sensorInfo="sensorInfo"
-                @open-edit-modal="openModal"></SensorChart>
+                @open-edit-modal="showEdit"></SensorChart>
               </div>
               <nav aria-label="Page navigation example" style="float: right">
                 <ul class="pagination">
@@ -59,12 +59,11 @@
         </div>
       </div>
     </div>
-    <SettingModal v-if="showModal" @close="closeModal" :id=id />
+    <SettingModal v-if="show" @close="show=false;" :sensor="sensor"></SettingModal>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
 import { Icon } from "@iconify/vue";
 import SettingModal from "@/components/AbnormalDetection/SettingModal";
 import SensorChart from "@/components/AbnormalDetection/SensorChart";
@@ -79,6 +78,7 @@ export default {
           { id: 3, type: "가스", range: [40, 50, 70, 90, 100, 110] },
         ],
         sensor : {id:1, type:"anything", range: [90,100,120,150,170]},
+        show : false,
       };
   },
   components: {
@@ -89,24 +89,8 @@ export default {
   methods: {
     showEdit(sensor) {
       this.sensor = sensor;
-      console.log("안녕",sensor.id);
+      this.show = true;
     }
-  },
-  setup() {
-    const showModal = ref(false);
-    const openModal = (sensorId) => {
-      this.sensorId = sensorId
-      console.log(sensorId);
-      showModal.value = true;
-    };
-    const closeModal = () => {
-      showModal.value = false;
-    };
-    return {
-      showModal,
-      openModal,
-      closeModal,
-    };
   },
 };
 </script>

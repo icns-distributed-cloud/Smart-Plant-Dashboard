@@ -80,6 +80,25 @@ body {
   overflow: hidden;
   border-right: #464d5c 1px solid;
 }
+.wrapper {
+  margin: 10px;
+}
+.table-header {
+  color: #727e8c;
+  font-size: 20px;
+}
+
+.table-main {
+  margin: 20px;
+  background-color: #272e48;
+  color: #a9c7f0;
+  border-radius: 9px;
+  height: 600px;
+}
+.table-main__header {
+  padding: 20px;
+  font-size: 20px;
+}
 
 .contents {
   order: 2;

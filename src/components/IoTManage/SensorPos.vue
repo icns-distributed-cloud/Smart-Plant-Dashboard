@@ -5,12 +5,12 @@
       rel="stylesheet"
     />
     <div class="table-header">
-      CCTV 영상인식 | <Icon icon="bx:bx-home-alt" />
+      센서 위치 등록 | <Icon icon="bx:bx-home-alt" />
     </div>
 
     <div class="table-main">
       <div>
-        <div class="table-main__header">CCTV 스트리밍 화면</div>
+        <div class="table-main__header">센서 위치 등록</div>
       </div>
     </div>
   </div>
@@ -28,5 +28,23 @@ export default {
 </script>
 
 <style>
+.wrapper {
+  margin: 10px;
+}
+.table-header {
+  color: #727e8c;
+  font-size: 20px;
+}
 
+.table-main {
+  margin: 20px;
+  background-color: #272e48;
+  color: #a9c7f0;
+  border-radius: 9px;
+  height: 600px;
+}
+.table-main__header {
+  padding: 20px;
+  font-size: 20px;
+}
 </style>

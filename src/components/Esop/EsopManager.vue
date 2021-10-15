@@ -5,12 +5,12 @@
       rel="stylesheet"
     />
     <div class="table-header">
-      CCTV 영상인식 | <Icon icon="bx:bx-home-alt" />
+      담당자 관리 | <Icon icon="bx:bx-home-alt" />
     </div>
 
     <div class="table-main">
       <div>
-        <div class="table-main__header">CCTV 스트리밍 화면</div>
+        <div class="table-main__header">담당자 관리</div>
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
 <script>
 import { Icon } from "@iconify/vue";
 export default {
-  name: "CCTV",
+  name: "EsopManager",
 
   components: {
     Icon,
@@ -28,5 +28,4 @@ export default {
 </script>
 
 <style>
-
 </style>
