@@ -5,7 +5,7 @@
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
   />
   <div class="side-bar">
-    <div class="home" @click="$router.push('/'); menuOpen=0;">
+    <div class="home" @click="$router.push('/'); menuOpen=0">
       <i class="bi bi-globe2"></i>
       Smart M
     </div>
