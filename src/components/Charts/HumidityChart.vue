@@ -18,7 +18,7 @@ export default {
     name: 'HumidityChart',
     data() {
     return {
-      color: "aqua",
+      color: "#5a8dee",
       icon: "<i class='bi bi-emoji-laughing-fill'></i>",
       status: "안전"
     };
@@ -62,7 +62,7 @@ export default {
 
 .pct {
   color: white;
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bold;
   position: absolute;
   top: 30px;

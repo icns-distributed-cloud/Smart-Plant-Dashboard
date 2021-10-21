@@ -18,32 +18,14 @@
                 <div
                   class="form-label-group position-relative has-icon-left controls"
                 >
-                  <label for="sensor_id">식별 번호</label>
-                  <div class="main-input">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="sensor_id"
-                      placeholder="식별 번호"
-                      minlength="2"
-                      maxlength="10"
-                      required
-                    />
-                    <div class="form-control-position label-icon">
-                      <i class="bx bx-grid-alt"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12">
-                <div
-                  class="form-label-group position-relative has-icon-left controls"
-                >
                   <label for="sensor_pos">센서 위치</label>
                   <div class="main-input">
-                    <select name="sensor_pos" class="form-control" required>
-                      <option value="">=== 선택하세요 ===</option>
+                    <select v-model="newSensor.sensorPosId" name="sensor_pos" class="form-control" required>
+                      <option disabled value="">=== 선택하세요 ===</option>
+                      <option v-for="pos in posList" :key="pos.posId"
+                      v-bind:value="pos.posId">
+                        {{ pos.posName }}
+                      </option>
                     </select>
                     <div class="form-control-position label-icon">
                       <i class="bx bx-shape-polygon"></i>
@@ -58,8 +40,12 @@
                 >
                   <label for="sensor_pos">센서 종류</label>
                   <div class="main-input">
-                    <select name="sensor_type" class="form-control" required>
-                      <option value="">=== 선택하세요 ===</option>
+                    <select v-model="newSensor.sensorTypeId" name="sensor_type" class="form-control" required>
+                      <option disabled value="">=== 선택하세요 ===</option>
+                      <option v-for="type in typeList" :key="type.typeId"
+                      v-bind:value="type.typeId">
+                        {{ type.typeName }}
+                      </option>
                     </select>
                     <div class="form-control-position label-icon">
                       <i class="bx bx-shape-square"></i>
@@ -78,6 +64,7 @@
                       name="sensor_etc"
                       placeholder="기타 정보"
                       maxlength="100"
+                      v-model= "newSensor.ssDtl"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-comment-detail"></i>
@@ -96,6 +83,7 @@
                       name="sensor_contact"
                       placeholder="담당자"
                       maxlength="100"
+                      v-model="newSensor.ssContact"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-street-view"></i>
@@ -114,6 +102,7 @@
                       name="sensor_contact_ext"
                       placeholder="담당자 내선 번호"
                       maxlength="100"
+                      v-model="newSensor.ssContactExt"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-phone"></i>
@@ -131,6 +120,7 @@
                       name="sensor_contact_phone"
                       placeholder="담당자 휴대번호"
                       maxlength="100"
+                      v-model="newSensor.ssContactPhone"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-mobile"></i>
@@ -142,7 +132,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="$emit('close');">
+          <button type="button" class="btn btn-primary"
+          @click="$emit('add-new-sensor',newSensor)">
             저장
           </button>
           <button type="button" class="btn btn-secondary" @click="$emit('close');">
@@ -155,7 +146,50 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
+  data () {
+    return {
+      posList: [],
+      typeList: [],
+      newSensor: {
+        sensorPosId: 0,
+        sensorTypeId: 0,
+        ssContact: "",
+        ssContactExt: "",
+        ssContactPhone: "",
+        ssDtl: "",
+      },
+    };
+  },
+  created() {
+    this.getPosInfo();
+    this.getTypeInfo();
+  },
+  methods: {
+    async getPosInfo() {
+      try {
+        const res = await axios.get(
+          "http://163.180.117.38:8281/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
+          );
+          this.posList = res.data.data.content;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getTypeInfo() {
+      try {
+        const res = await axios.get(
+          "http://163.180.117.38:8281/api/sensor-type"
+        );
+        this.typeList = res.data.data.content;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+  },
+
 };
 </script>
 

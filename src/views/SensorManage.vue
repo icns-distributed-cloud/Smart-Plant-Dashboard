@@ -24,12 +24,23 @@
               <button
                 type="button"
                 class="btn btn-primary"
-                style="margin-bottom: 12px; float:right"
-                @click="showModal=true;"
+                style="margin-bottom: 12px; margin-left: 12px; float:right"
+                @click="showModal = true"
               >
                 신규 등록
               </button>
 
+              <button type="button" class="btn btn-primary"
+              style="margin-bottom: 12px; margin-left: 12px;  float:right"
+              @click="sensorModalOpen = true">
+                <i class="bi bi-wrench"></i> 센서 종류 관리
+              </button>
+
+              <button type="button" class="btn btn-primary"
+              style="margin-bottom: 12px; float:right;"
+              @click="placeModalOpen = true">
+                <i class="bi bi-wrench"></i> 장소 관리
+              </button>
               <table class="table table-bordered table-hover">
                 <thead>
                   <tr>
@@ -46,15 +57,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>tt</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-
+                  <tr v-for="sensor in ssManageList" :key="sensor.ssId">
+                    <td>{{ sensor.ssCode }}</td>
+                    <td>{{ sensor.ssPos.posName }}</td>
+                    <td>{{ sensor.ssType.typeName }}</td>
+                    <td>{{ sensor.ssDtl }}</td>
+                    <td>{{ sensor.ssContact }}</td>
+                    <td>{{ sensor.ssContactExt }}</td>
+                    <td>{{ sensor.ssContactPhone }}</td>
                     <td
                       style="
                           padding-top: 2px;
@@ -65,90 +75,18 @@
                         "
                     >
                       <a class="btn btn-outline-primary mod-btn"
+                        @click="readyToEdit(sensor);"
                         ><i class="bx bx-edit"></i> 수정
                       </a>
-                      <a class="btn btn-outline-danger tr_data_del"
-                        ><i class="bx bx-trash"></i> 삭제</a
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>tt</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
 
-                    <td
-                      style="
-                          padding-top: 2px;
-                          padding-right: 0px;
-                          padding-left: 0px;
-                          padding-bottom: 2px;
-                          text-align: center;
-                        "
-                    >
-                      <a class="btn btn-outline-primary mod-btn"
-                        ><i class="bx bx-edit"></i> 수정</a
-                      >
                       <a class="btn btn-outline-danger tr_data_del"
+                      @click="deleteSensorManage(sensor.ssId);"
                         ><i class="bx bx-trash"></i> 삭제</a
                       >
-                      <input
-                        type="hidden"
-                        id="SS_INNB_{{USER SS_ITLPC}}"
-                        value="{{USER SS_INNB}}"
-                      />
-                      <input
-                        type="hidden"
-                        id="SS_TPYNN_{{USER SS_ITLPC}}"
-                        value="{{USER SS_TPYNN}}"
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>tt</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
-                    <td>ss</td>
 
-                    <td
-                      style="
-                          padding-top: 2px;
-                          padding-right: 0px;
-                          padding-left: 0px;
-                          padding-bottom: 2px;
-                          text-align: center;
-                        "
-                    >
-                      <a class="btn btn-outline-primary mod-btn"
-                        ><i class="bx bx-edit"></i> 수정</a
-                      >
-                      <a class="btn btn-outline-danger"
-                        ><i class="bx bx-trash"></i> 삭제</a
-                      >
                     </td>
                   </tr>
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <th>식별번호</th>
-                    <th>센싱 장비 위치</th>
-                    <th>센싱 장비 종류</th>
-                    <th>기타 정보</th>
-                    <th>담당자</th>
-
-                    <th>담당자 내선</th>
-                    <th>담당자 휴대번호</th>
-
-                    <th>ACTION</th>
-                  </tr>
-                </tfoot>
               </table>
             </div>
             <nav aria-label="Page navigation example" style=" float:right">
@@ -177,43 +115,136 @@
       </div>
     </div>
   </div>
-  <Modal v-if="showModal" @close="showModal=false;"/>
+  <Modal v-if="showModal" @close="showModal = false" @add-new-sensor="addNewSensor" />
+  <EditSensorModal v-if="showEditModal"
+    :sensorPosId= "sensorPosId"
+    :sensorTypeId= "sensorTypeId"
+    :ssDtl= "ssDtl"
+    :ssContact= "ssContact"
+    :ssContactExt= "ssContactExt"
+    :ssContactPhone= "ssContactPhone"
+    :ssId = "ssId"
+    @edit-sensor= "editSensor"
+    @close="showEditModal = false;">
+  </EditSensorModal>
 
-                  <button type="button" class="btn btn-light"
-                  @click="sensorModalOpen=true;">
-                    <i class="bi bi-wrench"></i>  센서 종류 수정
-                    </button>
-                  <button type="button" class="btn btn-light"
-                  @click="placeModalOpen=true;">
-                    <i class="bi bi-wrench"></i>  장소 수정
-                    </button>
-
-  <SensorModal v-if="sensorModalOpen" @close="sensorModalOpen=false;"/>
-  <PlaceModal v-if="placeModalOpen" @close="placeModalOpen=false;"/>
-
+  <TypeModal v-if="sensorModalOpen" @close="sensorModalOpen = false" />
+  <PlaceModal v-if="placeModalOpen" @close="placeModalOpen = false" />
 </template>
 
 <script>
 import { Icon } from "@iconify/vue";
 import Modal from "@/components/Modal.vue";
+import EditSensorModal from "@/components/IoTManage/EditSensorModal.vue";
 import PlaceModal from "@/components/IoTManage/PlaceModal.vue";
-import SensorModal from "@/components/IoTManage/SensorModal.vue";
+import TypeModal from "@/components/IoTManage/TypeModal.vue";
+import axios from "axios";
+
 export default {
   components: {
     Icon,
     Modal,
+    EditSensorModal,
     PlaceModal,
-    SensorModal,
+    TypeModal,
   },
   data() {
     return {
+      sensorPosId: 0,
+      sensorTypeId: 0,
+      ssContact: "",
+      ssContactExt: "",
+      ssContactPhone: "",
+      ssDtl: "",
+      ssId: "",
       showModal: false,
       sensorModalOpen: false,
       placeModalOpen: false,
+      showEditModal: false,
+      ssManageList: [],
     };
   },
+  created () {
+    this.getSensorManage();
+  },
   methods: {
+    readyToEdit(sensor) {
+      this.ssId = sensor.ssId;
+      this.sensorPosId = sensor.ssPos.posId;
+      this.sensorTypeId = sensor.ssType.typeId;
+      this.ssContact = sensor.ssContact;
+      this.ssContactExt = sensor.ssContactExt;
+      this.ssContactPhone = sensor.ssContactPhone,
+      this.ssDtl =  sensor.ssDtl;
+      this.showEditModal=true;
+    },
+    async getSensorManage() {
+      try {
+        const res = await axios.get(
+          "http://163.180.117.38:8281/api/sensor-manage?paged=false&sort.sorted=true"
+          );
+          this.ssManageList = res.data.data.content;
+      } catch (err) {
+        console.log(err);
+      }
+    },
 
+    async editSensor(newSensor) {
+      try {
+        const res = await axios.put(
+          "http://163.180.117.38:8281/api/sensor-manage/" + newSensor.ssId,
+          {
+            "sensorPosId": newSensor.sensorPosId,
+            "sensorTypeId": newSensor.sensorTypeId,
+            "ssContact": newSensor.ssContact,
+            "ssContactExt": newSensor.ssContactExt,
+            "ssContactPhone": newSensor.ssContactPhone,
+            "ssDtl": newSensor.ssDtl,
+          }
+        );
+        console.log(res);
+        this.getSensorManage();
+        this.showEditModal = false;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async deleteSensorManage(ssId) {
+      this.showEditModal = false;
+      try {
+        const res = await axios.delete(
+          "http://163.180.117.38:8281/api/sensor-manage/" + ssId
+        );
+        console.log(res);
+        this.getSensorManage();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async addNewSensor(newSensor) {
+      console.log(newSensor);
+      this.showModal = false;
+      try {
+        const res = await axios.post(
+          "http://163.180.117.38:8281/api/sensor-manage/",
+          {
+            "sensorPosId": newSensor.sensorPosId,
+            "sensorTypeId": newSensor.sensorTypeId,
+            "ssContact": newSensor.ssContact,
+            "ssContactExt": newSensor.ssContactExt,
+            "ssContactPhone": newSensor.ssContactPhone,
+            "ssDtl": newSensor.ssDtl,
+          }
+        );
+        this.getSensorManage();
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    
   },
 };
 </script>
@@ -257,7 +288,7 @@ table {
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > thead > tr > th {
-  border: 1px solid #464d5c;
+  border: 2px solid #464d5c;
 }
 .table.table-bordered th {
   border: 2px solid #464d5c;
@@ -271,6 +302,7 @@ tbody td,
   font-size: 24px;
 }
 thead > tr,
+tbody > tr,
 tfoot > tr {
   height: 60px;
   vertical-align: middle;
@@ -286,6 +318,10 @@ tfoot > tr {
   color: #7c8ba6;
 }
 .table-hover:hover tbody tr:hover td {
+  color: white;
+  background-color: #244a63;
+}
+.table-hover:target tbody tr:target td {
   color: white;
   background-color: #244a63;
 }
@@ -310,5 +346,4 @@ nav {
 .edit-input {
   border-radius: 5px;
 }
-
 </style>

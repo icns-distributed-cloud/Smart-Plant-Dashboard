@@ -175,9 +175,9 @@ export default {
         textEnabled: true,
       },
       thermo: {
-        color: "aqua",
+        color: "#5a8dee",
         backgroundColor: "#fcf9f9",
-        frameColor: "#28243D",
+        frameColor: "#1a233a10",
         ticks: 5,
         ticksEnabled: true,
         tickColor: "#c8d9f8",
@@ -197,7 +197,7 @@ export default {
   data() {
     return {
       defaultOptions: Object,
-      color: "aqua",
+      color: "#5a8dee",
       icon: "<i class='bi bi-emoji-laughing-fill'></i>",
       status: "안전"
     };

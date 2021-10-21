@@ -4,7 +4,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
-            센싱 장비 위치 관리
+            센싱 장비 종류 관리
           </h5>
           <button
             type="button"
@@ -16,52 +16,60 @@
           <div class="modal-body">            
             <button class="btn btn-primary"
             style="float:right; margin: 10px;"
-            @click="addPos=true;">
+            @click="addType=true;">
               신규 등록
             </button>
-            <AddPlaceModal v-if="addPos"
-            @add-new-pos="AddPos"
-            @close-add-modal="addPos=false;">
-            </AddPlaceModal>
+            <AddTypeModal v-if="addType"
+            @add-new-type="AddType"
+            @close-add-modal="addType=false;">
+            </AddTypeModal>
             <form @submit.prevent="onSubmit">
             <div class="modal-title sub-title">
-              <i class="bi bi-diamond-fill"></i> 위치 목록
+              <i class="bi bi-diamond-fill"></i> 종류 목록
             </div>
-            <!-- 장소 목록 -->
+            <!-- 종류 목록 -->
             <table class="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <th>위치 이름</th>
-                  <th>위치 상세</th>
+                  <th>종류 이름</th>
+                  <th>종류 상세</th>
                   <th>식별 코드</th>
+                  <th>색상 코드</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
-                  v-for="sensorPos in sensorPosList"
-                  :key="sensorPos.posId"
-                  @click="readyToEdit(sensorPos)"
+                  v-for="sensorType in sensorTypeList"
+                  :key="sensorType.typeId"
+                  @click="readyToEdit(sensorType)"
                 >
                   <td>
                     <input
                       class="td-input"
-                      v-model="sensorPos.posName"
-                      :disabled="able != sensorPos.posId"
+                      v-model="sensorType.typeName"
+                      :disabled="able != sensorType.typeId"
                     />
                   </td>
                   <td>
                     <input
                       class="td-input"
-                      v-model="sensorPos.posDtl"
-                      :disabled="able != sensorPos.posId"
+                      v-model="sensorType.typeDtl"
+                      :disabled="able != sensorType.typeId"
                     />
                   </td>
                   <td>
                     <input
                       class="td-input"
-                      v-model="sensorPos.posCode"
-                      :disabled="able != sensorPos.posId"
+                      v-model="sensorType.typeCode"
+                      :disabled="able != sensorType.typeId"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      class="td-input"
+                      v-model="sensorType.typeColorCode"
+                      :disables="able != sensorType.typeColorCode"
                     />
                   </td>
                   <td
@@ -76,12 +84,12 @@
                     <a
                       class="btn btn-outline-primary mod-btn"
                       type="submit"
-                      @click="readyToEdit(sensorPos); editSensorPos(sensorPos.posId);"
+                      @click="readyToEdit(sensorType); editSensorType(sensorType.typeId);"
                       ><i class="bx bx-edit"></i> 저장
                     </a>
                     <a
                       class="btn btn-outline-danger tr_data_del"
-                      @click="deleteSensorPos(sensorPos.posId)"
+                      @click="deleteSensorType(sensorType.typeId)"
                       ><i class="bx bx-trash"></i> 삭제</a
                     >
                   </td>
@@ -107,95 +115,97 @@
 
 <script>
 // eslint-disable-next-line no-unused-vars
-import AddPlaceModal from "./AddPlaceModal.vue";
+import AddTypeModal from "./AddTypeModal.vue";
 import axios from "axios";
 export default {
   data() {
     return {
-      posName: "",
-      posDtl: "",
-      posCode: "",
-      sensorPosList: [
-        { posId: 1, posName: "우리집", posDtl: "행복한 우리집", posCode: "1234" },
-        { posId: 2, posName: "ICNS", posDtl: "행복한 연구실", posCode: "3569" },
+      typeName: "",
+      typeDtl: "",
+      typeCode: "",
+      typeColorCode: "",
+      sensorTypeList: [
+        { typeId: 1, typeName: "온도", typeDtl: "온도를 측정함", typeCode: "1234", typeColorCode: "red" },
+        { typeId: 2, typeName: "습도", typeDtl: "습도를 측정함", typeCode: "3569", typeColorCode: "blue" },
       ],
       page: 1,
       able: 0,
-      addPos: false,
+      addType: false,
     };
   },
   created() {
-    this.getSensorPos();
+    this.getSensorType();
   },
   components: {
-    AddPlaceModal,
+    AddTypeModal,
   },
   methods: {
-    AddPos(newPos) {
-      this.addSensorPos(newPos.posName, newPos.posDtl, newPos.posCode);
-      console.log("add pos");
+    AddType(newType) {
+      this.addSensorType(newType.typeName, newType.typeDtl, newType.typeCode, newType.typeColorCode);
     },
-    async getSensorPos() {
+    async getSensorType() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-pos?paged=false&sort.sorted=true&sort.unsorted=false&unpaged=true"
+          "http://163.180.117.38:8281/api/sensor-type"
         );
-        this.sensorPosList = res.data.data.content;
-
+        this.sensorTypeList = res.data.data.content;
       } catch (err) {
         console.log(err);
       }
     },
-    async addSensorPos(pName=this.posName, pDtl=this.posDtl, pCode=this.posCode) {
+    async addSensorType(tName=this.typeName, tDtl=this.typeDtl, tCode=this.typeCode, tColorCode=this.typeColorCode) {
+      console.log("addSensorType",this.typeName, this.typeDtl, this.typeCode, this.typeColorCode);
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/sensor-pos",
+          "http://163.180.117.38:8281/api/sensor-type",
           {
-            posName: pName,
-            posDtl: pDtl,
-            posCode: pCode,
+            typeName: tName,
+            typeDtl: tDtl,
+            typeCode: tCode,
+            typeColorCode: tColorCode,
           }
         );
         console.log(res);
-
-        this.getSensorPos();
+        this.getSensorType();
       } catch (err) {
         console.log(err);
       }
     },
 
-    readyToEdit(sensorPos) {
-      this.able = sensorPos.posId;
-      this.posName = sensorPos.posName;
-      this.posDtl = sensorPos.posDtl;
-      this.posCode = sensorPos.posCode;
-      console.log(this.posName);
+    readyToEdit(sensorType) {
+      this.able = sensorType.typeId;
+      this.typeName = sensorType.typeName;
+      this.typeDtl = sensorType.typeDtl;
+      this.typeCode = sensorType.typeCode;
+      this.typeColorCode = sensorType.typeColorCode;
+      console.log(this.typeName);
     },
 
-    async editSensorPos(posId) {
+    async editSensorType(typeId) {
+      console.log(this.typeName, this.typeDtl, this.typeCode, this.typeColorCode);
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sensor-pos/" + posId,
+          "http://163.180.117.38:8281/api/sensor-type/" + typeId,
           {
-            posName: this.posName,
-            posDtl: this.posDtl,
-            posCode: this.posCode,
+            typeName: this.typeName,
+            typeDtl: this.typeDtl,
+            typeCode: this.typeCode,
+            typeColorCode: this.typeColorCode,
           }
         );
        console.log(res);
-       this.getSensorPos();
+       this.getSensorType();
       } catch (err) {
         console.log(err);
-        console.log("tttt");
       }
     },
-    async deleteSensorPos(posId) {
+    async deleteSensorType(typeId) {
       try {
         const res = await axios.delete(
-          "http://163.180.117.38:8281/api/sensor-pos/" + posId
+          "http://163.180.117.38:8281/api/sensor-type/" + typeId
         );
         console.log(res);
-        this.getSensorPos();
+        this.getSensorType();
       } catch (err) {
         console.log(err);
       }
@@ -278,6 +288,10 @@ label {
   position: absolute;
   left: 2px;
   top: 4px;
+}
+
+.new-input {
+  width: 30%;
 }
 
 .sub-title {

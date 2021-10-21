@@ -1,8 +1,7 @@
 <template>
-  <div style="display: flex">
+  <div class="background" style="display: flex;">
     <ShowCCTV></ShowCCTV>
     <MultiChart></MultiChart>
-    <GasChart :infoList="infoList" :gas=90></GasChart>
     <AlarmLog></AlarmLog>
     <div
       style="
@@ -12,8 +11,11 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        flex-shrink: 1
+        
       "
     >
+      <GasChart :infoList="infoList" :gas=90></GasChart>
       <DustChart :infoList="infoList"></DustChart>
       <TempChart :infoList="infoList" :temp="temp"></TempChart>
       <HumidityChart :infoList="infoList" :humidity="humidity"></HumidityChart>
@@ -35,6 +37,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
 import ShowCCTV from "@/components/Charts/ShowCCTV.vue";
 import MultiChart from "@/components/Charts/MultiChart.vue";
 import GasChart from "@/components/Charts/GasChart.vue";
@@ -45,8 +50,15 @@ import HumidityChart from "@/components/Charts/HumidityChart.vue";
 
 export default {
   name: "Home",
+  created() {
+  //this.connect();
+  this.getPosSensor();
+  },
   data() {
     return {
+      ssId: 1,
+      resList: [],
+      ssInfoList: [],
       humidity: 50,
       temp: 60,
       infoList: [
@@ -78,6 +90,61 @@ export default {
       ],
     };
   },
+  methods: {
+    async getPosSensor(posId=1) {
+      this.ssInfoList = [];
+      const res = await axios.get(
+        "http://163.180.117.38:8281/api/sensor-manage?paged=false&posId="+ posId +"&sort.sorted=true"
+      );
+      this.ssInfoList = res.data.data.content;
+      this.getSensorValue();
+    },
+    getSensorValue() {
+      for(var sensor of this.ssInfoList) {
+        this.connect(sensor.ssId);
+      }
+
+    },
+    infSend() {
+      setInterval(this.send, 1000);
+    },
+    send(ssId) {
+      console.log("send : " + ssId);
+      if (this.stompClient && this.stompClient.connected) {
+        const msg = {
+          ssId: ssId,
+        };
+        this.stompClient.send("/receive/" + ssId, JSON.stringify(msg), {});
+      }
+    },
+    connect(ssId) {
+      const serverURL = "http://163.180.117.38:8281/ws";
+
+      let socket = new SockJS(serverURL);
+
+      this.stompClient = Stomp.over(socket);
+
+      console.log(`try to connect: ${serverURL}`);
+
+      this.stompClient.connect(
+        {},
+        (frame) => {
+          this.connected = true;
+          console.log("Socket Connection Success", frame);
+
+          this.stompClient.subscribe("/send/" + ssId, (res) => {
+            console.log("Sub Message.", res.body);
+
+            this.resList.push(JSON.parse(res.body));
+          });
+        },
+        (error) => {
+          console.log("Socket Connection Fail", error);
+          this.connected = false;
+        }
+      );
+    },
+  },
   components: {
     ShowCCTV,
     MultiChart,
@@ -91,16 +158,29 @@ export default {
 </script>
 
 <style>
+.background {
+  background-size: contain;
+  height:100%;
+  background-image: url('../assets/background.png');
+  background-repeat: no-repeat;
+  width: 100%;
+  
+  
+
+}
 .box {
   background-color: #272e4890;
   opacity: 50;
   width: 230px;
+  /* width: 100%; */
   height: 250px;
   padding: 10px;
   overflow: visible;
   position: relative;
   border-radius: 5px;
   text-align: center;
+  /* flex-grow: 0;
+  flex-shrink: 0; */
 }
 
 .box_title {
@@ -122,7 +202,7 @@ export default {
 }
 
 .value_text {
-  color: aqua;
+  color: "#5a8dee";
   font-size: 40px;
   font-weight: bold;
   position: relative;
@@ -134,11 +214,11 @@ export default {
   height: 170px;
   border: 9px solid;
   border-radius: 50%;
-  border-color: aqua;
+  border-color: "#5a8dee";
   display: inline-flex;
   align-self: center;
   justify-content: center;
-  color: aqua;
+  color: "#5a8dee";
   font-weight: 8px;
   font-size: 40px;
   text-align: center;
@@ -154,7 +234,7 @@ export default {
   margin-top: 40px;
   margin-left: 30px;
   border-width: 9px;
-  border-color: aqua;
+  border-color: "#5a8dee";
   box-shadow: 5px 5px 5px #1b1f22;
 }
 
@@ -162,7 +242,7 @@ export default {
   width: 60px;
   height: 23px;
   border-radius: 10px;
-  color: aqua;
+  color: "#5a8dee";
   font-size: 15px;
   font-weight: bold;
   padding: 3px;

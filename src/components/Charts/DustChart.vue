@@ -52,7 +52,7 @@ export default {
   name: "DustChart",
   data() {
     return {
-      color: "aqua",
+      color: "#5a8dee",
       icon: "<i class='bi bi-emoji-laughing-fill'></i>",
       status: "안전",
     };

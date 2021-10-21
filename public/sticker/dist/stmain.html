@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class=no-js>
+  <head>
+    <meta charset=utf-8>
+    <title>Photo Sticker App</title>
+    <meta name=description content="">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600" rel=stylesheet type=text/css>
+    <link rel=stylesheet href=styles/main.d8de83ba.css>
+    <script src=scripts/vendor/modernizr.fbe20327.js></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+        <body style="background-color:#272e48;"> <!--[if lt IE 10]>
+
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+
+    <![endif]-->
+
+
+        <div class=container-fluid>
+        <div class="row clearfix">
+
+          <div class=col-md-10>
+            <span style="color:#ffffff"> <h5>센서를 배치할 장소를 선택하세요</h5> </span>
+
+<a class="page-link" href="#"><button type="button" class="btn btn-info"><B>조감도 </button></a>
+<a class="page-link" href="#"><button type="button" class="btn btn-info"><B>연료유 탱크 펌프룸 </button></a>
+<a class="page-link" href="#"><button type="button" class="btn btn-info"><B>우드펠릿 버킷엘리베이터 #2 </button></a>
+<a class="page-link" href="#"><button type="button" class="btn btn-info"><B>5호기 터빈 MSV/CV </button></a>
+<a class="page-link" href="#"><button type="button" class="btn btn-info"><B>정문 옹벽 </button></a>
+
+
+            <div class=main-container>
+              <div class=photo-controls-container>
+              <BR>
+                <button id=start-over class="btn btn-danger start-over" disabled><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;초기화</button>
+                <button id=choose-photo-link class="btn btn-success">
+                  <span class="glyphicon glyphicon-search"></span>&nbsp;평면도 불러오기</button>
+                      <input type=file id=photo-upload class="photo-upload hide" accept=image/*>
+
+
+ <button type="button" onclick="downImg()" class="btn btn-primary">
+     <span class="glyphicon glyphicon-save"></span>&nbsp;배치도 저장하기</button>
+
+
+                <!-- Main Image Container -->
+                  <div class=img-container>
+                         <BR>
+                    <div id=canvas-area ondragover=event.preventDefault() class=canvas-area> </div>
+
+
+                    <script type="text/javascript">
+
+                      function downImg(){
+                          html2canvas($("#canvas-area")[0]).then(function(canvas){
+                              var myImage = canvas.toDataURL();
+                              downloadURI(myImage, "배치도1.png")
+                          });
+                      }
+
+                      function downloadURI(uri, name){
+                          var link = document.createElement("a")
+                          link.download = name;
+                          link.href = uri;
+                          document.body.appendChild(link);
+                          link.click();
+                      }
+                    </script>
+                  </div>
+
+                  </div>
+            </div>
+          </div>
+
+          <!-- Sticker Container -->
+          <div class="col-md-2 sticker-lib">
+          <span style="color:#ffffff">  <h3>센서 선택</h3> </span>
+            <hr>
+              <button id=add-sticker class="btn btn-primary">
+              <span class="glyphicon glyphicon-plus"></span>센서 등록</button>
+                <div id=sticker-area class=sticker-area> </div>
+          </div>
+        </div>
+<!--
+        <div class=footer>
+          <p><span class="glyphicon glyphicon-thumbs-up"></span> </p>
+        </div>
+      </div>
+-->
+      <!-- Modal for adding sticker -->
+      <div id=sticker-modal class=sticker-modal>
+        <div class=modal-dialog>
+          <div class=modal-content>
+            <div class=modal-header>
+              <span style="color:#black"> <h4 class=modal-title>센서 이미지 등록</h4> </span>
+            </div>
+          <div class=modal-body>
+            <form id=sticker-form class=form-horizontal>
+              <div class=form-group>
+                <div class=col-sm-12>
+                  <input type=text id=sticker-input class="form-control form-name sticker-input" placeholder="센서명 입력">
+                  <span class="text-danger error-name" id=error-name>센서명 입력</span>
+                </div>
+              </div>
+              <div class=form-group>
+                <div class=col-sm-12>
+                  <a href=javascript:void(0) id=choose-sticker-link class="btn btn-primary">
+                  <span class="glyphicon glyphicon-search"></span>&nbsp;센서 이미지 선택</a>
+                  <input type=file id=sticker-upload class="sticker-upload hide" accept="image/*">
+                  <span class="text-primary sticker-name-cont" id=sticker-name-cont>
+                    <b>파일 선택</b>
+                    <span id=selected-sticker-name></span>
+                  </span>
+                  <span class="text-danger error-file" id=error-file>이미지를 불러오세요</span>
+                </div>
+              </div>
+
+              <div class=form-group>
+                <div class=col-sm-10>
+                  <button type=submit id=sticker-sumbit class="btn btn-success" disabled>저장</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Templates for sticker images and main image. Will be used in JS -->
+    <div id=sticker-template class="sticker-template hide">
+      <div class=sticker>{{stickerImg}}
+        <span class=title<span style="color:#ffffff">>{{title}}</span>
+        <span class="glyphicon glyphicon-remove sticker-remove" aria-hidden=true></span>
+      </div>
+    </div>
+
+    <div id=sticker-img-template class="sticker-img-template hide">
+      <img src={{srcString}} data-sticker-id={{id}} draggable=true class="sticker-img">
+    </div>
+
+    <div id=main-image-template class="main-image-template hide">
+      <img data-photo-id={{id}} class=main-image src="{{srcString}}">
+    </div>
+
+    <div id=photo-sticker-template class="photo-sticker-template hide">
+      <img src={{srcString}} data-id={{stickerId}} class=dropped-sticker style="left:{{left}};top:{{top}};z-index:{{zIndex}}">
+    </div>
+
+    <script src=scripts/main.bebd88b9.js></script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.
+    <script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');</script>-->
+
+    </body>
