@@ -4,12 +4,15 @@
     <div class="contents">
       <div class="header">
         <div class="header-left">
-          <button @click="send">Socket TEST</button>
+          <!-- <button @click="send">Socket TEST</button> -->
           <h3 style="color: #daa520; font-weight: 800">
             지능형 이상감지 - 대시보드
             <div class="icon" style="float: right; color: #969696">
-              <i class="bi bi-search" style="margin-right:50px; "></i>
-              <i class="bi bi-bell" style="margin-right:200px"></i>
+              
+              <i class="bi bi-search" style="margin-right:50px; cursor:pointer;"></i>
+              
+              <i class="bi bi-bell" style="margin-right:200px; cursor:pointer;"></i>
+              
             </div>
           </h3>
         </div>

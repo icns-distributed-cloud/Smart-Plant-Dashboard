@@ -185,7 +185,7 @@ export default {
           );
           this.ssManageList = res.data.data.content;
       } catch (err) {
-        console.log(err);
+        console.log("hello",err);
       }
     },
 

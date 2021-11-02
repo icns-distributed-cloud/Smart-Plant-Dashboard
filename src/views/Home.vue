@@ -1,8 +1,8 @@
 <template>
   <div class="background" style="display: flex;">
-    <ShowCCTV></ShowCCTV>
-    <MultiChart></MultiChart>
-    <AlarmLog></AlarmLog>
+    <show-cctv></show-cctv>
+    <multi-chart></multi-chart>
+    <!-- <AlarmLog></AlarmLog> -->
     <div
       style="
         width: 250px;
@@ -11,48 +11,51 @@
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        flex-shrink: 1
-        
+        flex-shrink: 1   
       "
     >
-      <GasChart :infoList="infoList" :gas=90></GasChart>
-      <DustChart :infoList="infoList"></DustChart>
-      <TempChart :infoList="infoList" :temp="temp"></TempChart>
-      <HumidityChart :infoList="infoList" :humidity="humidity"></HumidityChart>
+    <component
+    v-for="sensor in ssInfoList" :key="sensor.ssId"
+     :is="sensor.chartName"></component>
     </div>
     <div style="display: flex; flex-direction: column">
-    <div>
-    <span style="padding-left: 20px; color: white;">여기에 습도를 입력하세요 : </span>
-    <input style="height: 40px;" v-model="humidity">
+      <div>
+        <span style="padding-left: 20px; color: white;"
+          >여기에 습도를 입력하세요 :
+        </span>
+        <input style="height: 40px;" v-model="humidity" />
+      </div>
+      <gas-chart v-if="false" :gas="90"></gas-chart>
+      <dust-chart v-if="false"></dust-chart>
+      <temp-chart v-if="false" :temp="temp"></temp-chart>
+      <humidity-chart v-if="false" :humidity="humidity"></humidity-chart>
+      <div>
+        <span style="padding-left: 20px; color: white;"
+          >여기에 온도를 입력하세요 :
+        </span>
+        <input style="height: 40px;" v-model="temp" />
+      </div>
     </div>
-  <div>
-    <span style="padding-left: 20px; color: white;">여기에 온도를 입력하세요 : </span>
-    <input style="height: 40px;" v-model="temp">
-  </div>
-    </div>
-
-
-
   </div>
 </template>
 
 <script>
+//import Vue from "vue";
 import axios from "axios";
-import Stomp from "webstomp-client";
-import SockJS from "sockjs-client";
-import ShowCCTV from "@/components/Charts/ShowCCTV.vue";
-import MultiChart from "@/components/Charts/MultiChart.vue";
-import GasChart from "@/components/Charts/GasChart.vue";
-import AlarmLog from "@/components/Charts/AlarmLog.vue";
-import DustChart from "@/components/Charts/DustChart.vue";
-import TempChart from "@/components/Charts/TempChart.vue";
-import HumidityChart from "@/components/Charts/HumidityChart.vue";
+//import Stomp from "webstomp-client";
+//import SockJS from "sockjs-client";
+import ShowCCTV from "@/components/Charts/show-cctv.vue";
+import MultiChart from "@/components/Charts/multi-chart.vue";
+import GasChart from "@/components/Charts/gas-chart.vue";
+// import AlarmLog from "@/components/Charts/AlarmLog.vue";
+import DustChart from "@/components/Charts/dust-chart.vue";
+import TempChart from "@/components/Charts/temp-chart.vue";
+import HumidityChart from "@/components/Charts/humidity-chart.vue";
 
 export default {
   name: "Home",
   created() {
-  //this.connect();
-  this.getPosSensor();
+    this.getPosSensor();
   },
   data() {
     return {
@@ -61,6 +64,7 @@ export default {
       ssInfoList: [],
       humidity: 50,
       temp: 60,
+      displayGraph: "",
       infoList: [
         {
           color: "#5a8dee",
@@ -91,14 +95,42 @@ export default {
     };
   },
   methods: {
-    async getPosSensor(posId=1) {
+    async getPosSensor(posId = 1) {
       this.ssInfoList = [];
-      const res = await axios.get(
-        "http://163.180.117.38:8281/api/sensor-manage?paged=false&posId="+ posId +"&sort.sorted=true"
-      );
-      this.ssInfoList = res.data.data.content;
-      this.getSensorValue();
+      this.displayGraph = "";
+      try {
+        const res = await axios.get(
+          "http://163.180.117.38:8281/api/sensor-manage?paged=false&posId=" +
+            posId +
+            "&sort.sorted=true"
+        );
+        this.ssInfoList = res.data.data.content;
+        //this.getSensorValue();
+        for (let i = 0; i < this.ssInfoList.length; i++) {
+          this.ssInfoList[i].value = 0.0;
+          switch (this.ssInfoList[i].ssType.typeName) {
+            case "온도":
+              this.ssInfoList[i].chartName = "temp-chart";
+              break;
+            case "분진":
+              this.ssInfoList[i].chartName = "dust-chart";
+              break;
+            case "습도":
+              this.ssInfoList[i].chartName = "humidity-chart";
+              break;
+            case "가스":
+              this.ssInfoList[i].chartName = "gas-chart"
+              break;
+          }
+        }
+        console.log(this.ssInfoList);
+        console.log(this.displayGraph);
+      } catch(err) {
+        console.log(err);
+      }
     },
+
+    /*
     getSensorValue() {
       for(var sensor of this.ssInfoList) {
         this.connect(sensor.ssId);
@@ -108,7 +140,7 @@ export default {
     infSend() {
       setInterval(this.send, 1000);
     },
-    send(ssId) {
+    send(ssId=1) {
       console.log("send : " + ssId);
       if (this.stompClient && this.stompClient.connected) {
         const msg = {
@@ -117,7 +149,7 @@ export default {
         this.stompClient.send("/receive/" + ssId, JSON.stringify(msg), {});
       }
     },
-    connect(ssId) {
+    connect(ssId=1) {
       const serverURL = "http://163.180.117.38:8281/ws";
 
       let socket = new SockJS(serverURL);
@@ -134,8 +166,7 @@ export default {
 
           this.stompClient.subscribe("/send/" + ssId, (res) => {
             console.log("Sub Message.", res.body);
-
-            this.resList.push(JSON.parse(res.body));
+            console.log(JSON.parse(res.body).inputData);
           });
         },
         (error) => {
@@ -144,15 +175,16 @@ export default {
         }
       );
     },
+    */
   },
   components: {
-    ShowCCTV,
-    MultiChart,
-    GasChart,
-    AlarmLog,
-    DustChart,
-    TempChart,
-    HumidityChart,
+    "show-cctv": ShowCCTV,
+    "multi-chart": MultiChart,
+    "gas-chart": GasChart,
+    // AlarmLog,
+    "dust-chart": DustChart,
+    "temp-chart": TempChart,
+    "humidity-chart": HumidityChart,
   },
 };
 </script>
@@ -160,13 +192,10 @@ export default {
 <style>
 .background {
   background-size: contain;
-  height:100%;
-  background-image: url('../assets/background.png');
+  height: 100%;
+  background-image: url("../assets/background.png");
   background-repeat: no-repeat;
   width: 100%;
-  
-  
-
 }
 .box {
   background-color: #272e4890;

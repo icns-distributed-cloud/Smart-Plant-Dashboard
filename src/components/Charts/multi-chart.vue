@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "MultiChart",
+  name: "multi-chart",
 };
 </script>
 

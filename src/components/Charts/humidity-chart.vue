@@ -15,12 +15,39 @@
 
 <script>
 export default {
-    name: 'HumidityChart',
+    name: 'humidity-chart',
     data() {
     return {
       color: "#5a8dee",
       icon: "<i class='bi bi-emoji-laughing-fill'></i>",
-      status: "안전"
+      status: "안전",
+      infoList: [
+        {
+          color: "#5a8dee",
+          status: "안전",
+          icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+        },
+        {
+          color: "#00cfdd",
+          status: "관심",
+          icon: "<i class='bi bi-emoji-smile-fill'></i>",
+        },
+        {
+          color: "#39da8a",
+          status: "주의",
+          icon: "<i class='bi bi-emoji-neutral-fill'></i>",
+        },
+        {
+          color: "#fdac41",
+          status: "경고",
+          icon: "<i class='bi bi-emoji-frown-fill'></i>",
+        },
+        {
+          color: "#ff5b5c",
+          status: "심각",
+          icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
+        },
+      ],
     };
   },
   props: {
@@ -34,7 +61,6 @@ export default {
           return [50, 100, 110, 120, 130, 150]
         },
     },
-    infoList: Object,
   },
   methods: {},
   watch: {

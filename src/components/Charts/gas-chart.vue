@@ -5,26 +5,6 @@
     <div class="box_title">
       <i class="bi bi-bar-chart-line-fill"></i> 가스 가스 가스!
     </div>
-    <!-- <ejs-circulargauge orientation='Horizontal'>
-        <e-axes>
-            <e-axis minimum=0 maximum=200>
-                <e-pointers>
-                    <e-pointer :value='value' :animation='animation'></e-pointer>
-                </e-pointers>
-                <e-ranges> -->
-                  <!--
-                  <e-range v-for="i in 5" :key="i"
-                  :start="gasArray[i-1]" :end="gasArray[i]" startWidth=15 endWidth=15>
-                  </e-range>
-                  -->
-                    <!-- <e-range start=0 end=80 startWidth=15 endWidth=15></e-range>
-                    <e-range start=80 end=120 startWidth=15 endWidth=15></e-range>
-                    <e-range start=120 end=140 startWidth=15 endWidth=15></e-range>
-                    <e-range start=140 end=200 startWidth=15 endWidth=15></e-range>
-                </e-ranges>
-            </e-axis>
-        </e-axes>
-    </ejs-circulargauge> -->
     <div class="gauge" style="position: relative; top: -125px;">
     <ejs-circulargauge background="#FFFFFF00">
         <e-axes>
@@ -44,7 +24,7 @@
         </e-axes>
     </ejs-circulargauge>
     </div>
-   
+
 
     <div class="value_text" style="top: -330px;">{{ gas }}</div>
   </div>
@@ -56,7 +36,8 @@ import { CircularGaugeComponent, AxesDirective, AxisDirective, PointersDirective
 
 
 export default {
-  name: "GasChart",
+  name: "gas-chart",
+  
   components: {
     'ejs-circulargauge' : CircularGaugeComponent,
     'e-axes' : AxesDirective,
@@ -66,13 +47,40 @@ export default {
     'e-ranges' : RangesDirective,
     'e-range' : RangeDirective
   },
+
   data: function () {
       return {
-          value: 90,
-          animation: { enable: false },
-          majorTicks: { width: 1, color: "#5a8dee" },
-        
-            }},
+        value: 90,
+        infoList: [
+        {
+          color: "#5a8dee",
+          status: "안전",
+          icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+        },
+        {
+          color: "#00cfdd",
+          status: "관심",
+          icon: "<i class='bi bi-emoji-smile-fill'></i>",
+        },
+        {
+          color: "#39da8a",
+          status: "주의",
+          icon: "<i class='bi bi-emoji-neutral-fill'></i>",
+        },
+        {
+          color: "#fdac41",
+          status: "경고",
+          icon: "<i class='bi bi-emoji-frown-fill'></i>",
+        },
+        {
+          color: "#ff5b5c",
+          status: "심각",
+          icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
+        },
+      ],
+      animation: { enable: false },
+      majorTicks: { width: 1, color: "#5a8dee" },
+      }},
 
 
   props: {
@@ -85,9 +93,7 @@ export default {
       default: () => {
         return [0, 30, 50, 70, 100, 200];
       },
-    },
-    infoList: Object,
-    
+    },    
   },
 };
 </script>
