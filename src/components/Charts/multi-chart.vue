@@ -1,7 +1,7 @@
 
 <template>
   <!--복합 데이터-->
-  <div class="box" style="position: absolute; bottom: 40px; left: inherit">
+  <div class="box">
     <div class="box_title">복합 데이터 분석</div>
     <div class="title_div"></div>
   </div>

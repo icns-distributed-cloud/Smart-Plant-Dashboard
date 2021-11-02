@@ -1,11 +1,11 @@
 <template>
     <!--습도-->
-    <div class="box" style="top: 20px;">
+    <div class="box">
         <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   습도</div>
-        <div id="humidity" class="humid"></div>
-        <div id="humidity" class="value_text" style="bottom: 50%;">{{ humidity }}</div>
+        <div id="value" class="humid"></div>
+        <div id="value" class="value_text" style="bottom: 50%;">{{ value }}</div>
         <div class="pct">%</div>
-        <div id="humidity" class="status">
+        <div id="value" class="status">
           <span v-html="icon"></span>
           <span style="margin-left: 4px;">{{ status }}</span>
         </div>
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-    name: 'humidity-chart',
+    name: 'value-chart',
     data() {
     return {
       color: "#5a8dee",
@@ -51,11 +51,11 @@ export default {
     };
   },
   props: {
-    humidity: {
+    value: {
       type: Number,
       default: 80,
     },
-    humidityArray: {
+    rangeArray: {
       type: Array,
       default: ()=> {
           return [50, 100, 110, 120, 130, 150]
@@ -64,10 +64,10 @@ export default {
   },
   methods: {},
   watch: {
-    humidity: function () {
-      var d = this.humidity;
+    value: function () {
+      var d = this.value;
       for (var i=0; i<5; i++) {
-          if(d >= this.humidityArray[i] && d < this.humidityArray[i+1]){
+          if(d >= this.rangeArray[i] && d < this.rangeArray[i+1]){
               this.color = this.infoList[i].color;
               this.icon = this.infoList[i].icon;
               this.status = this.infoList[i].status;
@@ -81,7 +81,7 @@ export default {
 </script>
 
 <style>
-#humidity {
+#value {
     color: v-bind(color);
     border-color: v-bind(color);
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="box" :draggable="true" style="position: absolute; right: 350px; bottom:40px; width: 400px; height:200px;">
+    <div class="box" :draggable="true" style="width: 400px; height:200px;">
         <div class="box_title">알람이력</div>
          <div class="title_div"></div>
         <table class="table table-bordered dataex-html5-selectors">

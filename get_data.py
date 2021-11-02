@@ -43,7 +43,7 @@ with conn.cursor() as cur :
         try:
             sensor_temp = instrument1.read_register(0,1)   # (sensor address, float)
             sensor_humid = instrument1.read_register(1,1)
-            sensor_gyro_x = instrument2.read_register(61,3)
+            sensor_gyro_x = instrument2.read_register(61,2)
             sensor_gyro_y = instrument2.read_register(62,3)
 
             print("temperature: ", sensor_temp, "humidity: ", sensor_humid, "gyro_x: ", sensor_gyro_x, "gryo_y: ", sensor_gyro_y)
@@ -52,6 +52,8 @@ with conn.cursor() as cur :
 
                 cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_temp, 1))
                 cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_humid, 2))
+                cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_gyro_x, 3))
+                cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_gyro_y, 4))
                 print("Data Save Success")
                 conn.commit()
         

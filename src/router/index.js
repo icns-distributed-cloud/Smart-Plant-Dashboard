@@ -9,7 +9,7 @@ import SensorPos from "@/components/IoTManage/SensorPos.vue";
 import EsopEidtor from "@/components/Esop/EsopEditor.vue";
 import EsopManager from "@/components/Esop/EsopManager.vue";
 import MsgLog from "@/components/Esop/MsgLog.vue";
-
+import PageNotfound from "@/views/PageNotFound.vue";
 
 const routes = [
   // dashboardMenu,
@@ -57,13 +57,20 @@ const routes = [
     path: "/sensorpos",
     name: "sensorPos",
     component: SensorPos,
-
   },
   {
     path: "/sensor-manage",
     name: "SensorManage",
     component: SensorManage,
   },
+  {
+    path: '/*',
+    redirect: '/404'
+  },
+  {
+    path: '/404',
+    component: PageNotfound,
+  }
 ];
 
 const router = createRouter({

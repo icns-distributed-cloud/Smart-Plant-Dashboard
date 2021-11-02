@@ -1,32 +1,29 @@
 <template>
   <!--가스-->
 
-  <div class="box" style="position: absolute; right: 270px">
+  <div class="box">
     <div class="box_title">
-      <i class="bi bi-bar-chart-line-fill"></i> 가스 가스 가스!
+      <i class="bi bi-bar-chart-line-fill"></i> 가스
     </div>
     <div class="gauge" style="position: relative; top: -125px;">
     <ejs-circulargauge background="#FFFFFF00">
         <e-axes>
-            <e-axis :minimum="gasArray[0]" :maximum="gasArray[5]" >
+            <e-axis :minimum="rangeArray[0]" :maximum="rangeArray[5]" >
                 <e-pointers>
                     <e-pointer :value='value' :animation='animation' color="#1a233a"></e-pointer>
                 </e-pointers>
                 <e-ranges>
-                    <e-range :start="gasArray[0]" :end="gasArray[1]" :color="infoList[0].color" startWidth=15 endWidth=15></e-range>
-                    <e-range :start="gasArray[1]" :end="gasArray[2]" :color="infoList[1].color" startWidth=15 endWidth=15></e-range>
-                    <e-range :start="gasArray[2]" :end="gasArray[3]" :color="infoList[2].color" startWidth=15 endWidth=15></e-range>
-                    <e-range :start="gasArray[3]" :end="gasArray[4]" :color="infoList[3].color" startWidth=15 endWidth=15></e-range>
-                    <e-range :start="gasArray[4]" :end="gasArray[5]" :color="infoList[4].color" startWidth=15 endWidth=15></e-range>
-
+                    <e-range :start="rangeArray[0]" :end="rangeArray[1]" :color="infoList[0].color" startWidth=15 endWidth=15></e-range>
+                    <e-range :start="rangeArray[1]" :end="rangeArray[2]" :color="infoList[1].color" startWidth=15 endWidth=15></e-range>
+                    <e-range :start="rangeArray[2]" :end="rangeArray[3]" :color="infoList[2].color" startWidth=15 endWidth=15></e-range>
+                    <e-range :start="rangeArray[3]" :end="rangeArray[4]" :color="infoList[3].color" startWidth=15 endWidth=15></e-range>
+                    <e-range :start="rangeArray[4]" :end="rangeArray[5]" :color="infoList[4].color" startWidth=15 endWidth=15></e-range>
                 </e-ranges>
             </e-axis>
         </e-axes>
     </ejs-circulargauge>
     </div>
-
-
-    <div class="value_text" style="top: -330px;">{{ gas }}</div>
+    <div class="value_text" style="top: -330px;">{{ value }}</div>
   </div>
 </template>
 
@@ -50,7 +47,6 @@ export default {
 
   data: function () {
       return {
-        value: 90,
         infoList: [
         {
           color: "#5a8dee",
@@ -84,11 +80,11 @@ export default {
 
 
   props: {
-    gas: {
+    value: {
       type: Number,
       default: 10,
     },
-    gasArray: {
+    rangeArray: {
       type: Array,
       default: () => {
         return [0, 30, 50, 70, 100, 200];

@@ -1,40 +1,33 @@
 <template>
   <div class="background" style="display: flex;">
-    <show-cctv></show-cctv>
-    <multi-chart></multi-chart>
-    <!-- <AlarmLog></AlarmLog> -->
+    <div style="display: flex; flex-direction: column; justify-content: space-between">
+      <show-cctv></show-cctv>
+      <multi-chart></multi-chart>
+    </div>
+
+    <div style="display: flex; width: 100%; align-items: flex-end; justify-content: center;">
+      <alarm-log></alarm-log>
+    </div>
     <div
-      style="
-        width: 250px;
-        right: 30px;
-        position: absolute;
+      style="  
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        flex-shrink: 1   
+        place-content: flex-start flex-end;
+        flex-flow: column wrap-reverse;
+        justify-content: flex-start;
       "
     >
     <component
     v-for="sensor in ssInfoList" :key="sensor.ssId"
-     :is="sensor.chartName"></component>
+     :is="sensor.chartName" :value="sensor.value" :rangeArray="sensor.rangeArray">
+     </component>
     </div>
     <div style="display: flex; flex-direction: column">
-      <div>
-        <span style="padding-left: 20px; color: white;"
-          >여기에 습도를 입력하세요 :
-        </span>
-        <input style="height: 40px;" v-model="humidity" />
-      </div>
+
       <gas-chart v-if="false" :gas="90"></gas-chart>
       <dust-chart v-if="false"></dust-chart>
       <temp-chart v-if="false" :temp="temp"></temp-chart>
       <humidity-chart v-if="false" :humidity="humidity"></humidity-chart>
-      <div>
-        <span style="padding-left: 20px; color: white;"
-          >여기에 온도를 입력하세요 :
-        </span>
-        <input style="height: 40px;" v-model="temp" />
-      </div>
+
     </div>
   </div>
 </template>
@@ -42,57 +35,32 @@
 <script>
 //import Vue from "vue";
 import axios from "axios";
-//import Stomp from "webstomp-client";
-//import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
 import ShowCCTV from "@/components/Charts/show-cctv.vue";
 import MultiChart from "@/components/Charts/multi-chart.vue";
 import GasChart from "@/components/Charts/gas-chart.vue";
-// import AlarmLog from "@/components/Charts/AlarmLog.vue";
 import DustChart from "@/components/Charts/dust-chart.vue";
 import TempChart from "@/components/Charts/temp-chart.vue";
 import HumidityChart from "@/components/Charts/humidity-chart.vue";
+import AlarmLog from '../components/Charts/AlarmLog.vue';
 
 export default {
   name: "Home",
-  created() {
-    this.getPosSensor();
-  },
   data() {
     return {
       ssId: 1,
-      resList: [],
       ssInfoList: [],
       humidity: 50,
       temp: 60,
-      displayGraph: "",
-      infoList: [
-        {
-          color: "#5a8dee",
-          status: "안전",
-          icon: "<i class='bi bi-emoji-laughing-fill'></i>",
-        },
-        {
-          color: "#00cfdd",
-          status: "관심",
-          icon: "<i class='bi bi-emoji-smile-fill'></i>",
-        },
-        {
-          color: "#39da8a",
-          status: "주의",
-          icon: "<i class='bi bi-emoji-neutral-fill'></i>",
-        },
-        {
-          color: "#fdac41",
-          status: "경고",
-          icon: "<i class='bi bi-emoji-frown-fill'></i>",
-        },
-        {
-          color: "#ff5b5c",
-          status: "심각",
-          icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
-        },
-      ],
     };
+  },
+  mounted() {
+  this.getPosSensor();
+  },
+  beforeUnmount() {
+    this.disconnect();
+    clearInterval(this.timer);
   },
   methods: {
     async getPosSensor(posId = 1) {
@@ -124,71 +92,74 @@ export default {
           }
         }
         console.log(this.ssInfoList);
-        console.log(this.displayGraph);
+        this.connect();
       } catch(err) {
         console.log(err);
       }
     },
 
-    /*
-    getSensorValue() {
+    connect() {
+      const serverURL = "http://163.180.117.38:8281/ws";
+      var socket = new SockJS(serverURL);
+      this.stompClient = Stomp.over(socket);
+
       for(var sensor of this.ssInfoList) {
-        this.connect(sensor.ssId);
+        this.stompClient.connect(
+          {},
+          (frame) => {
+            this.connected = true;
+            console.log("Socket Connection Success", frame);
+            this.stompClient.subscribe("/send/" + 1, (res) => {
+              console.log("Sub Message.", res.body);
+              console.log(JSON.parse(res.body).inputData);
+              console.log(sensor.ssId);
+            });
+          },
+          (error) => {
+            console.log("Socket Connection Fail", error);
+            this.connected = false;
+          }
+        );
       }
 
+      this.infSend();
     },
+
     infSend() {
       setInterval(this.send, 1000);
     },
-    send(ssId=1) {
-      console.log("send : " + ssId);
-      if (this.stompClient && this.stompClient.connected) {
-        const msg = {
-          ssId: ssId,
-        };
-        this.stompClient.send("/receive/" + ssId, JSON.stringify(msg), {});
+
+    send() {
+      for(var sensor of this.ssInfoList) {
+        //console.log("send : " + sensor.ssId);
+        if (this.stompClient && this.stompClient.connected) {
+          const msg = {
+            ssId: sensor.ssId,
+          };
+          this.stompClient.send("/receive/" + sensor.ssId, JSON.stringify(msg), {});
+        }
       }
     },
-    connect(ssId=1) {
-      const serverURL = "http://163.180.117.38:8281/ws";
 
-      let socket = new SockJS(serverURL);
-
-      this.stompClient = Stomp.over(socket);
-
-      console.log(`try to connect: ${serverURL}`);
-
-      this.stompClient.connect(
-        {},
-        (frame) => {
-          this.connected = true;
-          console.log("Socket Connection Success", frame);
-
-          this.stompClient.subscribe("/send/" + ssId, (res) => {
-            console.log("Sub Message.", res.body);
-            console.log(JSON.parse(res.body).inputData);
-          });
-        },
-        (error) => {
-          console.log("Socket Connection Fail", error);
-          this.connected = false;
+    
+      disconnect() {
+        if (this.stompClient != null) {
+          this.stompClient.disconnect();
+          console.log("Disconnected");
         }
-      );
-    },
-    */
+      }
   },
   components: {
     "show-cctv": ShowCCTV,
     "multi-chart": MultiChart,
     "gas-chart": GasChart,
-    // AlarmLog,
     "dust-chart": DustChart,
     "temp-chart": TempChart,
     "humidity-chart": HumidityChart,
+    "alarm-log": AlarmLog,
   },
 };
 </script>
-
 <style>
 .background {
   background-size: contain;
@@ -208,8 +179,8 @@ export default {
   position: relative;
   border-radius: 5px;
   text-align: center;
-  /* flex-grow: 0;
-  flex-shrink: 0; */
+  margin: 5px;
+  
 }
 
 .box_title {

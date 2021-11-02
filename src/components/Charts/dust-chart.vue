@@ -25,7 +25,7 @@
           src="../../assets/bubble.png"
         />
         <div id="dust" class="value_text" style="bottom: 20px">
-          {{ dust }}
+          {{ value }}
         </div>
         <div
           style="
@@ -85,11 +85,11 @@ export default {
     };
   },
   props: {
-    dust: {
+    value: {
       type: Number,
       default: 80,
     },
-    dustArray: {
+    rangeArray: {
       type: Array,
       default: () => {
         return [50, 100, 110, 120, 130, 150];
@@ -99,9 +99,9 @@ export default {
   methods: {},
   watch: {
     dust: function () {
-      var d = this.dust;
+      var d = this.value;
       for (var i = 0; i < 5; i++) {
-        if (d >= this.dustArray[i] && d < this.dustArray[i + 1]) {
+        if (d >= this.dustArray[i] && d < this.rangeArray[i + 1]) {
           this.color = this.infoList[i].color;
           this.icon = this.infoList[i].icon;
           this.status = this.infoList[i].status;

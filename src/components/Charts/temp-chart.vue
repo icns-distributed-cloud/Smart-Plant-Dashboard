@@ -1,6 +1,6 @@
 <template>
   <!--온도-->
-  <div class="box" style="top: 10px">
+  <div class="box">
     <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   온도</div>
     <div id="temp" class="value_text" style="position: absolute; left: 25px">
       {{ temp }} <span style="font-size: 20px; position: relative; left: -5px; color:white;">°C</span>
