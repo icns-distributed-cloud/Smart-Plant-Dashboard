@@ -4,6 +4,7 @@
         <div class="box_title">영상 분석</div>
         <div class="title_div">
             <canvas id="main-cctv" style="width: 320px; height: 240px;"></canvas>
+
         </div>
     </div>
 </template>

@@ -7,15 +7,11 @@
     <div class="table-header">
       CCTV 영상인식 | <Icon icon="bx:bx-home-alt" />
     </div>
-    <canvas id='test-cctv' style="width: 640px; height: 480px;">
-    </canvas>
-
-
-    <!--div class="table-main">
-      <div>
-        <div class="table-main__header">ICNS Lab Monitor </div>
-      </div>
-    </div-->
+    <div class="table-main" v-for="item in elements" v-bind:key="item">
+      <div class="table-main__header">ICNS Lab Monitor</div>
+      <canvas :id=item style="width: 640px; height: 480px;">
+      </canvas>
+    </div>
   </div>
 </template>
 
@@ -32,26 +28,37 @@ export default {
   data(){
 
     return {
-      path: "ws://163.180.117.40:9998"
+      wsUrlList : [{
+        a1: "ws://163.180.117.40:9998",
+        a2: "ws://163.180.117.40:9997"
+      }],
+      elements : ['test-cctv', 'test-cctv3'],
     }
   },
 
-  mounted: function(){
+  mounted() {
     this.getWebsocketVideo();
   },
   beforeUnmount() {
     this.disconnect();
+
   },
   methods: {
+
+
     getWebsocketVideo: function(){
       let canvas = document.getElementById('test-cctv');
-      this.url = new WebSocket(this.path);
+      this.url = new WebSocket(this.wsUrlList[0].a1);
       new JSMpeg(this.url, {canvas:canvas});
+
+      let canvas3 = document.getElementById('test-cctv3');
+      this.url2 = new WebSocket(this.wsUrlList[0].a2);
+      new JSMpeg(this.url2, {canvas:canvas3});
     },
     disconnect: function (){
       this.url.close();
-    }
-
+      this.url2.close();
+    },
   }
 };
 </script>
