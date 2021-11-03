@@ -184,7 +184,7 @@ export default {
         console.log(err);
       }
     },
-    async getRangeInfo(posId=this.ssPosList[0].posId) {
+    async getRangeInfo(posId=1) {
       this.ssRangeList= [];
       try {
         const res = await axios.get(
@@ -267,6 +267,7 @@ export default {
 .wrapper {
   margin: 10px;
 }
+
 .table-header {
   color: #727e8c;
   font-size: 20px;

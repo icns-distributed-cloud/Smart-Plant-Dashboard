@@ -1,6 +1,5 @@
 <template>
   <!--가스-->
-
   <div class="box">
     <div class="box_title">
       <i class="bi bi-bar-chart-line-fill"></i> 가스
@@ -23,7 +22,7 @@
         </e-axes>
     </ejs-circulargauge>
     </div>
-    <div class="value_text" style="top: -330px;">{{ value }}</div>
+    <div id="gas" class="value_text" style="top: -330px;">{{ value }}</div>
   </div>
 </template>
 
@@ -47,6 +46,9 @@ export default {
 
   data: function () {
       return {
+        color: "#5a8dee",
+        icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+        status: "안전",
         infoList: [
         {
           color: "#5a8dee",
@@ -91,11 +93,26 @@ export default {
       },
     },    
   },
+
+  watch: {
+  value: function () {
+      var d = this.value;
+      for (var i = 0; i < 5; i++) {
+        if (d >= this.rangeArray[i] && d < this.rangeArray[i + 1]) {
+          this.color = this.infoList[i].color;
+          this.icon = this.infoList[i].icon;
+          this.status = this.infoList[i].status;
+          break;
+        }
+      }
+    }
+  }
 };
 </script>
 
 <style>
-
-
-
+#gas {
+  color: v-bind(color);
+  border-color: v-bind(color);
+}
 </style>

@@ -3,7 +3,7 @@
   <div class="box">
     <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   온도</div>
     <div id="temp" class="value_text" style="position: absolute; left: 25px">
-      {{ temp }} <span style="font-size: 20px; position: relative; left: -5px; color:white;">°C</span>
+      {{ value }} <span style="font-size: 20px; position: relative; left: -5px; color:white;">°C</span>
       </div>
 
     <div class="vue-thermometer" :class="customClass">
@@ -127,8 +127,7 @@ export default {
   name: "temp-chart",
 
   props: {
-
-    temp: {
+    value: {
       type: Number,
       default: 0,
       // required: false,
@@ -156,7 +155,7 @@ export default {
       type: String,
       required: false,
     },
-    tempArray: {
+    Array: {
       type: Array,
       default: () => {
         return [0, 30, 60, 80, 90, 100];
@@ -283,7 +282,7 @@ export default {
       return this.glassOffset + offset;
     },
     level() {
-      return Math.ceil(((this.temp - this.min) * 100) / (this.max - this.min));
+      return Math.ceil(((this.value - this.min) * 100) / (this.max - this.min));
     },
     thermoHeight() {
       return (
@@ -348,10 +347,10 @@ export default {
         this.mergeDefaultOptionsWithProp(val);
       }
     },
-    temp: function () {
-      var d = this.temp;
+    value: function () {
+      var d = this.value;
       for (var i = 0; i < 5; i++) {
-        if (d >= this.tempArray[i] && d < this.tempArray[i + 1]) {
+        if (d >= this.Array[i] && d < this.Array[i + 1]) {
           this.defaultOptions.thermo.color = this.infoList[i].color;
           this.color = this.infoList[i].color;
           this.icon = this.infoList[i].icon;
@@ -371,6 +370,6 @@ export default {
 
 .vue-thermometer {
   position: relative;
-  left: 30px;
+  left: 50px;
 }
 </style>

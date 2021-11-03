@@ -1,16 +1,32 @@
 <template>
     <!--습도-->
-    <div class="box">
-        <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   습도</div>
-        <div id="value" class="humid"></div>
-        <div id="value" class="value_text" style="bottom: 50%;">{{ value }}</div>
+  <div>
+    <!-- 습도 큰 창 -->
+    <div v-if="!smallView" class="box">
+        <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   습도
+          <i class="bi bi-caret-down-fill" style="float: right"
+          @click="smallView=true"
+          ></i>
+        </div>
+        <div id="humidity" class="humid"></div>
+        <div id="humidity" class="value_text" style="bottom: 50%;">{{ value }}</div>
         <div class="pct">%</div>
-        <div id="value" class="status">
-          <span v-html="icon"></span>
-          <span style="margin-left: 4px;">{{ status }}</span>
+        <div id="humidity" class="status" style="display: flex;">
+          <p v-html="icon"></p>
+          <p style="margin-left: 4px;">{{ status }}</p>
         </div>
     </div>
 
+    <!-- 습도작은 창 -->
+    <div v-if="smallView" class="box smallbox">
+      <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   습도
+      </div>
+      <p id="humidity" class="smallValue">{{ value }}</p>
+      <i class="bi bi-caret-up-fill" style="color: white;"
+      @click="smallView=false"
+      ></i>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -18,6 +34,7 @@ export default {
     name: 'value-chart',
     data() {
     return {
+      smallView: false,
       color: "#5a8dee",
       icon: "<i class='bi bi-emoji-laughing-fill'></i>",
       status: "안전",
@@ -81,7 +98,7 @@ export default {
 </script>
 
 <style>
-#value {
+#humidity {
     color: v-bind(color);
     border-color: v-bind(color);
 }

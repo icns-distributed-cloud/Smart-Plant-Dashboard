@@ -6,6 +6,11 @@
     </div>
 
     <div style="display: flex; width: 100%; align-items: flex-end; justify-content: center;">
+      <div class="ssPos" v-for="pos in ssPosList" :key="pos.posId"
+      @click="getPosSensor(pos.posId)">
+        {{ pos.posName }}
+      </div>
+      
       <alarm-log></alarm-log>
     </div>
     <div
@@ -50,12 +55,15 @@ export default {
   data() {
     return {
       ssId: 1,
+      currssId : 0,
       ssInfoList: [],
+      ssPosList: [],
       humidity: 50,
       temp: 60,
     };
   },
   mounted() {
+  this.getPosList();
   this.getPosSensor();
   },
   beforeUnmount() {
@@ -63,6 +71,17 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
+    async getPosList() {
+      try {
+        const res = await axios.get(
+          "http://163.180.117.38:8281/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
+        );
+        this.ssPosList = res.data.data.content;
+      } catch(err) {
+        console.log(err);
+      }
+    },
+
     async getPosSensor(posId = 1) {
       this.ssInfoList = [];
       this.displayGraph = "";
@@ -73,21 +92,21 @@ export default {
             "&sort.sorted=true"
         );
         this.ssInfoList = res.data.data.content;
-        //this.getSensorValue();
-        for (let i = 0; i < this.ssInfoList.length; i++) {
-          this.ssInfoList[i].value = 0.0;
-          switch (this.ssInfoList[i].ssType.typeName) {
+
+        for (var sensor of this.ssInfoList) {
+          sensor.value = 0;
+          switch (sensor.ssType.typeName) {
             case "온도":
-              this.ssInfoList[i].chartName = "temp-chart";
+              sensor.chartName = "temp-chart";
               break;
             case "분진":
-              this.ssInfoList[i].chartName = "dust-chart";
+              sensor.chartName = "dust-chart";
               break;
             case "습도":
-              this.ssInfoList[i].chartName = "humidity-chart";
+              sensor.chartName = "humidity-chart";
               break;
             case "가스":
-              this.ssInfoList[i].chartName = "gas-chart"
+              sensor.chartName = "gas-chart";
               break;
           }
         }
@@ -103,30 +122,34 @@ export default {
       var socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
 
-      for(var sensor of this.ssInfoList) {
         this.stompClient.connect(
+          // headers
           {},
+          // connetCallback
           (frame) => {
+            for(let i = 0; i < this.ssInfoList.length; i++) {
             this.connected = true;
             console.log("Socket Connection Success", frame);
-            this.stompClient.subscribe("/send/" + 1, (res) => {
+            // subscribe(destination, callback)
+            this.stompClient.subscribe("/send/" + this.ssInfoList[i].ssId, (res, idx=i) => {
               console.log("Sub Message.", res.body);
               console.log(JSON.parse(res.body).inputData);
-              console.log(sensor.ssId);
+              console.log(this.ssInfoList[idx].ssId);
+              this.ssInfoList[i].value = JSON.parse(res.body).inputData;
             });
+            }
           },
+          // errorCallback
           (error) => {
             console.log("Socket Connection Fail", error);
             this.connected = false;
           }
         );
-      }
-
       this.infSend();
     },
 
     infSend() {
-      setInterval(this.send, 1000);
+      setInterval(this.send, 2000);
     },
 
     send() {
@@ -137,11 +160,10 @@ export default {
             ssId: sensor.ssId,
           };
           this.stompClient.send("/receive/" + sensor.ssId, JSON.stringify(msg), {});
+          
         }
       }
     },
-
-    
       disconnect() {
         if (this.stompClient != null) {
           this.stompClient.disconnect();
@@ -180,7 +202,12 @@ export default {
   border-radius: 5px;
   text-align: center;
   margin: 5px;
-  
+}
+
+.smallbox {
+  width: fit-content;
+  height: fit-content;
+  display: flex;
 }
 
 .box_title {
@@ -250,5 +277,11 @@ export default {
   margin: 2px;
   position: absolute;
   bottom: 10px;
+}
+
+.ssPos {
+  width: 50px;
+  height: 50px;
+  color: white;
 }
 </style>

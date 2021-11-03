@@ -98,10 +98,10 @@ export default {
   },
   methods: {},
   watch: {
-    dust: function () {
+    value: function () {
       var d = this.value;
       for (var i = 0; i < 5; i++) {
-        if (d >= this.dustArray[i] && d < this.rangeArray[i + 1]) {
+        if (d >= this.rangeArray[i] && d < this.rangeArray[i + 1]) {
           this.color = this.infoList[i].color;
           this.icon = this.infoList[i].icon;
           this.status = this.infoList[i].status;

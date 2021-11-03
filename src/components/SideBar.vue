@@ -101,7 +101,6 @@ export default {
   font-weight: bold;
   transition: color 0.5s;
 }
-
 p {
   transition: color 0.5s;
 }
