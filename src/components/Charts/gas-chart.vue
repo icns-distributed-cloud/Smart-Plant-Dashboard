@@ -2,8 +2,16 @@
   <!--가스-->
   <div class="box">
     <div class="box_title">
-      <i class="bi bi-bar-chart-line-fill"></i> 가스
+      <i class="bi bi-clouds"></i> 가스
+      <i  v-if="!smallView" class="bi bi-caret-down-fill" id="hide_icon" style="float: right"
+      @click="smallView=true"
+      ></i>
+      <i  v-if="smallView" id="hide_icon" class="bi bi-caret-up-fill" style="color: white;"
+      @click="smallView=false"
+      ></i>
     </div>
+
+    <div v-if="!smallView" class="large_view_content">
     <div class="gauge" style="position: relative; top: -125px;">
     <ejs-circulargauge background="#FFFFFF00">
         <e-axes>
@@ -23,6 +31,16 @@
     </ejs-circulargauge>
     </div>
     <div id="gas" class="value_text" style="top: -330px;">{{ value }}</div>
+    </div>
+
+    <div v-if="smallView" class="small_view_content">
+      <div class="small_status" :style="{ backgroundColor: color }">
+        <div>{{ value }}<span style="font-size: 12px"> ppm</span></div>
+        <div style="font-weight: lighter;">|</div>
+      <div>{{ status }}</div>
+    </div>
+    </div>
+
   </div>
 </template>
 
@@ -46,6 +64,7 @@ export default {
 
   data: function () {
       return {
+        smallView: false,
         color: "#5a8dee",
         icon: "<i class='bi bi-emoji-laughing-fill'></i>",
         status: "안전",

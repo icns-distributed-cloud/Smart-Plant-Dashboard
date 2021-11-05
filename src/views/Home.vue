@@ -184,11 +184,10 @@ export default {
 </script>
 <style>
 .background {
-  background-size: contain;
+  background-size: cover;
+  width: 100%;
   height: 100%;
   background-image: url("../assets/background.png");
-  background-repeat: no-repeat;
-  width: 100%;
 }
 .box {
   background-color: #272e4890;
@@ -196,18 +195,17 @@ export default {
   width: 230px;
   /* width: 100%; */
   height: 250px;
+  height: fit-content;
   padding: 10px;
-  overflow: visible;
+  overflow: hidden;
   position: relative;
   border-radius: 5px;
   text-align: center;
   margin: 5px;
-}
+  }
 
 .smallbox {
-  width: fit-content;
   height: fit-content;
-  display: flex;
 }
 
 .box_title {
@@ -215,9 +213,7 @@ export default {
   text-align: left;
   font-size: 15px;
   font-weight: bold;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  margin-left: 10px;
+  margin: 5px 10px;
 }
 
 .title_div {
@@ -226,6 +222,62 @@ export default {
   height: 1.5px;
   border-radius: 2px;
   opacity: 40;
+  margin: 10px 0px;
+}
+
+
+.large_view_content {
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  animation: large-view 0.2s;
+}
+
+.small_view_content {
+  height: fit-content;
+  animation: small-view 0.2s;
+}
+
+@keyframes large-view {
+  from {
+    height: 0px;
+    opacity: 0;
+  }
+  to {
+    height: 200px;
+    opacity: 1;
+  }
+}
+
+@keyframes small-view {
+  from {
+    height: 190px;
+  }
+  to {
+    height: 30px;
+  }
+}
+
+.small_status {
+  border-radius: 13px;
+  display: flex;
+  justify-content: space-evenly;
+  font-weight: bold;
+  font-size: 17px;
+  color: white;
+  padding: 3px 0px;
+  opacity: 90%;
+  margin: 5px 5px;
+}
+
+#hide_icon {
+  float: right;
+  font-size: 18px;
+  transition: text-shadow .5s;
+}
+
+#hide_icon:hover {
+  text-shadow: 0px 0px 8px white;
 }
 
 .value_text {
@@ -253,13 +305,13 @@ export default {
 }
 
 .humid {
-  width: 150px;
-  height: 150px;
+  width: 140px;
+  height: 140px;
   border-radius: 0 50% 50% 50%;
   border: 3px solid black;
   transform: rotate(45deg);
   margin-top: 40px;
-  margin-left: 30px;
+  margin-left: 37px;
   border-width: 9px;
   border-color: "#5a8dee";
   box-shadow: 5px 5px 5px #1b1f22;

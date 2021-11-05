@@ -1,9 +1,19 @@
 <template>
   <!--온도-->
   <div class="box">
-    <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   온도</div>
-    <div id="temp" class="value_text" style="position: absolute; left: 25px">
-      {{ value }} <span style="font-size: 20px; position: relative; left: -5px; color:white;">°C</span>
+    <div class="box_title"><i class="bi bi-thermometer-half"></i>   온도
+      <i  v-if="!smallView" class="bi bi-caret-down-fill" id="hide_icon" style="float: right"
+      @click="smallView=true"
+      ></i>
+      <i  v-if="smallView" id="hide_icon" class="bi bi-caret-up-fill" style="color: white;"
+      @click="smallView=false"
+      ></i>
+    </div>
+
+    <div v-if="!smallView" class="large_view_content">
+    <div id="temp" class="value_text" style="position: absolute; left: 25px; top: 50px">
+      {{ value }}
+      <span style="font-size: 20px; position: relative; left: -7px; color:white;">°C</span>
       </div>
 
     <div class="vue-thermometer" :class="customClass">
@@ -116,8 +126,18 @@
         <span v-html="icon"></span>
         <span style="margin-left: 4px;">{{ status }}</span>
     </div>
+    </div>
+
+    <div v-if="smallView" class="small_view_content">
+      <div class="small_status" :style="{backgroundColor: color}">
+        <div>{{ value }}<span style="font-size: 10px"> °C</span></div>
+        <div style="font-weight: lighter;">|</div>
+      <div >{{ status }}</div>
+    </div>
+  </div>
 
   </div>
+  
 </template>
 
 <script>
@@ -194,6 +214,7 @@ export default {
   },
   data() {
     return {
+      smallView: false,
       defaultOptions: Object,
       color: "#5a8dee",
       icon: "<i class='bi bi-emoji-laughing-fill'></i>",
@@ -370,6 +391,6 @@ export default {
 
 .vue-thermometer {
   position: relative;
-  left: 50px;
+  left: 60px;
 }
 </style>

@@ -86,7 +86,7 @@
                     <div class="main-input">
                       <input
                         autocomplete="off"
-                        type="text"
+                        type="color"
                         class="form-control"
                         name="pos_dtl"
                         placeholder="색상 코드"

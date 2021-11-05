@@ -99,13 +99,13 @@ export default {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
-  transition: color 0.5s;
 }
 p {
-  transition: color 0.5s;
+  transition: all 0.5s;
 }
 
 p:hover {
   color: #517bcd;
+  padding-left: 5px;
 }
 </style>

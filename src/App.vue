@@ -4,7 +4,6 @@
     <div class="contents">
       <div class="header">
         <div class="header-left">
-          <!-- <button @click="send">Socket TEST</button> -->
           <h3 style="color: #daa520; font-weight: 800">
             지능형 이상감지 - 대시보드
             <div class="icon" style="float: right; color: #969696">
@@ -20,6 +19,7 @@
 
       <div class="main-contents">
         <router-view></router-view>
+        <div> 2021</div>
       </div>
       <div class="footer">2021 Smart Monitoring system</div>
     </div>
@@ -39,17 +39,6 @@ export default {
     return {
     };
   },
-  /*
-  created() {
-    this.connect()
-  },
-  methods: {
-    connect() {
-      const serverURL = "http://localhost:8080"
-      let
-    }
-  }
-  */
 };
 </script>
 
@@ -78,6 +67,7 @@ body {
   overflow: hidden;
   border-right: #464d5c 1px solid;
 }
+
 .wrapper {
   margin: 10px;
 }

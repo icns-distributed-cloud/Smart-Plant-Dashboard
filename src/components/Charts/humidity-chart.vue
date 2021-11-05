@@ -1,30 +1,35 @@
 <template>
     <!--습도-->
   <div>
-    <!-- 습도 큰 창 -->
-    <div v-if="!smallView" class="box">
-        <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   습도
-          <i class="bi bi-caret-down-fill" style="float: right"
+    <div class="box">
+        <div class="box_title"><i class="bi bi-droplet-half"></i>   습도
+          <i  v-if="!smallView" class="bi bi-caret-down-fill" id="hide_icon" style="float: right"
           @click="smallView=true"
           ></i>
-        </div>
-        <div id="humidity" class="humid"></div>
-        <div id="humidity" class="value_text" style="bottom: 50%;">{{ value }}</div>
-        <div class="pct">%</div>
-        <div id="humidity" class="status" style="display: flex;">
-          <p v-html="icon"></p>
-          <p style="margin-left: 4px;">{{ status }}</p>
-        </div>
-    </div>
+          <i  v-if="smallView" id="hide_icon" class="bi bi-caret-up-fill" style="color: white;"
+          @click="smallView=false"
+          ></i>
 
-    <!-- 습도작은 창 -->
-    <div v-if="smallView" class="box smallbox">
-      <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i>   습도
-      </div>
-      <p id="humidity" class="smallValue">{{ value }}</p>
-      <i class="bi bi-caret-up-fill" style="color: white;"
-      @click="smallView=false"
-      ></i>
+        <!-- 습도 큰 창 -->
+        </div>
+          <div v-if="!smallView" class="large_view_content">
+          <div id="humidity" class="humid"></div>
+          <div id="humidity" class="value_text" style="bottom: 100px;">{{ value }}</div>
+          <div class="pct">%</div>
+          <div id="humidity" class="status" style="display: flex;">
+            <p v-html="icon"></p>
+            <p style="margin-left: 4px;">{{ status }}</p>
+          </div>
+        </div>
+
+        <!-- 습도 작은 창 -->
+        <div v-if="smallView" class="small_view_content">
+          <div class="small_status" :style="{ backgroundColor: color }">
+            <div>{{ value }}<span style="font-size: 12px"> %</span></div>
+            <div style="font-weight: lighter;">|</div>
+          <div>{{ status }}</div>
+        </div>
+        </div>
     </div>
   </div>
 </template>
@@ -105,11 +110,11 @@ export default {
 
 .pct {
   color: white;
-  font-size: 40px;
+  font-size: 35px;
   font-weight: bold;
   position: absolute;
-  top: 30px;
-  right: 20px;
+  top: 35px;
+  right: 30px;
 }
 
 </style>

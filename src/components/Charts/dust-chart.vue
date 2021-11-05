@@ -1,7 +1,18 @@
 <template>
   <!-- 분진 -->
+  <div>
   <div class="box">
-    <div class="box_title"><i class="bi bi-bar-chart-line-fill"></i> 분진</div>
+    <div class="box_title"><i class="bi bi-cloud-haze"></i> 분진
+      <i v-if="!smallView" class="bi bi-caret-down-fill" id="hide_icon" style="float: right"
+      @click="smallView=true"
+      ></i>
+      <i v-if="smallView" id="hide_icon" class="bi bi-caret-up-fill" style="color: white;"
+      @click="smallView=false"
+      ></i>
+    </div>
+
+    <!-- 분진 큰 창 -->
+    <div v-if="!smallView" class="large_view_content">
     <div id="dust" class="dust_circle">
       <div
         id="dust"
@@ -45,6 +56,17 @@
       <span style="margin-left: 4px">{{ status }}</span>
     </div>
   </div>
+
+  <!-- 분진 작은 창 -->
+  <div v-if="smallView" class="small_view_content">
+      <div class="small_status" :style="{backgroundColor: color}">
+        <div>{{ value }}<span style="font-size: 10px"> μm</span></div>
+        <div style="font-weight: lighter">|</div>
+        <div >{{ status }}</div>
+      </div>
+    </div>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -52,6 +74,7 @@ export default {
   name: "dust-chart",
   data() {
     return {
+      smallView: false,
       color: "#5a8dee",
       icon: "<i class='bi bi-emoji-laughing-fill'></i>",
       status: "안전",
