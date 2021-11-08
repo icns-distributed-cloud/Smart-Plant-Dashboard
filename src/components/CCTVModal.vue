@@ -18,13 +18,13 @@
                 <div
                     class="form-label-group position-relative has-icon-left controls"
                 >
-                  <label for="sensor_pos">센서 위치</label>
+                  <label for="cctv">CCTV 위치</label>
                   <div class="main-input">
-                    <select v-model="newSensor.sensorPosId" name="sensor_pos" class="form-control" required>
+                    <select v-model="newCCTV.cctvId" name="cctv" class="form-control" required>
                       <option disabled value="">=== 선택하세요 ===</option>
-                      <option v-for="pos in posList" :key="pos.posId"
-                              v-bind:value="pos.posId">
-                        {{ pos.posName }}
+                      <option v-for="cctv in cctvList" :key="cctv.cctvId"
+                              v-bind:value="cctv.cctvId">
+                        {{ cctv.websocketURL }}
                       </option>
                     </select>
                     <div class="form-control-position label-icon">
@@ -40,7 +40,7 @@
                 >
                   <label for="sensor_pos">센서 종류</label>
                   <div class="main-input">
-                    <select v-model="newSensor.sensorTypeId" name="sensor_type" class="form-control" required>
+                    <select v-model="newCCTV.sensorTypeId" name="sensor_type" class="form-control" required>
                       <option disabled value="">=== 선택하세요 ===</option>
                       <option v-for="type in typeList" :key="type.typeId"
                               v-bind:value="type.typeId">
@@ -64,7 +64,7 @@
                         name="sensor_etc"
                         placeholder="기타 정보"
                         maxlength="100"
-                        v-model= "newSensor.ssDtl"
+                        v-model= "newCCTV.ssDtl"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-comment-detail"></i>
@@ -83,7 +83,7 @@
                         name="sensor_contact"
                         placeholder="담당자"
                         maxlength="100"
-                        v-model="newSensor.ssContact"
+                        v-model="newCCTV.ssContact"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-street-view"></i>
@@ -102,7 +102,7 @@
                         name="sensor_contact_ext"
                         placeholder="담당자 내선 번호"
                         maxlength="100"
-                        v-model="newSensor.ssContactExt"
+                        v-model="newCCTV.ssContactExt"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-phone"></i>
@@ -120,7 +120,7 @@
                         name="sensor_contact_phone"
                         placeholder="담당자 휴대번호"
                         maxlength="100"
-                        v-model="newSensor.ssContactPhone"
+                        v-model="newCCTV.ssContactPhone"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-mobile"></i>
@@ -133,7 +133,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary"
-                  @click="$emit('add-new-sensor',newSensor)">
+                  @click="$emit('add-new-cctv',newCCTV)">
             저장
           </button>
           <button type="button" class="btn btn-secondary" @click="$emit('close');">
@@ -150,43 +150,32 @@ import axios from "axios";
 export default {
   data () {
     return {
-      posList: [],
-      typeList: [],
-      newSensor: {
-        sensorPosId: 0,
-        sensorTypeId: 0,
-        ssContact: "",
-        ssContactExt: "",
-        ssContactPhone: "",
-        ssDtl: "",
+      cctvList: [],
+      newCCTV: {
+        cctvId: 0,
+        userId: "",
+        password: "",
+        cctvLocation: "",
+        streamUrl: "",
+        websocketURL: "",
       },
     };
   },
   created() {
-    this.getPosInfo();
-    this.getTypeInfo();
+    this.getCCTVInfo();
   },
   methods: {
-    async getPosInfo() {
+    async getCCTVInfo() {
       try {
         const res = await axios.get(
-            "http://163.180.117.40:8218/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
+            "http://163.180.117.40:8218/api/cctv?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
-        this.posList = res.data.data.content;
+        this.cctvList = res.data.data.content;
       } catch (err) {
         console.log(err);
       }
     },
-    async getTypeInfo() {
-      try {
-        const res = await axios.get(
-            "http://163.180.117.40:8218/api/sensor-type"
-        );
-        this.typeList = res.data.data.content;
-      } catch (err) {
-        console.log(err);
-      }
-    },
+
 
   },
 

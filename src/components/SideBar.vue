@@ -40,6 +40,10 @@
         <p @click="menuOpen=4;">
           <i v-if="menuOpen==4" class="bi bi-arrow-right"></i> 센서 위치 등록
         </p>
+
+        <p @click="$router.push('cctv-setting'); menuOpen=10;">
+          <i v-if="menuOpen==10" class="bi bi-arrow-right"></i> CCTV 설정
+        </p>
       </div>
     </div>
 
