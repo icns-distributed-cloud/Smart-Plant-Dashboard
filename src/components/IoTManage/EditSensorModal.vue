@@ -56,24 +56,6 @@
 
               <div class="col-12">
                 <div class="form-label-group position-relative has-icon-left">
-                  <label for="sensor_etc">기타 정보</label>
-                  <div class="main-input">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="sensor_etc"
-                      maxlength="100"
-                      v-model= "newSensor.ssDtl"
-                    />
-                    <div class="form-control-position label-icon">
-                      <i class="bx bx-comment-detail"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12">
-                <div class="form-label-group position-relative has-icon-left">
                   <label for="sensor_contact">담당자</label>
                   <div class="main-input">
                     <input

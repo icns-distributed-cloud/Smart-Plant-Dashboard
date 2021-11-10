@@ -87,15 +87,31 @@ export default {
       this.displayGraph = "";
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-manage?paged=false&posId=" +
-            posId +
-            "&sort.sorted=true"
+          "http://163.180.117.38:8281/api/sensor-range?posId=" + posId
         );
         this.ssInfoList = res.data.data.content;
-
+        this.makeSensorInfo();
+      } catch(err) {
+        console.log(err);
+      }
+    },
+    makeRangeInfo() {
+      for (var sensor of this.ssInfoList) {
+          var result = this.getRangeArray(sensor.ssId);
+          sensor.rangeArray = [];
+          sensor.rangeArray.push(result.rstart);
+          sensor.rangeArray.push(result.rlev1);
+          sensor.rangeArray.push(result.rlev2);
+          sensor.rangeArray.push(result.rlev3);
+          sensor.rangeArray.push(result.rlev4);
+          sensor.rangeArray.push(result.rend);
+          console.log(sensor.rangeArray);
+      }
+    },
+    makeSensorInfo() {  
         for (var sensor of this.ssInfoList) {
           sensor.value = 0;
-          switch (sensor.ssType.typeName) {
+          switch (sensor.sensorTypeName) {
             case "온도":
               sensor.chartName = "temp-chart";
               break;
@@ -109,14 +125,19 @@ export default {
               sensor.chartName = "gas-chart";
               break;
           }
+          sensor.rangeArray = [];
+          sensor.rangeArray.push(sensor.rstart);
+          sensor.rangeArray.push(sensor.rlev1);
+          sensor.rangeArray.push(sensor.rlev2);
+          sensor.rangeArray.push(sensor.rlev3);
+          sensor.rangeArray.push(sensor.rlev4);
+          sensor.rangeArray.push(sensor.rend);
+          console.log(sensor.rangeArray);
         }
-        console.log(this.ssInfoList);
+        console.log("hello!!!!!!!!!!!!", this.ssInfoList);
         this.connect();
-      } catch(err) {
-        console.log(err);
-      }
+        //this.makeRangeInfo();
     },
-
     connect() {
       const serverURL = "http://163.180.117.38:8281/ws";
       var socket = new SockJS(serverURL);

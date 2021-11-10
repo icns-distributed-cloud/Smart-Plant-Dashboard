@@ -8,7 +8,7 @@
             type="button"
             class="btn-close btn-close-white close"
             aria-label="Close"
-            @click="$emit('close');"
+            @click="$emit('close')"
           ></button>
         </div>
         <div class="modal-body">
@@ -20,10 +20,18 @@
                 >
                   <label for="sensor_pos">센서 위치</label>
                   <div class="main-input">
-                    <select v-model="newSensor.sensorPosId" name="sensor_pos" class="form-control" required>
-                      <option disabled value="">=== 선택하세요 ===</option>
-                      <option v-for="pos in posList" :key="pos.posId"
-                      v-bind:value="pos.posId">
+                    <select
+                      name="sensor_pos"
+                      class="form-control"
+                      required
+                      v-model="newSensor.sensorPosId"
+                    >
+                      <option value="0" hidden>== 위치 선택 ==</option>
+                      <option
+                        v-for="pos in posList"
+                        :key="pos.posId"
+                        :value="pos.posId"
+                      >
                         {{ pos.posName }}
                       </option>
                     </select>
@@ -40,34 +48,24 @@
                 >
                   <label for="sensor_pos">센서 종류</label>
                   <div class="main-input">
-                    <select v-model="newSensor.sensorTypeId" name="sensor_type" class="form-control" required>
-                      <option disabled value="">=== 선택하세요 ===</option>
-                      <option v-for="type in typeList" :key="type.typeId"
-                      v-bind:value="type.typeId">
+                    <select
+                      v-model="newSensor.sensorTypeId"
+                      name="sensor_type"
+                      class="form-control"
+                      id="ss_type_select"
+                      required
+                    >
+                      <option hidden value="0">== 종류 선택 ==</option>
+                      <option
+                        v-for="type in typeList"
+                        :key="type.typeId"
+                        v-bind:value="type.typeId"
+                      >
                         {{ type.typeName }}
                       </option>
                     </select>
                     <div class="form-control-position label-icon">
                       <i class="bx bx-shape-square"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-12">
-                <div class="form-label-group position-relative has-icon-left">
-                  <label for="sensor_etc">기타 정보</label>
-                  <div class="main-input">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="sensor_etc"
-                      placeholder="기타 정보"
-                      maxlength="100"
-                      v-model= "newSensor.ssDtl"
-                    />
-                    <div class="form-control-position label-icon">
-                      <i class="bx bx-comment-detail"></i>
                     </div>
                   </div>
                 </div>
@@ -97,10 +95,10 @@
                   <label for="sensor_contact_ext">담당자 내선번호</label>
                   <div class="main-input">
                     <input
-                      type="text"
+                      type="number"
                       class="form-control"
                       name="sensor_contact_ext"
-                      placeholder="담당자 내선 번호"
+                      placeholder="담당자 내선번호"
                       maxlength="100"
                       v-model="newSensor.ssContactExt"
                     />
@@ -115,9 +113,9 @@
                   <label for="sensor_contact_phone">담당자 휴대번호</label>
                   <div class="main-input">
                     <input
-                      type="text"
+                      type="number"
                       class="form-control"
-                      name="sensor_contact_phone"
+                      name="sensor_constact_phone"
                       placeholder="담당자 휴대번호"
                       maxlength="100"
                       v-model="newSensor.ssContactPhone"
@@ -132,11 +130,18 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary"
-          @click="$emit('add-new-sensor',newSensor)">
+          <button
+            type="button"
+            class="btn btn-primary"
+            @click="$emit('add-new-sensor', newSensor)"
+          >
             저장
           </button>
-          <button type="button" class="btn btn-secondary" @click="$emit('close');">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="$emit('close')"
+          >
             닫기
           </button>
         </div>
@@ -148,7 +153,7 @@
 <script>
 import axios from "axios";
 export default {
-  data () {
+  data() {
     return {
       posList: [],
       typeList: [],
@@ -158,7 +163,6 @@ export default {
         ssContact: "",
         ssContactExt: "",
         ssContactPhone: "",
-        ssDtl: "",
       },
     };
   },
@@ -171,8 +175,8 @@ export default {
       try {
         const res = await axios.get(
           "http://163.180.117.38:8281/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
-          );
-          this.posList = res.data.data.content;
+        );
+        this.posList = res.data.data.content;
       } catch (err) {
         console.log(err);
       }
@@ -187,9 +191,7 @@ export default {
         console.log(err);
       }
     },
-
   },
-
 };
 </script>
 
@@ -241,6 +243,8 @@ export default {
 }
 .form-control:focus {
   box-shadow: none;
+  background-color: #1a233a;
+  color: #9fb0d6;
 }
 label {
   margin-left: 3px;
@@ -252,5 +256,12 @@ label {
   position: absolute;
   left: 2px;
   top: 4px;
+}
+select.form-control:not([size]):not([multiple]) {
+  height: auto !important;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 </style>

@@ -1,7 +1,10 @@
 <template>
   <div>
-    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet"/>
-    
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
     <div class="wrapper">
       <div class="table-header">
         이상 경고 설정 | <Icon icon="bx:bx-home-alt" />
@@ -14,78 +17,99 @@
           <div>
             <div class="table-main__content">
               <div class="table-main__content-intro">
-                센서의 이상 경고값을 설정하는 화면입니다.
+                {{ posName }} 구역의 센서 이상 경고 설정
               </div>
 
-             
-              
               <div class="dropdown" style="margin: 10px;">
-    
-              <button class="btn  btn-primary  dropdown-toggle" data-toggle="dropdown" color="#000080">
-                구역 선택
-              </button>
-    
-              <div class="dropdown-menu">
-                <a v-for="pos in ssPosList" :key=pos.posId class="dropdown-item"
-                @click="selectedPos(pos.posId, pos.posName)">
-                  {{ pos.posName }}
-                </a>
+                <button
+                  class="btn  btn-primary  dropdown-toggle"
+                  data-toggle="dropdown"
+                  color="#000080"
+                >
+                  구역선택
+                </button>
+                <div class="dropdown-menu">
+                  <a
+                    v-for="pos in ssPosList"
+                    :key="pos.posId"
+                    class="dropdown-item"
+                    @click="selectedPos(pos.posId, pos.posName)"
+                  >
+                    {{ pos.posName }}
+                  </a>
+                </div>
               </div>
-    
-              </div>
-              
 
               <div>
                 <table class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th>식별번호</th>
-                    <th>센싱 장비 종류</th>
-                    <th>
-                        <div style="display: flex; justify-content: space-around;">
-                        <span v-for="(block, k) in infoList" :key="k"
-                        :style="{color: block.color}">
+                  <thead>
+                    <tr>
+                      <th>식별번호</th>
+                      <th>센싱 장비 종류</th>
+                      <th>
+                        <div
+                          style="display: flex; justify-content: space-around;"
+                        >
+                          <span
+                            v-for="(block, k) in infoList"
+                            :key="k"
+                            :style="{ color: block.color }"
+                          >
                             {{ block.status }}
-                        </span>
+                          </span>
                         </div>
-
-                    </th>
-                    <th>기타 정보</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="sensor in ssRangeList" :key="sensor.ssId">
-                    <td>{{ sensor.ssId }}</td>
-                    <td>{{ sensor.sensorTypeName }}</td>
-                    <td >
+                      </th>
+                      <th>ACTION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="sensor in ssRangeList" :key="sensor.ssId">
+                      <td>{{ sensor.ssId }}</td>
+                      <td>{{ sensor.sensorTypeName }}</td>
+                      <td>
                         <div class="range">
-                            <span v-for="(block, j) in infoList" :key="j"
-                            class="range-elem" :style="{backgroundColor: block.color}">
-                            <!--{{ block.status }}--> </span>
+                          <span
+                            v-for="(block, j) in infoList"
+                            :key="j"
+                            class="range-elem"
+                            :style="{ backgroundColor: block.color }"
+                          >
+                            <!--{{ block.status }}-->
+                          </span>
                         </div>
-                        <div  class="range-text-box">
-                            <span v-for="(value, k) in sensor.range" :key="k"
-                            class="range-text">{{ value }}
-                            </span>
+                        <div class="range-text-box">
+                          <span
+                            v-for="(value, k) in sensor.range"
+                            :key="k"
+                            class="range-text"
+                            >{{ value }}
+                          </span>
                         </div>
-                    </td>
-                    <td
-                      style="
-                        padding-top: 2px;
+                      </td>
+                      <td
+                        style="
+                        vertical-align: middle;
                         padding-right: 0px;
                         padding-left: 0px;
-                        padding-bottom: 2px;
+                        
                         text-align: center;
                       "
-                    >
-                      <a class="btn btn-outline-primary mod-btn"
-                      @click="readyToEdit(sensor.range, sensor.ssId, sensor.sensorTypeName)"
-                        ><i class="bx bx-edit"></i> 수정
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      >
+                        <a
+                          class="btn btn-outline-primary mod-btn"
+                          @click="
+                            readyToEdit(
+                              sensor.range,
+                              sensor.ssId,
+                              sensor.sensorTypeName
+                            )
+                          "
+                          ><i class="bx bx-edit"></i> 수정
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
               <nav aria-label="Page navigation example" style="float: right">
                 <ul class="pagination">
@@ -113,8 +137,14 @@
         </div>
       </div>
     </div>
-    <SettingModal v-if="show" @close="show=false;" @edit-range="editRange"
-    :range="range" :ssId="ssId" :sensorTypeName="sensorTypeName"></SettingModal>
+    <SettingModal
+      v-if="show"
+      @close="show = false"
+      @edit-range="editRange"
+      :range="range"
+      :ssId="ssId"
+      :sensorTypeName="sensorTypeName"
+    ></SettingModal>
   </div>
 </template>
 
@@ -126,36 +156,31 @@ import SettingModal from "@/components/AbnormalDetection/SettingModal";
 export default {
   name: "AlertSettings",
   data() {
-      return {
-        mySensor: {range: [], ssId: 0, sensorTypeName: ""},
-        range: [],
-        ssId: 0,
-        posId: 0,
-        posName: "",
-        sensorTypeName: "",
-          infoList: [
-            { color: "#5a8dee", status: "안전" },
-            { color: "#00cfdd", status: "관심" },
-            { color: "#39da8a", status: "주의" },
-            { color: "#fdac41", status: "경고" },
-            { color: "#ff5b5c", status: "심각" }
-          ],
-          sensorInfo : [
-          { id: 1, type: "온도", range: [10, 20, 30, 40, 50, 60] },
-          { id: 2, type: "습도", range: [10, 40, 60, 70, 100, 120] },
-          { id: 3, type: "가스", range: [40, 50, 70, 90, 100, 110] },
-        ],
-        sensor : {id:1, type:"anything", range: [90,100,120,150,170]},
-        show : false,
-        ssRangeList: [],
-        ssPosList: [],
-      };
+    return {
+      mySensor: { range: [], ssId: 0, sensorTypeName: "" },
+      range: [],
+      ssId: 0,
+      posId: 0,
+      posName: "ICNS",
+      sensorTypeName: "",
+      infoList: [
+        { color: "#5a8dee", status: "안전" },
+        { color: "#00cfdd", status: "관심" },
+        { color: "#39da8a", status: "주의" },
+        { color: "#fdac41", status: "경고" },
+        { color: "#ff5b5c", status: "심각" },
+      ],
+      sensor: { id: 1, type: "anything", range: [90, 100, 120, 150, 170] },
+      show: false,
+      ssRangeList: [],
+      ssPosList: [],
+    };
   },
   components: {
     Icon,
     SettingModal,
   },
-  mounted () {
+  mounted() {
     this.getPosInfo();
     this.getRangeInfo();
   },
@@ -174,6 +199,7 @@ export default {
       this.sensor = sensor;
       this.show = true;
     },
+
     async getPosInfo() {
       try {
         const res = await axios.get(
@@ -184,14 +210,22 @@ export default {
         console.log(err);
       }
     },
-    async getRangeInfo(posId=1) {
-      this.ssRangeList= [];
+    async getRangeInfo(posId = 1) {
+      this.ssRangeList = [];
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-range?pageNumber=1&pageSize=1&paged=false&posId="+ posId +"&sort.sorted=true&sort.unsorted=false"
+          "http://163.180.117.38:8281/api/sensor-range?pageNumber=1&pageSize=1&paged=false&posId=" +
+            posId +
+            "&sort.sorted=true&sort.unsorted=false"
         );
+
         for (var item of res.data.data.content) {
-          var temp = {ssId: "", range: [], sensorTypeName:"", sensorPosId:""};
+          var temp = {
+            ssId: "",
+            range: [],
+            sensorTypeName: "",
+            sensorPosId: "",
+          };
           temp.ssId = item.ssId;
           temp.sensorTypeName = item.sensorTypeName;
           temp.sensorPosId = item.sensorPosId;
@@ -222,46 +256,44 @@ export default {
             rend: newSensor.range[5],
           }
         );
-        this.show =false;
+        this.show = false;
         console.log(res);
       } catch (err) {
         console.log(err);
       }
-    }
-
+    },
   },
 };
 </script>
 
 <style>
 .range {
-    width : 100%;
-    height: 10px;
-    background-color: aqua;
-    overflow: hidden;
-    border-radius: 10px;
-    display: flex;
+  width: 100%;
+  height: 10px;
+  background-color: aqua;
+  overflow: hidden;
+  border-radius: 10px;
+  display: flex;
 }
 
 .range-elem {
-    width : 20%;
-    height: 20px;
-    font-size: 15px;
-    font-weight: bold;
-    color: black;
+  width: 20%;
+  height: 20px;
+  font-size: 15px;
+  font-weight: bold;
+  color: black;
 }
 
 .range-text-box {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .range-text {
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 .wrapper {

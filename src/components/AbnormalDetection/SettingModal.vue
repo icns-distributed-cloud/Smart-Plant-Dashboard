@@ -13,17 +13,17 @@
           ></button>
         </div>
 
-
+        <form>
         <div class="modal-body">
           <div class="form-body" style="margin-top:10px">
             <div class="row">
               <div class="col-12">
 
                 <div style="color: white; font-weight: bold; border-radius: 10px; padding: 5px; width: 100px; height: 30px;">
-                  id {{ ssId }}</div>
+                   센서 ID {{ ssId }}</div>
                 <div style="color: white; padding: 5px; font-weight: bold;">
                   {{ sensorTypeName }} 센서</div>
-                
+
                 <div class="block-wrapper">
                   <span class="block" v-for="(block, i) in infoList" :key="i"
                   :style="{ backgroundColor: block.color }">
@@ -43,13 +43,14 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary" @click="$emit('edit-range', newSensor);">
+          <button type="submit" class="btn btn-primary" @click.stop="$emit('edit-range', newSensor);">
             저장
           </button>
           <button type="button" class="btn btn-secondary" @click="$emit('close');">
             닫기
           </button>
         </div>
+        </form>
       </div>
     </div>
   </div>
@@ -77,7 +78,7 @@ export default {
     sensorTypeName: String,
   },
   mounted() {
-    this.newSensor.range = this.range;
+    this.newSensor.range = this.range.slice();
     this.newSensor.ssId = this.ssId;
     this.newSensor.sensorTypeName = this.sensorTypeName;
   }

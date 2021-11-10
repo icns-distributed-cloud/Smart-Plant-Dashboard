@@ -12,9 +12,9 @@
             aria-label="Close"
             @click="$emit('close-add-modal')"
           ></button>
-          </div>
-    <form @submit.prevent="onSubmit">
-  <div class="modal-body">
+        </div>
+        <form @submit.prevent="onSubmit">
+          <div class="modal-body">
             <div class="form-body" style="margin-top:10px">
               <div class="row">
                 <div class="col-12">
@@ -82,10 +82,17 @@
                 </div>
               </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" @click="$emit('add-new-pos', newPos); $emit('close-add-modal')">
-              신규 등록
+          </div>
+          <div class="modal-footer">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              @click="
+                $emit('add-new-pos', newPos);
+                $emit('close-add-modal');
+              "
+            >
+              위치 등록
             </button>
             <button
               type="button"
@@ -94,21 +101,21 @@
             >
               닫기
             </button>
-        </div>
+          </div>
         </form>
-        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-        newPos: { posName: "", posDtl: "", posCode: "" },
-        };
-    }
-}
+  data() {
+    return {
+      newPos: { posName: "", posDtl: "", posCode: "" },
+    };
+  },
+};
 </script>
 
 <style>

@@ -11,7 +11,7 @@
     </div>
     <div class="menu">
       <div class="menu1">
-        <i class="bi bi-display" style="font-size: 1.5rem;"></i>
+        <i class="bi bi-display" ></i>
         대시보드
       </div>
       <div class="menu2" style="cursor:pointer;">
@@ -29,7 +29,7 @@
 
     <div class="menu">
       <div class="menu1">
-        <i class="bi bi-gear" style="font-size: 1.5rem;"></i>
+        <i class="bi bi-gear" ></i>
         IoT 관리
       </div>
       <div class="menu2" style="cursor:pointer;">
@@ -45,7 +45,7 @@
 
     <div class="menu">
       <div class="menu1">
-        <i class="bi bi-clipboard-check" style="font-size: 1.5rem;"></i>
+        <i class="bi bi-clipboard-check" ></i>
         e-SOP 관리
       </div>
       <div class="menu2" style="cursor:pointer;">
@@ -63,7 +63,7 @@
 
     <div class="menu">
       <div class="menu1">
-        <i class="bi bi-exclamation-triangle" style="font-size: 1.5rem;"></i>
+        <i class="bi bi-exclamation-triangle" ></i>
         이상 감지 관리
       </div>
       <div class="menu2" style="cursor:pointer;">
@@ -102,6 +102,7 @@ export default {
 }
 p {
   transition: all 0.5s;
+  font-size: 15px;
 }
 
 p:hover {

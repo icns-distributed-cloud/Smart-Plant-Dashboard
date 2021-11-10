@@ -12,9 +12,9 @@
             aria-label="Close"
             @click="$emit('close-add-modal')"
           ></button>
-          </div>
-    <form @submit.prevent="onSubmit">
-  <div class="modal-body">
+        </div>
+        <form @submit.prevent="onSubmit">
+          <div class="modal-body">
             <div class="form-body" style="margin-top:10px">
               <div class="row">
                 <div class="col-12">
@@ -101,9 +101,16 @@
                 </div>
               </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" @click="$emit('add-new-type', newType); $emit('close-add-modal')">
+          </div>
+          <div class="modal-footer">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              @click="
+                $emit('add-new-type', newType);
+                $emit('close-add-modal');
+              "
+            >
               신규 등록
             </button>
             <button
@@ -113,21 +120,21 @@
             >
               닫기
             </button>
-        </div>
+          </div>
         </form>
-        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-        newType: { typeName: "", typeDtl: "", typeCode: "", typeColorCode: "" },
-        };
-    }
-}
+  data() {
+    return {
+      newType: { typeName: "", typeDtl: "", typeCode: "", typeColorCode: "" },
+    };
+  },
+};
 </script>
 
 <style>
@@ -149,6 +156,7 @@ export default {
   font-size: 15px;
   font-weight: bold;
 }
+
 .modal-body {
   padding: 10px 25px;
   margin-bottom: 20px;
@@ -166,7 +174,6 @@ export default {
   margin-bottom: 12px;
   width: 100%;
 }
-
 .form-control {
   background-color: #1a233a;
   color: #9fb0d6;
@@ -178,6 +185,8 @@ export default {
 }
 .form-control:focus {
   box-shadow: none;
+  background-color: #1a233a;
+  color: #9fb0d6;
 }
 label {
   margin-left: 3px;

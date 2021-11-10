@@ -13,17 +13,21 @@
             @click="$emit('close')"
           ></button>
         </div>
-          <div class="modal-body">            
-            <button class="btn btn-primary"
+        <div class="modal-body">
+          <button
+            class="btn btn-primary"
             style="float:right; margin: 10px;"
-            @click="addPos=true;">
-              신규 등록
-            </button>
-            <AddPlaceModal v-if="addPos"
+            @click="addPos = true"
+          >
+            위치 등록
+          </button>
+          <AddPlaceModal
+            v-if="addPos"
             @add-new-pos="AddPos"
-            @close-add-modal="addPos=false;">
-            </AddPlaceModal>
-            <form @submit.prevent="onSubmit">
+            @close-add-modal="addPos = false"
+          >
+          </AddPlaceModal>
+          <form @submit.prevent="onSubmit">
             <div class="modal-title sub-title">
               <i class="bi bi-diamond-fill"></i> 위치 목록
             </div>
@@ -66,22 +70,29 @@
                   </td>
                   <td
                     style="
-                          padding-top: 2px;
+                          vertical-align: middle;
                           padding-right: 0px;
                           padding-left: 0px;
-                          padding-bottom: 2px;
                           text-align: center;
                           "
                   >
                     <a
                       class="btn btn-outline-primary mod-btn"
                       type="submit"
-                      @click="readyToEdit(sensorPos); editSensorPos(sensorPos.posId);"
+                      @click="
+                        readyToEdit(sensorPos);
+                        editSensorPos(sensorPos.posId);
+                        alertSuccessfullyModified=true;
+                      "
                       ><i class="bx bx-edit"></i> 저장
                     </a>
                     <a
                       class="btn btn-outline-danger tr_data_del"
-                      @click="deleteSensorPos(sensorPos.posId)"
+                      @click="askToDelete = true"
+                      @delete="
+                        deleteSensorPos(sensorPos.posId);
+                        askToDelete = false;
+                      "
                       ><i class="bx bx-trash"></i> 삭제</a
                     >
                   </td>
@@ -89,16 +100,26 @@
               </tbody>
             </table>
           </form>
-            <!-- footer -->
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="$emit('close')"
-            >
-              닫기
-            </button>
+          <!-- footer -->
+          <AskToDelete
+            v-if="askToDelete"
+            @close="askToDelete = false"
+            @delete="deleteSensorPos(able)"
+          ></AskToDelete>
+          <AlertSuccessfullyModified
+            v-if="alertSuccessfullyModified"
+            @close="alertSuccessfullyModified = false"
+          >
+          </AlertSuccessfullyModified>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="$emit('close')"
+          >
+            닫기
+          </button>
         </div>
       </div>
     </div>
@@ -108,15 +129,25 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import AddPlaceModal from "./AddPlaceModal.vue";
+import AskToDelete from "@/views/ask-to-delete.vue";
+import AlertSuccessfullyModified from "@/views/alert-successfully-modified.vue";
+
 import axios from "axios";
 export default {
   data() {
     return {
+      alertSuccessfullyModified: false,
+      askToDelete: false,
       posName: "",
       posDtl: "",
       posCode: "",
       sensorPosList: [
-        { posId: 1, posName: "우리집", posDtl: "행복한 우리집", posCode: "1234" },
+        {
+          posId: 1,
+          posName: "우리집",
+          posDtl: "행복한 우리집",
+          posCode: "1234",
+        },
         { posId: 2, posName: "ICNS", posDtl: "행복한 연구실", posCode: "3569" },
       ],
       page: 1,
@@ -129,6 +160,8 @@ export default {
   },
   components: {
     AddPlaceModal,
+    AskToDelete,
+    AlertSuccessfullyModified,
   },
   methods: {
     AddPos(newPos) {
@@ -141,12 +174,15 @@ export default {
           "http://163.180.117.38:8281/api/sensor-pos?paged=false&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
         this.sensorPosList = res.data.data.content;
-
       } catch (err) {
         console.log(err);
       }
     },
-    async addSensorPos(pName=this.posName, pDtl=this.posDtl, pCode=this.posCode) {
+    async addSensorPos(
+      pName = this.posName,
+      pDtl = this.posDtl,
+      pCode = this.posCode
+    ) {
       try {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/sensor-pos",
@@ -182,8 +218,9 @@ export default {
             posCode: this.posCode,
           }
         );
-       console.log(res);
-       this.getSensorPos();
+        console.log(res);
+        this.getSensorPos();
+        this.$emit('modified');
       } catch (err) {
         console.log(err);
         console.log("tttt");
@@ -267,6 +304,8 @@ export default {
 }
 .form-control:focus {
   box-shadow: none;
+  background-color: #1a233a;
+  color: #9fb0d6;
 }
 label {
   margin-left: 3px;

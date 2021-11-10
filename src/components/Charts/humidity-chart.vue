@@ -80,7 +80,7 @@ export default {
     rangeArray: {
       type: Array,
       default: ()=> {
-          return [50, 100, 110, 120, 130, 150]
+          return [10, 20, 30, 40, 50, 100]
         },
     },
   },

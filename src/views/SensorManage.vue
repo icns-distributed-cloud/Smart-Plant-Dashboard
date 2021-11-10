@@ -30,15 +30,21 @@
                 신규 등록
               </button>
 
-              <button type="button" class="btn btn-primary"
-              style="margin-bottom: 12px; margin-left: 12px;  float:right"
-              @click="sensorModalOpen = true">
+              <button
+                type="button"
+                class="btn btn-primary"
+                style="margin-bottom: 12px; margin-left: 12px;  float:right"
+                @click="sensorModalOpen = true"
+              >
                 <i class="bi bi-wrench"></i> 센서 종류 관리
               </button>
 
-              <button type="button" class="btn btn-primary"
-              style="margin-bottom: 12px; float:right;"
-              @click="placeModalOpen = true">
+              <button
+                type="button"
+                class="btn btn-primary"
+                style="margin-bottom: 12px; float:right;"
+                @click="placeModalOpen = true"
+              >
                 <i class="bi bi-wrench"></i> 장소 관리
               </button>
               <table class="table table-bordered table-hover">
@@ -47,7 +53,6 @@
                     <th>식별번호</th>
                     <th>센싱 장비 위치</th>
                     <th>센싱 장비 종류</th>
-                    <th>기타 정보</th>
                     <th>담당자</th>
 
                     <th>담당자 내선</th>
@@ -61,29 +66,28 @@
                     <td>{{ sensor.ssCode }}</td>
                     <td>{{ sensor.ssPos.posName }}</td>
                     <td>{{ sensor.ssType.typeName }}</td>
-                    <td>{{ sensor.ssDtl }}</td>
                     <td>{{ sensor.ssContact }}</td>
                     <td>{{ sensor.ssContactExt }}</td>
                     <td>{{ sensor.ssContactPhone }}</td>
                     <td
                       style="
-                          padding-top: 2px;
+                          vertical-align: middle;
                           padding-right: 0px;
                           padding-left: 0px;
-                          padding-bottom: 2px;
                           text-align: center;
                         "
                     >
-                      <a class="btn btn-outline-primary mod-btn"
-                        @click="readyToEdit(sensor);"
+                      <a
+                        class="btn btn-outline-primary mod-btn"
+                        @click="readyToEdit(sensor)"
                         ><i class="bx bx-edit"></i> 수정
                       </a>
 
-                      <a class="btn btn-outline-danger tr_data_del"
-                      @click="deleteSensorManage(sensor.ssId);"
+                      <a
+                        class="btn btn-outline-danger tr_data_del"
+                        @click="askToDelete=true; deleteSensorId = sensor.ssId"
                         ><i class="bx bx-trash"></i> 삭제</a
                       >
-
                     </td>
                   </tr>
                 </tbody>
@@ -115,21 +119,28 @@
       </div>
     </div>
   </div>
-  <Modal v-if="showModal" @close="showModal = false" @add-new-sensor="addNewSensor" />
-  <EditSensorModal v-if="showEditModal"
-    :sensorPosId= "sensorPosId"
-    :sensorTypeId= "sensorTypeId"
-    :ssDtl= "ssDtl"
-    :ssContact= "ssContact"
-    :ssContactExt= "ssContactExt"
-    :ssContactPhone= "ssContactPhone"
-    :ssId = "ssId"
-    @edit-sensor= "editSensor"
-    @close="showEditModal = false;">
+  <Modal
+    v-if="showModal"
+    @close="showModal = false"
+    @add-new-sensor="addNewSensor"
+  />
+  <EditSensorModal
+    v-if="showEditModal"
+    :sensorPosId="sensorPosId"
+    :sensorTypeId="sensorTypeId"
+    :ssDtl="ssDtl"
+    :ssContact="ssContact"
+    :ssContactExt="ssContactExt"
+    :ssContactPhone="ssContactPhone"
+    :ssId="ssId"
+    @edit-sensor="editSensor"
+    @close="showEditModal = false"
+  >
   </EditSensorModal>
-
-  <TypeModal v-if="sensorModalOpen" @close="sensorModalOpen = false" />
-  <PlaceModal v-if="placeModalOpen" @close="placeModalOpen = false" />
+  <TypeModal v-if="sensorModalOpen" @close="sensorModalOpen = false" @modified="getSensorManage" />
+  <PlaceModal v-if="placeModalOpen" @close="placeModalOpen = false" @modified="getSensorManage"/>
+  <AskToDelete v-if="askToDelete" @close="askToDelete=false" @delete="deleteSensorManage(deleteSensorId); askToDelete=false;"></AskToDelete>
+  <AlertSuccessfullyModified v-if="alertSuccessfullyModified" @close="alertSuccessfullyModified=false"></AlertSuccessfullyModified>
 </template>
 
 <script>
@@ -138,6 +149,8 @@ import Modal from "@/components/Modal.vue";
 import EditSensorModal from "@/components/IoTManage/EditSensorModal.vue";
 import PlaceModal from "@/components/IoTManage/PlaceModal.vue";
 import TypeModal from "@/components/IoTManage/TypeModal.vue";
+import AskToDelete from "@/views/ask-to-delete.vue";
+import AlertSuccessfullyModified from './alert-successfully-modified.vue';
 import axios from "axios";
 
 export default {
@@ -147,15 +160,19 @@ export default {
     EditSensorModal,
     PlaceModal,
     TypeModal,
+    AskToDelete,
+    AlertSuccessfullyModified,
   },
   data() {
     return {
+      alertSuccessfullyModified: false,
+      askToDelete: false,
+      deleteSensorID: 0,
       sensorPosId: 0,
       sensorTypeId: 0,
       ssContact: "",
       ssContactExt: "",
       ssContactPhone: "",
-      ssDtl: "",
       ssId: "",
       showModal: false,
       sensorModalOpen: false,
@@ -164,7 +181,7 @@ export default {
       ssManageList: [],
     };
   },
-  created () {
+  created() {
     this.getSensorManage();
   },
   methods: {
@@ -174,18 +191,17 @@ export default {
       this.sensorTypeId = sensor.ssType.typeId;
       this.ssContact = sensor.ssContact;
       this.ssContactExt = sensor.ssContactExt;
-      this.ssContactPhone = sensor.ssContactPhone,
-      this.ssDtl =  sensor.ssDtl;
-      this.showEditModal=true;
+      (this.ssContactPhone = sensor.ssContactPhone),
+        (this.showEditModal = true);
     },
     async getSensorManage() {
       try {
         const res = await axios.get(
           "http://163.180.117.38:8281/api/sensor-manage?paged=false&sort.sorted=true"
-          );
-          this.ssManageList = res.data.data.content;
+        );
+        this.ssManageList = res.data.data.content;
       } catch (err) {
-        console.log("hello",err);
+        console.log("hello", err);
       }
     },
 
@@ -194,17 +210,18 @@ export default {
         const res = await axios.put(
           "http://163.180.117.38:8281/api/sensor-manage/" + newSensor.ssId,
           {
-            "sensorPosId": newSensor.sensorPosId,
-            "sensorTypeId": newSensor.sensorTypeId,
-            "ssContact": newSensor.ssContact,
-            "ssContactExt": newSensor.ssContactExt,
-            "ssContactPhone": newSensor.ssContactPhone,
-            "ssDtl": newSensor.ssDtl,
+            sensorPosId: newSensor.sensorPosId,
+            sensorTypeId: newSensor.sensorTypeId,
+            ssContact: newSensor.ssContact,
+            ssContactExt: newSensor.ssContactExt,
+            ssContactPhone: newSensor.ssContactPhone,
+            ssDtl: newSensor.ssDtl,
           }
         );
         console.log(res);
         this.getSensorManage();
         this.showEditModal = false;
+        this.alertSuccessfullyModified = true;
       } catch (err) {
         console.log(err);
       }
@@ -230,12 +247,12 @@ export default {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/sensor-manage/",
           {
-            "sensorPosId": newSensor.sensorPosId,
-            "sensorTypeId": newSensor.sensorTypeId,
-            "ssContact": newSensor.ssContact,
-            "ssContactExt": newSensor.ssContactExt,
-            "ssContactPhone": newSensor.ssContactPhone,
-            "ssDtl": newSensor.ssDtl,
+            sensorPosId: newSensor.sensorPosId,
+            sensorTypeId: newSensor.sensorTypeId,
+            ssContact: newSensor.ssContact,
+            ssContactExt: newSensor.ssContactExt,
+            ssContactPhone: newSensor.ssContactPhone,
+            ssDtl: newSensor.ssDtl,
           }
         );
         this.getSensorManage();
@@ -243,8 +260,7 @@ export default {
       } catch (err) {
         console.log(err);
       }
-    }
-    
+    },
   },
 };
 </script>
@@ -300,12 +316,19 @@ tbody td,
   border-color: #464d5c;
   color: #8a99b5;
   font-size: 24px;
+  height: 40px;
+  line-height: 40px;
+}
+td {
+  height: 40px;
+  line-height: 40px;
 }
 thead > tr,
 tbody > tr,
 tfoot > tr {
-  height: 60px;
+  height: 30px;
   vertical-align: middle;
+  line-height: 30px;
 }
 .mod-btn {
   margin-right: 5px;
@@ -345,5 +368,15 @@ nav {
 
 .edit-input {
   border-radius: 5px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-transition: background-color 9999s ease-out;
+  -webkit-box-shadow: 0 0 0px 1000px #00000000 inset !important;
+  -webkit-text-fill-color: #9fb0d6 !important;
 }
 </style>

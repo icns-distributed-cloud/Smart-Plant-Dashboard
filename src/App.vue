@@ -7,11 +7,6 @@
           <h3 style="color: #daa520; font-weight: 800">
             지능형 이상감지 - 대시보드
             <div class="icon" style="float: right; color: #969696">
-             <p> 
-              <i class="bi bi-search" style="margin-right:50px; cursor:pointer;"></i>
-              
-              <i class="bi bi-bell" style="margin-right:200px; cursor:pointer;"></i>
-              </p>
             </div>
           </h3>
         </div>
@@ -65,7 +60,7 @@ body {
   padding: 10px;
   position: relative;
   overflow: hidden;
-  border-right: #464d5c 1px solid;
+  box-shadow: 1px 0px 10px 0px black;
 }
 
 .wrapper {
@@ -121,10 +116,12 @@ body {
   padding-right: 15px;
 }
 .menu1 {
-  color: aqua;
+  color: #66cfcf;
+  font-weight: bold;
   padding-left: 20px;
 }
 .menu2 {
+  font-weight: bold;
   margin: 20px;
   padding-left: 20px;
   padding-bottom: 10px;

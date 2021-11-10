@@ -175,7 +175,7 @@ export default {
       type: String,
       required: false,
     },
-    Array: {
+    rangeArray: {
       type: Array,
       default: () => {
         return [0, 30, 60, 80, 90, 100];
@@ -371,7 +371,7 @@ export default {
     value: function () {
       var d = this.value;
       for (var i = 0; i < 5; i++) {
-        if (d >= this.Array[i] && d < this.Array[i + 1]) {
+        if (d >= this.rangeArray[i] && d < this.rangeArray[i + 1]) {
           this.defaultOptions.thermo.color = this.infoList[i].color;
           this.color = this.infoList[i].color;
           this.icon = this.infoList[i].icon;

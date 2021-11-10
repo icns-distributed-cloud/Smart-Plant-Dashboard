@@ -13,17 +13,21 @@
             @click="$emit('close')"
           ></button>
         </div>
-          <div class="modal-body">            
-            <button class="btn btn-primary"
+        <div class="modal-body">
+          <button
+            class="btn btn-primary"
             style="float:right; margin: 10px;"
-            @click="addType=true;">
-              신규 등록
-            </button>
-            <AddTypeModal v-if="addType"
+            @click="addType = true"
+          >
+            종류 등록
+          </button>
+          <AddTypeModal
+            v-if="addType"
             @add-new-type="AddType"
-            @close-add-modal="addType=false;">
-            </AddTypeModal>
-            <form @submit.prevent="onSubmit">
+            @close-add-modal="addType = false"
+          >
+          </AddTypeModal>
+          <form @submit.prevent="onSubmit">
             <div class="modal-title sub-title">
               <i class="bi bi-diamond-fill"></i> 종류 목록
             </div>
@@ -67,29 +71,33 @@
                   </td>
                   <td>
                     <input
+                      style="vertical-align: middle;"
                       class="td-input"
+                      type="color"
                       v-model="sensorType.typeColorCode"
                       :disables="able != sensorType.typeColorCode"
                     />
                   </td>
                   <td
                     style="
-                          padding-top: 2px;
+                          vertical-align: middle;
                           padding-right: 0px;
                           padding-left: 0px;
-                          padding-bottom: 2px;
                           text-align: center;
                           "
                   >
                     <a
                       class="btn btn-outline-primary mod-btn"
                       type="submit"
-                      @click="readyToEdit(sensorType); editSensorType(sensorType.typeId);"
+                      @click="
+                        readyToEdit(sensorType);
+                        editSensorType(sensorType.typeId);
+                      "
                       ><i class="bx bx-edit"></i> 저장
                     </a>
                     <a
                       class="btn btn-outline-danger tr_data_del"
-                      @click="deleteSensorType(sensorType.typeId)"
+                      @click="askToDelete = true"
                       ><i class="bx bx-trash"></i> 삭제</a
                     >
                   </td>
@@ -97,16 +105,24 @@
               </tbody>
             </table>
           </form>
-            <!-- footer -->
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="$emit('close')"
-            >
-              닫기
-            </button>
+          <!-- footer -->
+          <AskToDelete
+            v-if="askToDelete"
+            @close="askToDelete = false"
+            @delete="
+              deleteSensorType(able);
+              askToDelete = false;
+            "
+          ></AskToDelete>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="$emit('close')"
+          >
+            닫기
+          </button>
         </div>
       </div>
     </div>
@@ -116,17 +132,31 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import AddTypeModal from "./AddTypeModal.vue";
+import AskToDelete from "@/views/ask-to-delete.vue";
 import axios from "axios";
 export default {
   data() {
     return {
+      askToDelete: false,
       typeName: "",
       typeDtl: "",
       typeCode: "",
       typeColorCode: "",
       sensorTypeList: [
-        { typeId: 1, typeName: "온도", typeDtl: "온도를 측정함", typeCode: "1234", typeColorCode: "red" },
-        { typeId: 2, typeName: "습도", typeDtl: "습도를 측정함", typeCode: "3569", typeColorCode: "blue" },
+        {
+          typeId: 1,
+          typeName: "온도",
+          typeDtl: "온도를 측정함",
+          typeCode: "1234",
+          typeColorCode: "red",
+        },
+        {
+          typeId: 2,
+          typeName: "습도",
+          typeDtl: "습도를 측정함",
+          typeCode: "3569",
+          typeColorCode: "blue",
+        },
       ],
       page: 1,
       able: 0,
@@ -138,10 +168,16 @@ export default {
   },
   components: {
     AddTypeModal,
+    AskToDelete,
   },
   methods: {
     AddType(newType) {
-      this.addSensorType(newType.typeName, newType.typeDtl, newType.typeCode, newType.typeColorCode);
+      this.addSensorType(
+        newType.typeName,
+        newType.typeDtl,
+        newType.typeCode,
+        newType.typeColorCode
+      );
     },
     async getSensorType() {
       try {
@@ -153,8 +189,19 @@ export default {
         console.log(err);
       }
     },
-    async addSensorType(tName=this.typeName, tDtl=this.typeDtl, tCode=this.typeCode, tColorCode=this.typeColorCode) {
-      console.log("addSensorType",this.typeName, this.typeDtl, this.typeCode, this.typeColorCode);
+    async addSensorType(
+      tName = this.typeName,
+      tDtl = this.typeDtl,
+      tCode = this.typeCode,
+      tColorCode = this.typeColorCode
+    ) {
+      console.log(
+        "addSensorType",
+        this.typeName,
+        this.typeDtl,
+        this.typeCode,
+        this.typeColorCode
+      );
       try {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/sensor-type",
@@ -182,7 +229,12 @@ export default {
     },
 
     async editSensorType(typeId) {
-      console.log(this.typeName, this.typeDtl, this.typeCode, this.typeColorCode);
+      console.log(
+        this.typeName,
+        this.typeDtl,
+        this.typeCode,
+        this.typeColorCode
+      );
       try {
         const res = await axios.put(
           "http://163.180.117.38:8281/api/sensor-type/" + typeId,
@@ -193,8 +245,9 @@ export default {
             typeColorCode: this.typeColorCode,
           }
         );
-       console.log(res);
-       this.getSensorType();
+        console.log(res);
+        this.getSensorType();
+        this.$emit('modified');
       } catch (err) {
         console.log(err);
       }
@@ -224,6 +277,7 @@ export default {
   color: white;
   font-size: 15px;
   text-align: center;
+  padding: none;
 }
 
 .td-input:focus {
