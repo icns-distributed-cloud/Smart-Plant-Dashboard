@@ -5,49 +5,52 @@
   />
   <div class="wrapper">
     <div class="table-header">
-      CCTV Setting | <Icon icon="bx:bx-home-alt" />
+      CCTV 설정 | <Icon icon="bx:bx-home-alt" />
     </div>
 
     <div class="table-main">
       <div>
         <div class="table-main__header">
-          CCTV 설정
+          CCTV 관리 설정
         </div>
 
         <div>
           <div class="table-main__content">
             <div class="table-main__content-intro">
-              CCTV를 설정하는 화면입니다.
+              CCTV 장비를 관리하는 화면입니다.
             </div>
 
             <div>
               <button
-                type="button"
-                class="btn btn-primary"
-                style="margin-bottom: 12px; float: right"
-                @click.stop="openModal"
+                  type="button"
+                  class="btn btn-primary"
+                  style="margin-bottom: 12px; margin-left: 12px; float:right"
+                  @click="showModal = true"
               >
-                신규등록
+                신규 등록
               </button>
 
               <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
                   <th>식별번호</th>
-                  <th>CCTV 장비 위치</th>
-                  <th>CCTV Stream URL</th>
-                  <th>CCTV 송출 URL</th>
+                  <th>CCTV 위치</th>
+                  <th>CCTV User ID</th>
+                  <th>CCTV User Password</th>
+                  <th>CCTV RTSP URL</th>
+                  <th>CCTV Websocket URL</th>
+
                   <th style="width: 175px">ACTION</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>tt</td>
-                  <td>ss</td>
-                  <td>ss</td>
-                  <td>ss</td>
-
-
+                <tr v-for="cctv in cctvList" :key="cctv.cctvId">
+                  <td>{{ cctv.cctvId }}</td>
+                  <td>{{ cctv.cctvLocation }}</td>
+                  <td>{{ cctv.userId }}</td>
+                  <td>{{ cctv.password}}</td>
+                  <td>{{ cctv.streamURL }}</td>
+                  <td>{{ cctv.websocketURL }}</td>
                   <td
                       style="
                           padding-top: 2px;
@@ -58,84 +61,121 @@
                         "
                   >
                     <a class="btn btn-outline-primary mod-btn"
+                       @click="readyToEdit(sensor);"
                     ><i class="bx bx-edit"></i> 수정
                     </a>
-                    <a class="btn btn-outline-danger tr_data_del"
-                    ><i class="bx bx-trash"></i> 삭제</a
-                    >
-                  </td>
-                </tr>
-                <tr>
-                  <td>tt</td>
-                  <td>ss</td>
-                  <td>ss</td>
-                  <td>ss</td>
 
-                  <td
-                      style="
-                          padding-top: 2px;
-                          padding-right: 0px;
-                          padding-left: 0px;
-                          padding-bottom: 2px;
-                          text-align: center;
-                        "
-                  >
-                    <a class="btn btn-outline-primary mod-btn"
-                    ><i class="bx bx-edit"></i> 수정</a
-                    >
                     <a class="btn btn-outline-danger tr_data_del"
+                       @click="deleteCCTV(cctv.cctvId);"
                     ><i class="bx bx-trash"></i> 삭제</a
                     >
+
                   </td>
                 </tr>
                 </tbody>
-                <tfoot>
-                <tr>
-                  <th>식별번호</th>
-                  <th>CCTV 장비 위치</th>
-                  <th>CCTV Stream URL</th>
-                  <th>CCTV 송출 URL</th>
-
-                  <th>ACTION</th>
-                </tr>
-                </tfoot>
               </table>
             </div>
-
+            <nav aria-label="Page navigation example" style=" float:right">
+              <ul class="pagination">
+                <li class="page-item">
+                  <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only"></span>
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link cur-page" href="#">1</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only"></span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <CCTVModal v-if="showModal" @close="closeModal"/>
+  <CCTVModal v-if="showModal" @close="showModal = false" @add-new-cctv="addNewCCTV" />
+
 </template>
+
 <script>
-import {ref} from "vue";
 import { Icon } from "@iconify/vue";
 import CCTVModal from "@/components/CCTVModal";
+import axios from "axios";
 export default {
   components: {
     Icon,
     CCTVModal,
   },
-  setup(){
-    const showModal = ref(false);
-    const openModal = () => {
-      showModal.value = true;
-    };
-    const closeModal = () => {
-      showModal.value = false;
-    };
+  data() {
     return {
-      showModal,
-      openModal,
-      closeModal,
+      cctvList : [],
+      showModal: false,
+
+      cctvLocation : "",
+      userId : "",
+      password : "",
+      streamURL : "",
+      websocketURL : "",
+
     };
   },
+  created () {
+    this.getCCTVInfo();
+  },
+  methods: {
+    async getCCTVInfo(){
+      try{
+        const res = await axios.get(
+            "http://163.180.117.40:8218/api/cctv?pageSize=1&paged=true&sort.sorted=true"
+        );
+        this.cctvList = res.data.data.content;
+      } catch (err){
+        console.log(err);
+      }
+    },
+
+    async deleteCCTV(cctvId) {
+      try {
+        const res = await axios.delete(
+            "http://163.180.117.40:8218/api/cctv/" + cctvId
+        );
+        console.log(res);
+        this.getCCTVInfo();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async addNewCCTV(newCCTV) {
+      console.log(newCCTV);
+      this.showModal = false;
+      try {
+        const res = await axios.post(
+            "http://163.180.117.40:8218/api/cctv/",
+            {
+              "cctvLocation": newCCTV.cctvLocation,
+              "password": newCCTV.password,
+              "streamURL": newCCTV.streamURL,
+              "userId": newCCTV.userId,
+              "websocketURL": newCCTV.websocketURL,
+            }
+        );
+        this.getCCTVInfo();
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+  },
 };
-
-
-
 </script>
 
 <style>
@@ -160,7 +200,6 @@ export default {
   padding: 20px;
   font-size: 20px;
 }
-
 .table-main__content {
   margin: 0 20px;
   color: #8a99b5;
@@ -177,7 +216,7 @@ table {
 .table-bordered > tfoot > tr > th,
 .table-bordered > thead > tr > td,
 .table-bordered > thead > tr > th {
-  border: 1px solid #464d5c;
+  border: 2px solid #464d5c;
 }
 .table.table-bordered th {
   border: 2px solid #464d5c;
@@ -191,6 +230,7 @@ tbody td,
   font-size: 24px;
 }
 thead > tr,
+tbody > tr,
 tfoot > tr {
   height: 60px;
   vertical-align: middle;
@@ -206,6 +246,10 @@ tfoot > tr {
   color: #7c8ba6;
 }
 .table-hover:hover tbody tr:hover td {
+  color: white;
+  background-color: #244a63;
+}
+.table-hover:target tbody tr:target td {
   color: white;
   background-color: #244a63;
 }
@@ -225,5 +269,8 @@ nav {
 .cur-page {
   background-color: #5a8ded;
   color: white;
+}
+.edit-input {
+  border-radius: 5px;
 }
 </style>

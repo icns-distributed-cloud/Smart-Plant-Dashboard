@@ -7,34 +7,44 @@
     <div class="table-header">
       CCTV 영상인식 | <Icon icon="bx:bx-home-alt" />
     </div>
-    <div class="cctv-main" v-for="item in elements" v-bind:key="item.cctv_element">
-      <div class="cctv-main__header">{{ item.cctv_location }}</div>
-      <canvas :id=item.cctv_element style="width: 320px; height: 240px; margin:10px;">
-      </canvas>
+    <div style="display: flex; ">
+      <div class="cctv-main" v-for="item in elements" v-bind:key="item.cctv_element">
+        <div class="cctv-main__header">{{ item.cctv_location }}</div>
+        <canvas :id=item.cctv_element style="width: 320px; height: 240px; margin:10px;">
+        </canvas>
+        <button @click="fullScreenModal=true; canvasId=item.cctv_element+'modal'; websocketUrl=item.cctv_websocketurl; [disconnect(),disconnectedState()]">click</button>
+
+      </div>
     </div>
   </div>
+  <FullScreenModal v-if="fullScreenModal" @close="fullScreenModal = false" :childCanvasId=canvasId :childWebsocketURL=websocketUrl />
+
 </template>
 
 <script>
 import { Icon } from "@iconify/vue";
 import JSMpeg from "jsmpeg";
 import axios from "axios";
+import FullScreenModal from "@/components/AbnormalDetection/FullScreenModal";
 export default {
   name: "CCTV",
 
   components: {
+    FullScreenModal,
     Icon,
   },
   data(){
 
     return {
+      fullScreenModal: false,
+      currId: "",
       cctvList : [],
       cctvListLength : 0,
       elements : [
       ],
       url :[],
       canvasView : [],
-
+      disconnectState: false
     }
   },
   created() {
@@ -63,22 +73,24 @@ export default {
     },
     getCCTVElement: function (){
       for(let i=0;i<this.cctvListLength;i++){
-        this.elements[i] = {cctv_element: '', cctv_location: ''};
+        this.elements[i] = {cctv_element: '', cctv_location: '', cctv_websocketurl: ''};
       }
       for(let i=0;i<this.cctvListLength;i++){
         this.elements[i].cctv_element= 'test-cctv'+ this.cctvList[i].cctvId;
         this.elements[i].cctv_location = this.cctvList[i].cctvLocation;
-        console.log(this.elements[i].cctv_location);
+        this.elements[i].cctv_websocketurl = this.cctvList[i].websocketURL;
       }
 
     },
     getWebsocketVideo: function(){
-
-      for(let i=0;i<this.cctvListLength;i++){
-        this.canvasView[i] = document.getElementById('test-cctv'+String(this.cctvList[i].cctvId));
-        this.url[i] = new WebSocket(this.cctvList[i].websocketURL);
-        new JSMpeg(this.url[i], {canvas:this.canvasView[i]});
+      if(this.disconnectState === false){
+        for(let i=0;i<this.cctvListLength;i++){
+          this.canvasView[i] = document.getElementById('test-cctv'+String(this.cctvList[i].cctvId));
+          this.url[i] = new WebSocket(this.cctvList[i].websocketURL);
+          new JSMpeg(this.url[i], {canvas:this.canvasView[i]});
+        }
       }
+
     },
     disconnect: function(){
       let length = this.cctvListLength;
@@ -86,6 +98,9 @@ export default {
         this.url[i].close();
       }
     },
+    disconnectedState: function(){
+      this.disconnectState = true;
+    }
 
   }
 };
@@ -124,4 +139,5 @@ export default {
   padding: 20px;
   font-size: 20px;
 }
+
 </style>
