@@ -39,7 +39,7 @@
             :r="glassWidth * 0.9 + 2"
             :stroke="defaultOptions.thermo.frameColor"
             stroke-width="4"
-            :fill="defaultOptions.thermo.color"
+            :fill="color"
           />
           <rect
             :fill="defaultOptions.thermo.frameColor"
@@ -81,12 +81,12 @@
             :r="glassWidth * 0.9"
             :stroke="defaultOptions.thermo.backgroundColor"
             stroke-width="4"
-            :fill="defaultOptions.thermo.color"
+            :fill="color"
           />
 
           <!-- this is the bar/temp height -->
           <rect
-            :fill="defaultOptions.thermo.color"
+            :fill="color"
             stroke="#000000"
             stroke-width="0"
             stroke-linecap="round"
@@ -175,13 +175,19 @@ export default {
       type: String,
       required: false,
     },
-    rangeArray: {
-      type: Array,
-      default: () => {
-        return [0, 30, 60, 80, 90, 100];
-      },
-    },
     colorList: Array,
+    color: {
+      type: String,
+      default: "5a8dee"
+    },
+    icon: {
+      type: String,
+      default: "<i class='bi bi-emoji-laughing-fill'></i>"
+    },
+    status: {
+      type: String,
+      default: "안전",
+    }
   },
   created() {
     this.defaultOptions = {
@@ -193,7 +199,7 @@ export default {
         textEnabled: true,
       },
       thermo: {
-        color: "#5a8dee",
+        color: this.color,
         backgroundColor: "#fcf9f9",
         frameColor: "#1a233a10",
         ticks: 5,
@@ -216,36 +222,6 @@ export default {
     return {
       smallView: false,
       defaultOptions: Object,
-      color: "#5a8dee",
-      icon: "<i class='bi bi-emoji-laughing-fill'></i>",
-      status: "안전",
-      infoList: [
-        {
-          color: "#5a8dee",
-          status: "안전",
-          icon: "<i class='bi bi-emoji-laughing-fill'></i>",
-        },
-        {
-          color: "#00cfdd",
-          status: "관심",
-          icon: "<i class='bi bi-emoji-smile-fill'></i>",
-        },
-        {
-          color: "#39da8a",
-          status: "주의",
-          icon: "<i class='bi bi-emoji-neutral-fill'></i>",
-        },
-        {
-          color: "#fdac41",
-          status: "경고",
-          icon: "<i class='bi bi-emoji-frown-fill'></i>",
-        },
-        {
-          color: "#ff5b5c",
-          status: "심각",
-          icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
-        },
-      ],
     };
   },
   computed: {
@@ -366,18 +342,6 @@ export default {
     options: function (val) {
       if (val !== null && val !== undefined) {
         this.mergeDefaultOptionsWithProp(val);
-      }
-    },
-    value: function () {
-      var d = this.value;
-      for (var i = 0; i < 5; i++) {
-        if (d >= this.rangeArray[i] && d < this.rangeArray[i + 1]) {
-          this.defaultOptions.thermo.color = this.infoList[i].color;
-          this.color = this.infoList[i].color;
-          this.icon = this.infoList[i].icon;
-          this.status = this.infoList[i].status;
-          break;
-        }
       }
     },
   },

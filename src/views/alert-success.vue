@@ -8,7 +8,7 @@
             
             <div style="display: flex; flex-direction: column; align-items: center">
             <div class="row" style="text-align: center;">
-                <h4 style="color: white; font-weight: bold;">성공적으로 수정되었습니다.</h4>
+                <h4 style="color: white; font-weight: bold;">성공적으로 {{ action }}되었습니다.</h4>
                 <i id="check" class="bi bi-check-circle"></i>
             </div>
 
@@ -17,7 +17,8 @@
           @click="$emit('close')">
             확인
           </button>
-          <button style="width: 90px;" type="button" class="btn btn-secondary" @click="$emit('close');">
+          <button style="width: 90px;" type="button" class="btn btn-secondary"
+          @click="$emit('close');">
             닫기
           </button>
           </div> 
@@ -31,8 +32,13 @@
 </template>
 <script>
 export default {
-  name: "alert-successfully-modified",
-
+  name: "alert-success",
+  props: {
+    action: {
+      type: String,
+      default: "수정"
+    }
+  }
 }
 </script>
 <style>

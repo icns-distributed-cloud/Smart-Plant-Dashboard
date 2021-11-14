@@ -21,17 +21,17 @@
                   <div
                     class="form-label-group position-relative has-icon-left controls"
                   >
-                    <label for="pos_name">종류 이름</label>
+                    <label for="pos_name">위치 이름</label>
                     <div class="main-input">
                       <input
                         autocomplete="off"
                         type="text"
                         class="form-control"
                         name="pos_name"
-                        placeholder="종류 이름"
+                        placeholder="위치이름"
                         minlength="1"
                         maxlength="100"
-                        v-model="newType.typeName"
+                        v-model="newPos.posName"
                         required
                       />
                       <div class="form-control-position label-icon">
@@ -52,7 +52,7 @@
                         placeholder="식별 코드"
                         minlength="1"
                         maxlength="100"
-                        v-model="newType.typeCode"
+                        v-model="newPos.posCode"
                         required
                       />
                       <div class="form-control-position label-icon">
@@ -63,66 +63,16 @@
                 </div>
                 <div class="col-12">
                   <div class="form-label-group position-relative has-icon-left">
-                    <label for="pos_dtl">종류 상세</label>
+                    <label for="pos_dtl">위치 상세</label>
                     <div class="main-input">
                       <input
                         autocomplete="off"
                         type="text"
                         class="form-control"
                         name="pos_dtl"
-                        placeholder="종류 상세"
+                        placeholder="위치 상세"
                         maxlength="100"
-                        v-model="newType.typeDtl"
-                      />
-                      <div class="form-control-position label-icon">
-                        <i class="bx bx-comment-detail"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-12">
-                  <div class="form-label-group position-relative has-icon-left">
-                    <label for="pos_dtl">색상 코드</label>
-                    <div class="color-wrapper">
-                      <div class="color-picker" v-for="(color, i) in colorList" :key="i"
-                      >
-                      <button class="color-circle"
-                      :style="{background: color}"  
-                      @click="model"
-                      ></button>
-                      </div>
-                    </div>
-
-                    <div class="main-input">
-                      <input
-                        autocomplete="off"
-                        type="color"
-                        class="form-control"
-                        name="pos_dtl"
-                        placeholder="색상 코드"
-                        maxlength="100"
-                        v-model="newType.typeColorCode"
-                      />
-                      <div class="form-control-position label-icon">
-                        <i class="bx bx-comment-detail"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-12">
-                  <div class="form-label-group position-relative has-icon-left">
-                    <label for="pos_dtl">색상 코드</label>
-                    <div class="main-input">
-                      <input
-                        autocomplete="off"
-                        type="color"
-                        class="form-control"
-                        name="pos_dtl"
-                        placeholder="색상 코드"
-                        maxlength="100"
-                        v-model="newType.typeColorCode"
+                        v-model="newPos.posDtl"
                       />
                       <div class="form-control-position label-icon">
                         <i class="bx bx-comment-detail"></i>
@@ -138,16 +88,16 @@
               type="submit"
               class="btn btn-primary"
               @click="
-                $emit('add-new-type', newType);
-                $emit('close-add-modal');
+                $emit('edit-pos', newPos);
+                $emit('close-edit-modal');
               "
             >
-              신규 등록
+              저장
             </button>
             <button
               type="button"
               class="btn btn-secondary"
-              @click="$emit('close-add-modal')"
+              @click="$emit('close-edit-modal')"
             >
               닫기
             </button>
@@ -160,57 +110,24 @@
 
 <script>
 export default {
-  data() {
-    return {
-      newType: { typeName: "", typeDtl: "", typeCode: "", typeColorCode: "" },
-      colorList: [
-        "#ef5350", "#e53935", "#ec407a", "#d81b60",
-        "#ab47bc", "#8e24aa", "#7e57c2", "#5e35b1",
-        "#5c6bc0", "#3949ab", "#26c6da", "#00acc1",
-        "#26a69a", "#00897b", "#66bb6a", "#43a047",
-        "#9ccc65", "#7cb342", "#d4e157", "#c0ca33",
-        "#ffee58", "#fdd835", "#ffca28", "#ffb300",
-        "#ffa726", "#fb8c00", "#ff7043", "#f4511e"
-      ]
-    };
-  },
+    mounted(){
+        this.newPos.posId = this.currPos.posId;
+        this.newPos.posName = this.currPos.posName;
+        this.newPos.posDtl = this.currPos.posDtl;
+        this.newPos.posCode = this.currPos.posCode;
+    },
+    data() {
+        return {
+        newPos: {},
+        };
+    },
+    props: {
+        currPos: Object,
+    }
 };
 </script>
 
 <style>
-.color-wrapper {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 10px;
-  justify-content: flex-start;
-  border: 1px solid #464d5c;
-  border-radius: 3px;
-}
-
-.color-picker {
-  width: 12.5%;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.color-circle {
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.color-circle:hover,
-.color-circle:focus,
-.color-circle:active {
-  width: 30px;
-  height: 30px;
-}
-
 .modal-wrapper {
   position: fixed;
   z-index: 100;
@@ -229,7 +146,6 @@ export default {
   font-size: 15px;
   font-weight: bold;
 }
-
 .modal-body {
   padding: 10px 25px;
   margin-bottom: 20px;
@@ -247,6 +163,7 @@ export default {
   margin-bottom: 12px;
   width: 100%;
 }
+
 .form-control {
   background-color: #1a233a;
   color: #9fb0d6;
@@ -258,8 +175,6 @@ export default {
 }
 .form-control:focus {
   box-shadow: none;
-  background-color: #1a233a;
-  color: #9fb0d6;
 }
 label {
   margin-left: 3px;

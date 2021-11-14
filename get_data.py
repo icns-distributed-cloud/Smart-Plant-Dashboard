@@ -3,6 +3,7 @@ import minimalmodbus
 import os, sys, time
 import datetime
 
+
 instrument1 = minimalmodbus.Instrument('/dev/ttyUSB0', 1) # temperature & humidity (USBport, slave ID)
 instrument1.serial.baudrate = 9600
 instrument1.serial.parity = 'N'
@@ -56,6 +57,9 @@ with conn.cursor() as cur :
                 cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_gyro_y, 4))
                 print("Data Save Success")
                 conn.commit()
+                
+                
+
         
         except:
             restart()

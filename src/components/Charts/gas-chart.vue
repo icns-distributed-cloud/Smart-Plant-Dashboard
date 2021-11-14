@@ -23,7 +23,7 @@
       <div class="gauge" style="position: relative; top: -125px;">
         <ejs-circulargauge background="#FFFFFF00">
           <e-axes>
-            <e-axis :minimum="rangeArray[0]" :maximum="rangeArray[5]">
+            <e-axis :minimum="0" :maximum="100">
               <e-pointers>
                 <e-pointer
                   :value="value"
@@ -33,37 +33,37 @@
               </e-pointers>
               <e-ranges>
                 <e-range
-                  :start="rangeArray[0]"
-                  :end="rangeArray[1]"
-                  :color="infoList[0].color"
+                  :start="0"
+                  :end="10"
+                  :color="red"
                   startWidth="15"
                   endWidth="15"
                 ></e-range>
                 <e-range
-                  :start="rangeArray[1]"
-                  :end="rangeArray[2]"
-                  :color="infoList[1].color"
+                  :start="10"
+                  :end="20"
+                  :color="blue"
                   startWidth="15"
                   endWidth="15"
                 ></e-range>
                 <e-range
-                  :start="rangeArray[2]"
-                  :end="rangeArray[3]"
-                  :color="infoList[2].color"
+                  :start="20"
+                  :end="40"
+                  :color="green"
                   startWidth="15"
                   endWidth="15"
                 ></e-range>
                 <e-range
-                  :start="rangeArray[3]"
-                  :end="rangeArray[4]"
-                  :color="infoList[3].color"
+                  :start="40"
+                  :end="60"
+                  :color="yellow"
                   startWidth="15"
                   endWidth="15"
                 ></e-range>
                 <e-range
-                  :start="rangeArray[4]"
-                  :end="rangeArray[5]"
-                  :color="infoList[4].color"
+                  :start="60"
+                  :end="100"
+                  :color="purple"
                   startWidth="15"
                   endWidth="15"
                 ></e-range>
@@ -112,36 +112,6 @@ export default {
   data: function() {
     return {
       smallView: false,
-      color: "#5a8dee",
-      icon: "<i class='bi bi-emoji-laughing-fill'></i>",
-      status: "안전",
-      infoList: [
-        {
-          color: "#5a8dee",
-          status: "안전",
-          icon: "<i class='bi bi-emoji-laughing-fill'></i>",
-        },
-        {
-          color: "#00cfdd",
-          status: "관심",
-          icon: "<i class='bi bi-emoji-smile-fill'></i>",
-        },
-        {
-          color: "#39da8a",
-          status: "주의",
-          icon: "<i class='bi bi-emoji-neutral-fill'></i>",
-        },
-        {
-          color: "#fdac41",
-          status: "경고",
-          icon: "<i class='bi bi-emoji-frown-fill'></i>",
-        },
-        {
-          color: "#ff5b5c",
-          status: "심각",
-          icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
-        },
-      ],
       animation: { enable: false },
       majorTicks: { width: 1, color: "#5a8dee" },
     };
@@ -152,26 +122,18 @@ export default {
       type: Number,
       default: 10,
     },
-    rangeArray: {
-      type: Array,
-      default: () => {
-        return [0, 30, 50, 70, 100, 200];
-      },
+    color: {
+      type: String,
+      default: "5a8dee"
     },
-  },
-
-  watch: {
-    value: function() {
-      var d = this.value;
-      for (var i = 0; i < 5; i++) {
-        if (d >= this.rangeArray[i] && d < this.rangeArray[i + 1]) {
-          this.color = this.infoList[i].color;
-          this.icon = this.infoList[i].icon;
-          this.status = this.infoList[i].status;
-          break;
-        }
-      }
+    icon: {
+      type: String,
+      default: "<i class='bi bi-emoji-laughing-fill'></i>"
     },
+    status: {
+      type: String,
+      default: "안전",
+    }
   },
 };
 </script>

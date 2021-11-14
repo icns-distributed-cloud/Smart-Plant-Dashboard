@@ -75,63 +75,25 @@ export default {
   data() {
     return {
       smallView: false,
-      color: "#5a8dee",
-      icon: "<i class='bi bi-emoji-laughing-fill'></i>",
-      status: "안전",
-      infoList: [
-        {
-          color: "#5a8dee",
-          status: "안전",
-          icon: "<i class='bi bi-emoji-laughing-fill'></i>",
-        },
-        {
-          color: "#00cfdd",
-          status: "관심",
-          icon: "<i class='bi bi-emoji-smile-fill'></i>",
-        },
-        {
-          color: "#39da8a",
-          status: "주의",
-          icon: "<i class='bi bi-emoji-neutral-fill'></i>",
-        },
-        {
-          color: "#fdac41",
-          status: "경고",
-          icon: "<i class='bi bi-emoji-frown-fill'></i>",
-        },
-        {
-          color: "#ff5b5c",
-          status: "심각",
-          icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
-        },
-      ],
     };
   },
   props: {
     value: {
       type: Number,
-      default: 80,
+      default: 0,
     },
-    rangeArray: {
-      type: Array,
-      default: () => {
-        return [50, 100, 110, 120, 130, 150];
-      },
+    color: {
+      type: String,
+      default: "5a8dee"
     },
-  },
-  methods: {},
-  watch: {
-    value: function () {
-      var d = this.value;
-      for (var i = 0; i < 5; i++) {
-        if (d >= this.rangeArray[i] && d < this.rangeArray[i + 1]) {
-          this.color = this.infoList[i].color;
-          this.icon = this.infoList[i].icon;
-          this.status = this.infoList[i].status;
-          break;
-        }
-      }
+    icon: {
+      type: String,
+      default: "<i class='bi bi-emoji-laughing-fill'></i>"
     },
+    status: {
+      type: String,
+      default: "안전",
+    }
   },
 };
 </script>

@@ -20,10 +20,12 @@
                 >
                   <label for="sensor_pos">센서 위치</label>
                   <div class="main-input">
-                    <select v-model="newSensor.sensorPosId" name="sensor_pos" class="form-control" required>
-                      <option disabled value="">=== 선택하세요 ===</option>
-                      <option v-for="pos in posList" :key="pos.posId"
-                      v-bind:value="pos.posId">
+                    <select
+                    v-model="newSensor.sensorPosId"
+                    name="sensor_pos"
+                    class="form-control"
+                    required>
+                      <option v-for="pos in posList" :key="pos.posId" :value="pos.posId">
                         {{ pos.posName }}
                       </option>
                     </select>
@@ -41,7 +43,6 @@
                   <label for="sensor_pos">센서 종류</label>
                   <div class="main-input">
                     <select v-model="newSensor.sensorTypeId" name="sensor_type" class="form-control" required>
-                      <option disabled value="">=== 선택하세요 ===</option>
                       <option v-for="type in typeList" :key="type.typeId"
                       v-bind:value="type.typeId">
                         {{ type.typeName }}
@@ -136,7 +137,6 @@ export default {
         ssContact: "",
         ssContactExt: "",
         ssContactPhone: "",
-        ssDtl: "",
         ssId: 0,
       },
     };
@@ -147,20 +147,18 @@ export default {
         ssContact: String,
         ssContactExt: String,
         ssContactPhone: String,
-        ssDtl: String,
         ssId: Number,
   },
   mounted() {
     this.getPosInfo();
     this.getTypeInfo();
-    console.log(this.ssDtl);
     this.newSensor.sensorPosId = this.sensorPosId;
     this.newSensor.sensorTypeId = this.sensorTypeId;
     this.newSensor.ssContact = this.ssContact;
     this.newSensor.ssContactExt = this.ssContactExt;
     this.newSensor.ssContactPhone = this.ssContactPhone;
-    this.newSensor.ssDtl = this.ssDtl;
     this.newSensor.ssId = this.ssId;
+    console.log(this.newSensor);
   },
   methods: {
     async getPosInfo() {
@@ -249,4 +247,9 @@ label {
   left: 2px;
   top: 4px;
 }
+
+select.form-control:not([size]):not([multiple]) {
+  height: auto !important;
+}
+
 </style>

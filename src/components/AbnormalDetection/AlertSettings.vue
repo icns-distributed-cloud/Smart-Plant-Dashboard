@@ -26,7 +26,7 @@
                   data-toggle="dropdown"
                   color="#000080"
                 >
-                  구역선택
+                  {{ posName }}
                 </button>
                 <div class="dropdown-menu">
                   <a
@@ -35,7 +35,7 @@
                     class="dropdown-item"
                     @click="selectedPos(pos.posId, pos.posName)"
                   >
-                    {{ pos.posName }}
+                    {{ pos.posName }}s
                   </a>
                 </div>
               </div>
@@ -64,7 +64,7 @@
                   </thead>
                   <tbody>
                     <tr v-for="sensor in ssRangeList" :key="sensor.ssId">
-                      <td>{{ sensor.ssId }}</td>
+                      <td>{{ sensor.ssCode }}</td>
                       <td>{{ sensor.sensorTypeName }}</td>
                       <td>
                         <div class="range">
@@ -220,15 +220,12 @@ export default {
         );
 
         for (var item of res.data.data.content) {
-          var temp = {
-            ssId: "",
-            range: [],
-            sensorTypeName: "",
-            sensorPosId: "",
-          };
+          var temp = {};
           temp.ssId = item.ssId;
           temp.sensorTypeName = item.sensorTypeName;
           temp.sensorPosId = item.sensorPosId;
+          temp.ssCode = item.ssCode;
+          temp.range = [];
           temp.range.push(item.rstart);
           temp.range.push(item.rlev1);
           temp.range.push(item.rlev2);
@@ -236,7 +233,6 @@ export default {
           temp.range.push(item.rlev4);
           temp.range.push(item.rend);
           this.ssRangeList.push(temp);
-          console.log(this.ssRangeList);
         }
       } catch (err) {
         console.log(err);

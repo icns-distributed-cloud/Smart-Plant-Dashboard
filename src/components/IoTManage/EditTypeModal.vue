@@ -80,37 +80,6 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="col-12">
-                  <div class="form-label-group position-relative has-icon-left">
-                    <label for="pos_dtl">색상 코드</label>
-                    <div class="color-wrapper">
-                      <div class="color-picker" v-for="(color, i) in colorList" :key="i"
-                      >
-                      <button class="color-circle"
-                      :style="{background: color}"  
-                      @click="model"
-                      ></button>
-                      </div>
-                    </div>
-
-                    <div class="main-input">
-                      <input
-                        autocomplete="off"
-                        type="color"
-                        class="form-control"
-                        name="pos_dtl"
-                        placeholder="색상 코드"
-                        maxlength="100"
-                        v-model="newType.typeColorCode"
-                      />
-                      <div class="form-control-position label-icon">
-                        <i class="bx bx-comment-detail"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 <div class="col-12">
                   <div class="form-label-group position-relative has-icon-left">
                     <label for="pos_dtl">색상 코드</label>
@@ -138,16 +107,16 @@
               type="submit"
               class="btn btn-primary"
               @click="
-                $emit('add-new-type', newType);
-                $emit('close-add-modal');
+                $emit('edit', newType);
+                $emit('close-edit-modal');
               "
             >
-              신규 등록
+              저장
             </button>
             <button
               type="button"
               class="btn btn-secondary"
-              @click="$emit('close-add-modal')"
+              @click="$emit('close-edit-modal')"
             >
               닫기
             </button>
@@ -160,57 +129,25 @@
 
 <script>
 export default {
-  data() {
-    return {
-      newType: { typeName: "", typeDtl: "", typeCode: "", typeColorCode: "" },
-      colorList: [
-        "#ef5350", "#e53935", "#ec407a", "#d81b60",
-        "#ab47bc", "#8e24aa", "#7e57c2", "#5e35b1",
-        "#5c6bc0", "#3949ab", "#26c6da", "#00acc1",
-        "#26a69a", "#00897b", "#66bb6a", "#43a047",
-        "#9ccc65", "#7cb342", "#d4e157", "#c0ca33",
-        "#ffee58", "#fdd835", "#ffca28", "#ffb300",
-        "#ffa726", "#fb8c00", "#ff7043", "#f4511e"
-      ]
-    };
-  },
+    mounted() {
+        this.newType.typeId = this.currType.typeId;
+        this.newType.typeName = this.currType.typeName;
+        this.newType.typeDtl = this.currType.typeDtl;
+        this.newType.typeCode = this.currType.typeCode;
+        this.newType.typeColorCode = this.currType.typeColorCode;
+    },
+    data() {
+        return {
+        newType: {},
+        };
+    },
+    props: {
+        currType: Object,
+    }
 };
 </script>
 
 <style>
-.color-wrapper {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 10px;
-  justify-content: flex-start;
-  border: 1px solid #464d5c;
-  border-radius: 3px;
-}
-
-.color-picker {
-  width: 12.5%;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.color-circle {
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.color-circle:hover,
-.color-circle:focus,
-.color-circle:active {
-  width: 30px;
-  height: 30px;
-}
-
 .modal-wrapper {
   position: fixed;
   z-index: 100;

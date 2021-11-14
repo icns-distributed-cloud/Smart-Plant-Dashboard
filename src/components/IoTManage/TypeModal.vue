@@ -49,25 +49,13 @@
                   @click="readyToEdit(sensorType)"
                 >
                   <td>
-                    <input
-                      class="td-input"
-                      v-model="sensorType.typeName"
-                      :disabled="able != sensorType.typeId"
-                    />
+                    <div>{{ sensorType.typeName }}</div>
                   </td>
                   <td>
-                    <input
-                      class="td-input"
-                      v-model="sensorType.typeDtl"
-                      :disabled="able != sensorType.typeId"
-                    />
+                    <div>{{ sensorType.typeDtl }}</div>
                   </td>
                   <td>
-                    <input
-                      class="td-input"
-                      v-model="sensorType.typeCode"
-                      :disabled="able != sensorType.typeId"
-                    />
+                    <div>{{ sensorType.typeCode }}</div>
                   </td>
                   <td>
                     <input
@@ -88,16 +76,15 @@
                   >
                     <a
                       class="btn btn-outline-primary mod-btn"
-                      type="submit"
                       @click="
-                        readyToEdit(sensorType);
-                        editSensorType(sensorType.typeId);
+                        currType=sensorType;
+                        editType=true;
                       "
-                      ><i class="bx bx-edit"></i> 저장
+                      ><i class="bx bx-edit"></i> 수정
                     </a>
                     <a
                       class="btn btn-outline-danger tr_data_del"
-                      @click="askToDelete = true"
+                      @click="askToDelete = true; able = sensorType.typeId"
                       ><i class="bx bx-trash"></i> 삭제</a
                     >
                   </td>
@@ -114,6 +101,24 @@
               askToDelete = false;
             "
           ></AskToDelete>
+          <AlertSuccess
+            v-if="alertSuccess"
+            :action="action"
+            @close="alertSuccess=false"
+          >
+          </AlertSuccess>
+          <AlertFail
+            v-if="alertFail"
+            :action="action"
+            @close="alertFail=false"
+          ></AlertFail>
+          <EditTypeModal
+            v-if="editType"
+            :currType="currType"
+            @close-edit-modal="editType=false"
+            @edit="editSensorType"
+          >
+          </EditTypeModal>
         </div>
         <div class="modal-footer">
           <button
@@ -132,35 +137,33 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import AddTypeModal from "./AddTypeModal.vue";
+import EditTypeModal from "./EditTypeModal.vue";
 import AskToDelete from "@/views/ask-to-delete.vue";
+import AlertSuccess from "@/views/alert-success.vue";
+import AlertFail from "@/views/alert-fail.vue";
 import axios from "axios";
 export default {
   data() {
     return {
+      action: "",
+      alertSuccess: false,
+      alertFail: false,
       askToDelete: false,
       typeName: "",
       typeDtl: "",
       typeCode: "",
       typeColorCode: "",
-      sensorTypeList: [
-        {
-          typeId: 1,
-          typeName: "온도",
-          typeDtl: "온도를 측정함",
-          typeCode: "1234",
-          typeColorCode: "red",
-        },
-        {
-          typeId: 2,
-          typeName: "습도",
-          typeDtl: "습도를 측정함",
-          typeCode: "3569",
-          typeColorCode: "blue",
-        },
-      ],
+      sensorTypeList: [],
       page: 1,
       able: 0,
       addType: false,
+      editType: false,
+      currPos: {
+        typeId: 0,
+        typeDtl: "",
+        typeCode: "",
+        typeColorCode: ""
+      }
     };
   },
   created() {
@@ -169,6 +172,9 @@ export default {
   components: {
     AddTypeModal,
     AskToDelete,
+    AlertSuccess,
+    AlertFail,
+    EditTypeModal,
   },
   methods: {
     AddType(newType) {
@@ -195,13 +201,7 @@ export default {
       tCode = this.typeCode,
       tColorCode = this.typeColorCode
     ) {
-      console.log(
-        "addSensorType",
-        this.typeName,
-        this.typeDtl,
-        this.typeCode,
-        this.typeColorCode
-      );
+      this.action = "등록";
       try {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/sensor-type",
@@ -213,53 +213,45 @@ export default {
           }
         );
         console.log(res);
+        this.alertSuccess = true;
         this.getSensorType();
       } catch (err) {
+        this.alertFail = true;
         console.log(err);
       }
     },
-
-    readyToEdit(sensorType) {
-      this.able = sensorType.typeId;
-      this.typeName = sensorType.typeName;
-      this.typeDtl = sensorType.typeDtl;
-      this.typeCode = sensorType.typeCode;
-      this.typeColorCode = sensorType.typeColorCode;
-      console.log(this.typeName);
-    },
-
-    async editSensorType(typeId) {
-      console.log(
-        this.typeName,
-        this.typeDtl,
-        this.typeCode,
-        this.typeColorCode
-      );
+    async editSensorType(type) {
+      this.action = "수정"
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sensor-type/" + typeId,
+          "http://163.180.117.38:8281/api/sensor-type/" + type.typeId,
           {
-            typeName: this.typeName,
-            typeDtl: this.typeDtl,
-            typeCode: this.typeCode,
-            typeColorCode: this.typeColorCode,
+            typeName: type.typeName,
+            typeDtl: type.typeDtl,
+            typeCode: type.typeCode,
+            typeColorCode: type.typeColorCode,
           }
         );
         console.log(res);
+        this.alertSuccess = true;
         this.getSensorType();
         this.$emit('modified');
       } catch (err) {
+        this.alertFail = true;
         console.log(err);
       }
     },
     async deleteSensorType(typeId) {
+      this.action = "삭제";
       try {
         const res = await axios.delete(
           "http://163.180.117.38:8281/api/sensor-type/" + typeId
         );
+        this.alertSuccess = true;
         console.log(res);
         this.getSensorType();
       } catch (err) {
+        this.alertFail = true;
         console.log(err);
       }
     },

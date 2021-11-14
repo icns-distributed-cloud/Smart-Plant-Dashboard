@@ -27,7 +27,6 @@
             @close-add-modal="addPos = false"
           >
           </AddPlaceModal>
-          <form @submit.prevent="onSubmit">
             <div class="modal-title sub-title">
               <i class="bi bi-diamond-fill"></i> 위치 목록
             </div>
@@ -36,8 +35,8 @@
               <thead>
                 <tr>
                   <th>위치 이름</th>
-                  <th>위치 상세</th>
                   <th>식별 코드</th>
+                  <th>위치 상세</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
@@ -45,28 +44,15 @@
                 <tr
                   v-for="sensorPos in sensorPosList"
                   :key="sensorPos.posId"
-                  @click="readyToEdit(sensorPos)"
                 >
                   <td>
-                    <input
-                      class="td-input"
-                      v-model="sensorPos.posName"
-                      :disabled="able != sensorPos.posId"
-                    />
+                    <div>{{ sensorPos.posName }}</div>
                   </td>
                   <td>
-                    <input
-                      class="td-input"
-                      v-model="sensorPos.posDtl"
-                      :disabled="able != sensorPos.posId"
-                    />
+                    <div>{{ sensorPos.posCode }}</div>
                   </td>
                   <td>
-                    <input
-                      class="td-input"
-                      v-model="sensorPos.posCode"
-                      :disabled="able != sensorPos.posId"
-                    />
+                    <div>{{ sensorPos.posDtl }}</div>
                   </td>
                   <td
                     style="
@@ -78,39 +64,42 @@
                   >
                     <a
                       class="btn btn-outline-primary mod-btn"
-                      type="submit"
-                      @click="
-                        readyToEdit(sensorPos);
-                        editSensorPos(sensorPos.posId);
-                        alertSuccessfullyModified=true;
-                      "
-                      ><i class="bx bx-edit"></i> 저장
+                      @click="editPos=true; currPos=sensorPos;"
+                      ><i class="bx bx-edit"></i> 수정
                     </a>
                     <a
                       class="btn btn-outline-danger tr_data_del"
-                      @click="askToDelete = true"
-                      @delete="
-                        deleteSensorPos(sensorPos.posId);
-                        askToDelete = false;
-                      "
+                      @click="askToDelete = true; able=sensorPos.posId"
                       ><i class="bx bx-trash"></i> 삭제</a
                     >
                   </td>
                 </tr>
               </tbody>
             </table>
-          </form>
           <!-- footer -->
           <AskToDelete
             v-if="askToDelete"
-            @close="askToDelete = false"
+            @close="askToDelete=false"
             @delete="deleteSensorPos(able)"
           ></AskToDelete>
-          <AlertSuccessfullyModified
-            v-if="alertSuccessfullyModified"
-            @close="alertSuccessfullyModified = false"
+          <AlertSuccess
+            v-if="alertSuccess"
+            :action="action"
+            @close="alertSuccess=false"
           >
-          </AlertSuccessfullyModified>
+          </AlertSuccess>
+          <AlertFail
+            v-if="alertFail"
+            :action="action"
+            @close="alertFail=false"
+          >
+          </AlertFail>
+          <EditPlaceModal
+            v-if="editPos"
+            @edit-pos="editSensorPos"
+            @close-edit-modal="editPos=false"
+            :currPos="currPos"
+          ></EditPlaceModal>
         </div>
         <div class="modal-footer">
           <button
@@ -129,30 +118,30 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import AddPlaceModal from "./AddPlaceModal.vue";
+import EditPlaceModal from "./EditPlaceModal.vue";
 import AskToDelete from "@/views/ask-to-delete.vue";
-import AlertSuccessfullyModified from "@/views/alert-successfully-modified.vue";
+import AlertSuccess from "@/views/alert-success.vue";
+import AlertFail from "@/views/alert-fail.vue";
 
 import axios from "axios";
 export default {
   data() {
     return {
-      alertSuccessfullyModified: false,
+      action: "",
+      alertSuccess: false,
+      alertFail: false,
       askToDelete: false,
-      posName: "",
-      posDtl: "",
-      posCode: "",
-      sensorPosList: [
-        {
-          posId: 1,
-          posName: "우리집",
-          posDtl: "행복한 우리집",
-          posCode: "1234",
-        },
-        { posId: 2, posName: "ICNS", posDtl: "행복한 연구실", posCode: "3569" },
-      ],
       page: 1,
       able: 0,
       addPos: false,
+      editPos: false,
+      currPos: {
+        posId: 0,
+        posName: "",
+        posDtl: "",
+        posCode: ""
+      },
+      sensorPosList: [],
     };
   },
   created() {
@@ -161,7 +150,9 @@ export default {
   components: {
     AddPlaceModal,
     AskToDelete,
-    AlertSuccessfullyModified,
+    AlertSuccess,
+    AlertFail,
+    EditPlaceModal,
   },
   methods: {
     AddPos(newPos) {
@@ -183,6 +174,7 @@ export default {
       pDtl = this.posDtl,
       pCode = this.posCode
     ) {
+      this.action="등록";
       try {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/sensor-pos",
@@ -193,10 +185,11 @@ export default {
           }
         );
         console.log(res);
-
+        this.alertSuccess=true;
         this.getSensorPos();
       } catch (err) {
         console.log(err);
+        this.alertFail=true;
       }
     },
 
@@ -208,32 +201,37 @@ export default {
       console.log(this.posName);
     },
 
-    async editSensorPos(posId) {
+    async editSensorPos(pos) {
+      this.action = "수정";
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sensor-pos/" + posId,
+          "http://163.180.117.38:8281/api/sensor-pos/" + pos.posId,
           {
-            posName: this.posName,
-            posDtl: this.posDtl,
-            posCode: this.posCode,
+            posName: pos.posName,
+            posDtl: pos.posDtl,
+            posCode: pos.posCode,
           }
         );
         console.log(res);
+        this.alertSuccess=true;
         this.getSensorPos();
         this.$emit('modified');
       } catch (err) {
+        this.alertFail=true;
         console.log(err);
-        console.log("tttt");
       }
     },
     async deleteSensorPos(posId) {
+      this.action = "삭제";
       try {
         const res = await axios.delete(
           "http://163.180.117.38:8281/api/sensor-pos/" + posId
         );
         console.log(res);
+        this.alertSuccess=true;
         this.getSensorPos();
       } catch (err) {
+        this.alertFail=true;
         console.log(err);
       }
     },

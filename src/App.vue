@@ -6,15 +6,13 @@
         <div class="header-left">
           <h3 style="color: #daa520; font-weight: 800">
             지능형 이상감지 - 대시보드
-            <div class="icon" style="float: right; color: #969696">
-            </div>
+            <div class="icon" style="float: right; color: #969696"></div>
           </h3>
         </div>
       </div>
 
       <div class="main-contents">
         <router-view></router-view>
-        <div> 2021</div>
       </div>
       <div class="footer">2021 Smart Monitoring system</div>
     </div>
@@ -28,10 +26,11 @@ export default {
   components: {
     SideBar: SideBar,
   },
-  created() {
-  },
   data() {
     return {
+      resList: [],
+      alertWarning: false,
+      warningInfo: {}
     };
   },
 };
@@ -47,20 +46,8 @@ body {
 .main-container {
   display: flex;
   flex-direction: row;
+  width: calc(100%-230px);
   height: 100%;
-}
-.side-bar {
-  order: 1;
-  float: left;
-  width: 230px;
-  height: 100%;
-  background-color: #1a233a;
-  color: #c8d9f8;
-  text-align: left;
-  padding: 10px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 1px 0px 10px 0px black;
 }
 
 .wrapper {
@@ -102,7 +89,6 @@ body {
 
 .main-contents {
   height: calc(100% - 80px);
-  padding: 15px;
   background-color: #1a233a;
   /* flex-direction: column; */
 }
@@ -121,7 +107,7 @@ body {
   padding-left: 20px;
 }
 .menu2 {
-  font-weight: bold;
+  font-size: 0.85rem;
   margin: 20px;
   padding-left: 20px;
   padding-bottom: 10px;

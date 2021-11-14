@@ -1,39 +1,63 @@
 <template>
   <div class="background" style="display: flex;">
-    <div style="display: flex; flex-direction: column; justify-content: space-between">
+    <div
+      style="display: flex; flex-direction: column; justify-content: space-between"
+    >
       <show-cctv></show-cctv>
       <multi-chart></multi-chart>
     </div>
 
-    <div style="display: flex; width: 100%; align-items: flex-end; justify-content: center;">
-      <div class="ssPos" v-for="pos in ssPosList" :key="pos.posId"
-      @click="getPosSensor(pos.posId)">
+    <div
+      style="display: flex;
+      width: 100%;
+      align-items: flex-end;
+      justify-content: center;"
+    >
+      <div
+        class="ssPos"
+        v-for="pos in ssPosList"
+        :key="pos.posId"
+        @click="getPosSensor(pos.posId)"
+      >
         {{ pos.posName }}
       </div>
-      
+
       <alarm-log></alarm-log>
     </div>
+
     <div
       style="  
+        width: 260px;
         display: flex;
         place-content: flex-start flex-end;
         flex-flow: column wrap-reverse;
         justify-content: flex-start;
       "
     >
-    <component
-    v-for="sensor in ssInfoList" :key="sensor.ssId"
-     :is="sensor.chartName" :value="sensor.value" :rangeArray="sensor.rangeArray">
-     </component>
+      <component
+        v-for="sensor in ssInfoList"
+        :key="sensor.ssId"
+        :is="sensor.chartName"
+        :value="sensor.value"
+        :color="sensor.color"
+        :icon="sensor.icon"
+        :status="sensor.status"
+      >
+      </component>
+
     </div>
     <div style="display: flex; flex-direction: column">
-
       <gas-chart v-if="false" :gas="90"></gas-chart>
       <dust-chart v-if="false"></dust-chart>
       <temp-chart v-if="false" :temp="temp"></temp-chart>
       <humidity-chart v-if="false" :humidity="humidity"></humidity-chart>
-
     </div>
+
+    <AlertWarningModal
+    v-if="alertWarning"
+    :warningInfo="warningInfo"
+    @close-warning-modal="alertWarning=false"
+    ></AlertWarningModal>
   </div>
 </template>
 
@@ -48,23 +72,52 @@ import GasChart from "@/components/Charts/gas-chart.vue";
 import DustChart from "@/components/Charts/dust-chart.vue";
 import TempChart from "@/components/Charts/temp-chart.vue";
 import HumidityChart from "@/components/Charts/humidity-chart.vue";
-import AlarmLog from '../components/Charts/AlarmLog.vue';
+import AlarmLog from "../components/Charts/AlarmLog.vue";
+import AlertWarningModal from "./AlertWarningModal.vue";
+//import NewChart from "@/components/Charts/NewChart.vue";
 
 export default {
   name: "Home",
   data() {
     return {
       ssId: 1,
-      currssId : 0,
+      currssId: 0,
       ssInfoList: [],
       ssPosList: [],
-      humidity: 50,
-      temp: 60,
+      warningInfo: {},
+      alertWarning: false,
+      infoList: [
+        {
+          color: "#5a8dee",
+          status: "안전",
+          icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+        },
+        {
+          color: "#39da8a",
+          status: "관심",
+          icon: "<i class='bi bi-emoji-smile-fill'></i>",
+        },
+        {
+          color: "#fdce41",
+          status: "주의",
+          icon: "<i class='bi bi-emoji-neutral-fill'></i>",
+        },
+        {
+          color: "#fdac41",
+          status: "경고",
+          icon: "<i class='bi bi-emoji-frown-fill'></i>",
+        },
+        {
+          color: "#ff5b5c",
+          status: "심각",
+          icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
+        },
+      ],
     };
   },
   mounted() {
-  this.getPosList();
-  this.getPosSensor();
+    this.getPosList();
+    this.getPosSensor();
   },
   beforeUnmount() {
     this.disconnect();
@@ -77,7 +130,7 @@ export default {
           "http://163.180.117.38:8281/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
         this.ssPosList = res.data.data.content;
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     },
@@ -91,81 +144,92 @@ export default {
         );
         this.ssInfoList = res.data.data.content;
         this.makeSensorInfo();
-      } catch(err) {
+      } catch (err) {
         console.log(err);
       }
     },
-    makeRangeInfo() {
+    makeSensorInfo() {
       for (var sensor of this.ssInfoList) {
-          var result = this.getRangeArray(sensor.ssId);
-          sensor.rangeArray = [];
-          sensor.rangeArray.push(result.rstart);
-          sensor.rangeArray.push(result.rlev1);
-          sensor.rangeArray.push(result.rlev2);
-          sensor.rangeArray.push(result.rlev3);
-          sensor.rangeArray.push(result.rlev4);
-          sensor.rangeArray.push(result.rend);
-          console.log(sensor.rangeArray);
-      }
-    },
-    makeSensorInfo() {  
-        for (var sensor of this.ssInfoList) {
-          sensor.value = 0;
-          switch (sensor.sensorTypeName) {
-            case "온도":
-              sensor.chartName = "temp-chart";
-              break;
-            case "분진":
-              sensor.chartName = "dust-chart";
-              break;
-            case "습도":
-              sensor.chartName = "humidity-chart";
-              break;
-            case "가스":
-              sensor.chartName = "gas-chart";
-              break;
-          }
-          sensor.rangeArray = [];
-          sensor.rangeArray.push(sensor.rstart);
-          sensor.rangeArray.push(sensor.rlev1);
-          sensor.rangeArray.push(sensor.rlev2);
-          sensor.rangeArray.push(sensor.rlev3);
-          sensor.rangeArray.push(sensor.rlev4);
-          sensor.rangeArray.push(sensor.rend);
-          console.log(sensor.rangeArray);
+        // default 값 설정
+        sensor.value = 0;
+        sensor.color = "#5a8dee";
+        sensor.icon = "<i class='bi bi-emoji-laughing-fill'></i>";
+        sensor.status = "안전";
+
+        // component 지정
+        switch (sensor.sensorTypeName) {
+          case "온도":
+            sensor.chartName = "temp-chart";
+            break;
+          case "분진":
+            sensor.chartName = "dust-chart";
+            break;
+          case "습도":
+            sensor.chartName = "humidity-chart";
+            break;
+          case "가스":
+            sensor.chartName = "gas-chart";
+            break;
         }
-        console.log("hello!!!!!!!!!!!!", this.ssInfoList);
-        this.connect();
-        //this.makeRangeInfo();
+      }
+      this.connect();
     },
     connect() {
       const serverURL = "http://163.180.117.38:8281/ws";
       var socket = new SockJS(serverURL);
       this.stompClient = Stomp.over(socket);
 
-        this.stompClient.connect(
-          // headers
-          {},
-          // connetCallback
-          (frame) => {
-            for(let i = 0; i < this.ssInfoList.length; i++) {
+      this.stompClient.connect(
+        // headers
+        {},
+        // connetCallback
+        (frame) => {
+
+          // 이상 데이터 발생하는 경우
+          this.stompClient.subscribe("/alert", (res) => {
+            console.log("======================WARNING======================");
+            console.log("Sub Message : ", res.body);
+            // 경고 단계 이상이면..
+            if (JSON.parse(res.body).sensorState > 3 ) {
+              // warningInfo 설정
+              const state = JSON.parse(res.body).sensorState;
+              this.warningInfo = JSON.parse(res.body);
+              this.warningInfo.color = this.infoList[state].color;
+              this.warningInfo.icon = this.infoList[state].icon;
+              this.warningInfo.status = this.infoList[state].status;
+              this.alertWarning = true;
+              this.getPosSensor(this.warningInfo.posId);
+            }
+          });
+
+          // 현재 보여지는 화면의 데이터값 가져오기
+          for (let i = 0; i < this.ssInfoList.length; i++) {
             this.connected = true;
             console.log("Socket Connection Success", frame);
             // subscribe(destination, callback)
-            this.stompClient.subscribe("/send/" + this.ssInfoList[i].ssId, (res, idx=i) => {
-              console.log("Sub Message.", res.body);
-              console.log(JSON.parse(res.body).inputData);
-              console.log(this.ssInfoList[idx].ssId);
-              this.ssInfoList[i].value = JSON.parse(res.body).inputData;
-            });
-            }
-          },
-          // errorCallback
-          (error) => {
-            console.log("Socket Connection Fail", error);
-            this.connected = false;
+            this.stompClient.subscribe(
+              "/send/" + this.ssInfoList[i].ssId,
+              (res, idx = i) => {
+                console.log("Sub Message.", res.body);
+                console.log(JSON.parse(res.body).inputData);
+                console.log(this.ssInfoList[idx].ssId);
+                // sensorState : ex) 심각 -> 4
+                // ["안전","관심","주의","경고","심각"]
+                const state = JSON.parse(res.body).sensorState;
+                this.ssInfoList[i].value = JSON.parse(res.body).inputData;
+                this.ssInfoList[i].color = this.infoList[state].color;
+                this.ssInfoList[i].icon = this.infoList[state].icon;
+                this.ssInfoList[i].status = this.infoList[state].status;
+              }
+            );
           }
-        );
+        },
+        // errorCallback
+        (error) => {
+          console.log("Socket Connection Fail", error);
+          this.connected = false;
+        }
+      );
       this.infSend();
     },
 
@@ -174,23 +238,26 @@ export default {
     },
 
     send() {
-      for(var sensor of this.ssInfoList) {
+      for (var sensor of this.ssInfoList) {
         //console.log("send : " + sensor.ssId);
         if (this.stompClient && this.stompClient.connected) {
           const msg = {
             ssId: sensor.ssId,
           };
-          this.stompClient.send("/receive/" + sensor.ssId, JSON.stringify(msg), {});
-          
+          this.stompClient.send(
+            "/receive/" + sensor.ssId,
+            JSON.stringify(msg),
+            {}
+          );
         }
       }
     },
-      disconnect() {
-        if (this.stompClient != null) {
-          this.stompClient.disconnect();
-          console.log("Disconnected");
-        }
+    disconnect() {
+      if (this.stompClient != null) {
+        this.stompClient.disconnect();
+        console.log("Disconnected");
       }
+    },
   },
   components: {
     "show-cctv": ShowCCTV,
@@ -200,6 +267,8 @@ export default {
     "temp-chart": TempChart,
     "humidity-chart": HumidityChart,
     "alarm-log": AlarmLog,
+     AlertWarningModal,
+     //NewChart,
   },
 };
 </script>
@@ -214,7 +283,6 @@ export default {
   background-color: #272e4890;
   opacity: 50;
   width: 230px;
-  /* width: 100%; */
   height: 250px;
   height: fit-content;
   padding: 10px;
@@ -223,7 +291,7 @@ export default {
   border-radius: 5px;
   text-align: center;
   margin: 5px;
-  }
+}
 
 .smallbox {
   height: fit-content;
@@ -245,7 +313,6 @@ export default {
   opacity: 40;
   margin: 10px 0px;
 }
-
 
 .large_view_content {
   width: 100%;
@@ -294,7 +361,7 @@ export default {
 #hide_icon {
   float: right;
   font-size: 18px;
-  transition: text-shadow .5s;
+  transition: text-shadow 0.5s;
 }
 
 #hide_icon:hover {

@@ -128,19 +128,19 @@
     v-if="showEditModal"
     :sensorPosId="sensorPosId"
     :sensorTypeId="sensorTypeId"
-    :ssDtl="ssDtl"
     :ssContact="ssContact"
     :ssContactExt="ssContactExt"
     :ssContactPhone="ssContactPhone"
     :ssId="ssId"
     @edit-sensor="editSensor"
-    @close="showEditModal = false"
+    @close="showEditModal=false"
   >
   </EditSensorModal>
   <TypeModal v-if="sensorModalOpen" @close="sensorModalOpen = false" @modified="getSensorManage" />
   <PlaceModal v-if="placeModalOpen" @close="placeModalOpen = false" @modified="getSensorManage"/>
   <AskToDelete v-if="askToDelete" @close="askToDelete=false" @delete="deleteSensorManage(deleteSensorId); askToDelete=false;"></AskToDelete>
-  <AlertSuccessfullyModified v-if="alertSuccessfullyModified" @close="alertSuccessfullyModified=false"></AlertSuccessfullyModified>
+  <AlertSuccess v-if="alertSuccess" :action="action" @close="alertSuccess=false"></AlertSuccess>
+  <AlertFail v-if="alertFail" :action="action" @close="alertFail=false"></AlertFail>
 </template>
 
 <script>
@@ -150,7 +150,8 @@ import EditSensorModal from "@/components/IoTManage/EditSensorModal.vue";
 import PlaceModal from "@/components/IoTManage/PlaceModal.vue";
 import TypeModal from "@/components/IoTManage/TypeModal.vue";
 import AskToDelete from "@/views/ask-to-delete.vue";
-import AlertSuccessfullyModified from './alert-successfully-modified.vue';
+import AlertSuccess from '@/views/alert-success.vue';
+import AlertFail from '@/views/alert-fail.vue';
 import axios from "axios";
 
 export default {
@@ -161,11 +162,14 @@ export default {
     PlaceModal,
     TypeModal,
     AskToDelete,
-    AlertSuccessfullyModified,
+    AlertSuccess,
+    AlertFail
   },
   data() {
     return {
-      alertSuccessfullyModified: false,
+      action: "",
+      alertFail: false,
+      alertSuccess: false,
       askToDelete: false,
       deleteSensorID: 0,
       sensorPosId: 0,
@@ -185,15 +189,6 @@ export default {
     this.getSensorManage();
   },
   methods: {
-    readyToEdit(sensor) {
-      this.ssId = sensor.ssId;
-      this.sensorPosId = sensor.ssPos.posId;
-      this.sensorTypeId = sensor.ssType.typeId;
-      this.ssContact = sensor.ssContact;
-      this.ssContactExt = sensor.ssContactExt;
-      (this.ssContactPhone = sensor.ssContactPhone),
-        (this.showEditModal = true);
-    },
     async getSensorManage() {
       try {
         const res = await axios.get(
@@ -205,7 +200,19 @@ export default {
       }
     },
 
+    readyToEdit(sensor) {
+      this.ssId = sensor.ssId;
+      this.sensorPosId = sensor.ssPos.posId;
+      this.sensorTypeId = sensor.ssType.typeId;
+      this.ssContact = sensor.ssContact;
+      this.ssContactExt = sensor.ssContactExt;
+      this.ssContactPhone = sensor.ssContactPhone;
+      this.showEditModal=true;
+    },
+
     async editSensor(newSensor) {
+      this.action = "수정";
+      console.log(newSensor);
       try {
         const res = await axios.put(
           "http://163.180.117.38:8281/api/sensor-manage/" + newSensor.ssId,
@@ -215,34 +222,36 @@ export default {
             ssContact: newSensor.ssContact,
             ssContactExt: newSensor.ssContactExt,
             ssContactPhone: newSensor.ssContactPhone,
-            ssDtl: newSensor.ssDtl,
           }
         );
         console.log(res);
         this.getSensorManage();
         this.showEditModal = false;
-        this.alertSuccessfullyModified = true;
+        this.alertSuccess = true;
       } catch (err) {
+        this.alertFail = true;
         console.log(err);
       }
     },
 
     async deleteSensorManage(ssId) {
       this.showEditModal = false;
+      this.action = "삭제"
       try {
         const res = await axios.delete(
           "http://163.180.117.38:8281/api/sensor-manage/" + ssId
         );
         console.log(res);
+        this.alertSuccess = true;
         this.getSensorManage();
       } catch (err) {
+        this.alertFail = true;
         console.log(err);
       }
     },
 
     async addNewSensor(newSensor) {
-      console.log(newSensor);
-      this.showModal = false;
+      this.action = "등록";
       try {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/sensor-manage/",
@@ -252,10 +261,12 @@ export default {
             ssContact: newSensor.ssContact,
             ssContactExt: newSensor.ssContactExt,
             ssContactPhone: newSensor.ssContactPhone,
-            ssDtl: newSensor.ssDtl,
           }
         );
         this.getSensorManage();
+        this.showModal = false;
+        this.alertSuccess=true;
+
         console.log(res);
       } catch (err) {
         console.log(err);
