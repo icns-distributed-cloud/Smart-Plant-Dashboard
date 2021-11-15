@@ -38,7 +38,9 @@
                   <th>종류 이름</th>
                   <th>종류 상세</th>
                   <th>식별 코드</th>
-                  <th>색상 코드</th>
+                  <th
+                  style="width: 100px; text-align: -webkit-center"
+                  >색상 코드</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
@@ -57,14 +59,11 @@
                   <td>
                     <div>{{ sensorType.typeCode }}</div>
                   </td>
-                  <td>
-                    <input
-                      style="vertical-align: middle;"
-                      class="td-input"
-                      type="color"
-                      v-model="sensorType.typeColorCode"
-                      :disables="able != sensorType.typeColorCode"
-                    />
+                  <td style="text-align: -webkit-center">
+                    <div
+                    class="show-color-code"
+                    :style="{backgroundColor: sensorType.typeColorCode}">
+                    </div>
                   </td>
                   <td
                     style="
@@ -263,83 +262,23 @@ export default {
 </script>
 
 <style scoped>
-.td-input {
-  background-color: #00000000;
-  border-color: #00000000;
-  color: white;
-  font-size: 15px;
-  text-align: center;
-  padding: none;
+tbody td {
+  font-size: 1.1rem;
+  border: 0px solid red;
+}
+tbody tr {
+  border: 0px solid red;
+}
+.show-color-code {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 
-.td-input:focus {
-  outline: none;
-}
-
-.modal-wrapper {
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.modal-header {
-  background-color: #272e48;
-  color: #9fb0d6;
-  border-bottom: #464d5c 0.5px solid;
-}
 .modal-title {
   font-size: 15px;
   font-weight: bold;
 }
-.modal-body {
-  padding: 10px 25px;
-  margin-bottom: 20px;
-}
-.modal-content {
-  background-color: #1a233a;
-}
-.modal-footer {
-  border-top: #464d5c 0.5px solid;
-}
-.main-input {
-  border: #464d5c 1px solid;
-  border-radius: 3px;
-  position: relative;
-  margin-bottom: 12px;
-  width: 100%;
-}
-
-.form-control {
-  background-color: #1a233a;
-  color: #9fb0d6;
-  border: none;
-  font-size: 12px;
-  font-weight: bold;
-  margin-left: 20px;
-  width: 80%;
-}
-.form-control:focus {
-  box-shadow: none;
-}
-label {
-  margin-left: 3px;
-  font-size: 10px;
-  color: #9fb0d6;
-}
-.label-icon {
-  margin-left: 5px;
-  position: absolute;
-  left: 2px;
-  top: 4px;
-}
-
-.new-input {
-  width: 30%;
-}
-
 .sub-title {
   color: #9fb0d6;
   padding: 20px;

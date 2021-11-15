@@ -8,7 +8,7 @@
       센싱 장비 관리 | <Icon icon="bx:bx-home-alt" />
     </div>
 
-    <div class="table-main">
+    <div class="table-main" style="height: fit-content">
       <div>
         <div class="table-main__header">
           센싱 장비 관리 설정
@@ -47,7 +47,9 @@
               >
                 <i class="bi bi-wrench"></i> 장소 관리
               </button>
-              <table class="table table-bordered table-hover">
+
+              <div style="width: 100%; display: flex; justify-content: center;">
+              <table class="table table-bordered table-hover" style="width: 95%;">
                 <thead>
                   <tr>
                     <th>식별번호</th>
@@ -92,8 +94,10 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-            <nav aria-label="Page navigation example" style=" float:right">
+              </div>
+
+              
+                  <nav aria-label="Page navigation example" style=" float:right">
               <ul class="pagination">
                 <li class="page-item">
                   <a class="page-link" href="#" aria-label="Previous">
@@ -114,9 +118,12 @@
                 </li>
               </ul>
             </nav>
+            </div>
+
           </div>
         </div>
       </div>
+
     </div>
   </div>
   <Modal
@@ -282,7 +289,7 @@ export default {
 }
 .table-header {
   color: #727e8c;
-  font-size: 20px;
+  font-size: 1rem;
 }
 .table {
   color: #464d5c;
@@ -292,11 +299,12 @@ export default {
   background-color: #272e48;
   color: #bdd1f8;
   border-radius: 9px;
-  height: 600px;
+  min-height: 600px;
+  height: fit-content;
 }
 .table-main__header {
   padding: 20px;
-  font-size: 20px;
+  font-size: 1rem;
 }
 
 .table-main__content {
@@ -320,13 +328,13 @@ table {
 .table.table-bordered th {
   border: 2px solid #464d5c;
   color: #bdd1f8;
-  font-size: 15px;
+  font-size: 1rem;
 }
 tbody td,
 .table tbody th {
   border-color: #464d5c;
   color: #8a99b5;
-  font-size: 24px;
+  font-size: 1rem;
   height: 40px;
   line-height: 40px;
 }

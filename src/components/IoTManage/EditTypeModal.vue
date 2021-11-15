@@ -80,25 +80,35 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="col-12">
                   <div class="form-label-group position-relative has-icon-left">
                     <label for="pos_dtl">색상 코드</label>
-                    <div class="main-input">
-                      <input
-                        autocomplete="off"
-                        type="color"
-                        class="form-control"
-                        name="pos_dtl"
-                        placeholder="색상 코드"
-                        maxlength="100"
-                        v-model="newType.typeColorCode"
-                      />
-                      <div class="form-control-position label-icon">
-                        <i class="bx bx-comment-detail"></i>
+                    <div style="display: flex">
+                      <div class="color-wrapper">
+                        <div class="show-color" :style="{backgroundColor: newType.typeColorCode}"></div>
                       </div>
+                      <div class="color-wrapper">
+                        <div class="color-picker" v-for="(color, i) in colorList" :key="i">
+                          <input name="color" type="radio" 
+                          :id="color"
+                          :value="color"
+                          :style="{backgroundColor: color}"
+                          v-model="newType.typeColorCode"
+                          />
+                          <label
+                          :for="color"
+                          :style="{backgroundColor: color}"
+                          >
+                          <i class="bi bi-check-lg"></i>
+                          </label>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -139,6 +149,11 @@ export default {
     data() {
         return {
         newType: {},
+        colorList: [
+          "#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3",
+          "#00bcd4", "#009688", "#4caf50" ,"#8bc34a", "#cddc39",
+          "#ffeb3b", "#ff9800", "#795548", "#9e9e9e"
+        ]
         };
     },
     props: {
@@ -148,6 +163,59 @@ export default {
 </script>
 
 <style>
+.color-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 3px;
+  justify-content: flex-start;
+  border: 1px solid #464d5c;
+  border-radius: 3px;
+  margin: 3px;
+}
+
+.color-picker {
+  width: 20%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.show-color {
+  width: 30px;
+  height: 100%;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+input[name="color"]+label {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    transition: all 0.2s ease;
+    color: rgba(0,0,0,0);
+}
+
+input[name="color"]:hover+label {
+  width: 40px;
+  height: 40px;
+}
+
+input[name="color"]:checked+label {
+  width: 30px;
+  height: 30px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+input[name="color"] {
+    display: none;
+}
+
+
 .modal-wrapper {
   position: fixed;
   z-index: 100;
