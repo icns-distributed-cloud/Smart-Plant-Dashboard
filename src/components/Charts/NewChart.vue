@@ -6,7 +6,7 @@
             <span>{{ sensor.ssName }}</span>
             <span>{{ sensor.ssCode }}</span>
         </div>
-        <i style="float: right; color: white;" class="bi bi-caret-down-fill"></i>
+        <i style="margin-left: 10px; color: white;" class="bi bi-caret-down-fill"></i>
     </div>
     <div v-if="!smallView" class="large-content-wrapper">
         <div class="value-wrapper">
@@ -31,8 +31,12 @@
             </div>
         </div>
     </div>
-    <div v-if="smallView" class="small-content-warpper">
-
+    <div v-if="smallView" class="small_view_content">
+        <div class="small_status" :style="{ backgroundColor: color }">
+        <div>{{ value }}<span style="font-size: 12px"> %</span></div>
+        <div style="font-weight: lighter;">|</div>
+        <div>{{ status }}</div>
+    </div>
     </div>
 </div>
 
@@ -122,7 +126,9 @@ export default {
     width: 100%;
     height: 20%;
     display: flex;
+    align-items: center;
 }
+
 .chart-name-wrapper {
     color: white;
     font-weight: bold;
@@ -132,6 +138,9 @@ export default {
     width: 80%;
     display: flex;
     justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    border-radius: 0px 0px 10px 0px;
 }
 
 .small-content-warpper {

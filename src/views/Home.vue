@@ -22,7 +22,10 @@
         {{ pos.posName }}
       </div>
 
-      <alarm-log></alarm-log>
+      <alarm-log
+        ref="addAlarmLog"
+      >
+      </alarm-log>
     </div>
 
     <div
@@ -44,7 +47,7 @@
         :status="sensor.status"
       >
       </component>
-
+      <NewChart></NewChart>
     </div>
     <div style="display: flex; flex-direction: column">
       <gas-chart v-if="false" :gas="90"></gas-chart>
@@ -74,7 +77,7 @@ import TempChart from "@/components/Charts/temp-chart.vue";
 import HumidityChart from "@/components/Charts/humidity-chart.vue";
 import AlarmLog from "../components/Charts/AlarmLog.vue";
 import AlertWarningModal from "./AlertWarningModal.vue";
-//import NewChart from "@/components/Charts/NewChart.vue";
+import NewChart from "@/components/Charts/NewChart.vue";
 
 export default {
   name: "Home",
@@ -98,12 +101,12 @@ export default {
           icon: "<i class='bi bi-emoji-smile-fill'></i>",
         },
         {
-          color: "#fdce41",
+          color: "#fdac41",
           status: "주의",
           icon: "<i class='bi bi-emoji-neutral-fill'></i>",
         },
         {
-          color: "#fdac41",
+          color: "#fdce41",
           status: "경고",
           icon: "<i class='bi bi-emoji-frown-fill'></i>",
         },
@@ -189,17 +192,14 @@ export default {
           this.stompClient.subscribe("/alert", (res) => {
             console.log("======================WARNING======================");
             console.log("Sub Message : ", res.body);
-            // 경고 단계 이상이면..
-            if (JSON.parse(res.body).sensorState > 3 ) {
-              // warningInfo 설정
-              const state = JSON.parse(res.body).sensorState;
-              this.warningInfo = JSON.parse(res.body);
-              this.warningInfo.color = this.infoList[state].color;
-              this.warningInfo.icon = this.infoList[state].icon;
-              this.warningInfo.status = this.infoList[state].status;
-              this.alertWarning = true;
-              this.getPosSensor(this.warningInfo.posId);
-            }
+            const state = JSON.parse(res.body).sensorState;
+            this.warningInfo = JSON.parse(res.body);
+            this.warningInfo.color = this.infoList[state].color;
+            this.warningInfo.icon = this.infoList[state].icon;
+            this.warningInfo.status = this.infoList[state].status;
+            this.alertWarning = true;
+            this.getPosSensor(this.warningInfo.posId);
+            this.$refs.addAlarmLog.getAlarmLog();
           });
 
           // 현재 보여지는 화면의 데이터값 가져오기
@@ -268,7 +268,7 @@ export default {
     "humidity-chart": HumidityChart,
     "alarm-log": AlarmLog,
      AlertWarningModal,
-     //NewChart,
+     NewChart,
   },
 };
 </script>
@@ -282,8 +282,8 @@ export default {
 .box {
   background-color: #272e4890;
   opacity: 50;
-  width: 230px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   height: fit-content;
   padding: 10px;
   overflow: hidden;
@@ -370,15 +370,15 @@ export default {
 
 .value_text {
   color: "#5a8dee";
-  font-size: 40px;
+  font-size: 2.5rem;
   font-weight: bold;
   position: relative;
   text-shadow: 5px 5px 5px #1b1f22;
 }
 
 .dust_circle {
-  width: 170px;
-  height: 170px;
+  width: 160px;
+  height: 160px;
   border: 9px solid;
   border-radius: 50%;
   border-color: "#5a8dee";
@@ -399,7 +399,7 @@ export default {
   border: 3px solid black;
   transform: rotate(45deg);
   margin-top: 40px;
-  margin-left: 37px;
+  margin-left: 25px;
   border-width: 9px;
   border-color: "#5a8dee";
   box-shadow: 5px 5px 5px #1b1f22;

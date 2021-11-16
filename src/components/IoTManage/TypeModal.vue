@@ -32,12 +32,14 @@
               <i class="bi bi-diamond-fill"></i> 종류 목록
             </div>
             <!-- 종류 목록 -->
-            <table class="table table-bordered table-hover">
+            <div style="display: flex; justify-content: center; margin: 20px 0px;">
+            <table class="table table-bordered table-hover" style="width: 90%;">
               <thead>
                 <tr>
                   <th>종류 이름</th>
                   <th>종류 상세</th>
                   <th>식별 코드</th>
+                  <th>단위</th>
                   <th
                   style="width: 100px; text-align: -webkit-center"
                   >색상 코드</th>
@@ -48,7 +50,6 @@
                 <tr
                   v-for="sensorType in sensorTypeList"
                   :key="sensorType.typeId"
-                  @click="readyToEdit(sensorType)"
                 >
                   <td>
                     <div>{{ sensorType.typeName }}</div>
@@ -59,6 +60,10 @@
                   <td>
                     <div>{{ sensorType.typeCode }}</div>
                   </td>
+                  <td>
+                    <div>{{ sensorType.unit }}</div>
+                  </td>
+
                   <td style="text-align: -webkit-center">
                     <div
                     class="show-color-code"
@@ -90,6 +95,7 @@
                 </tr>
               </tbody>
             </table>
+            </div>
           </form>
           <!-- footer -->
           <AskToDelete
@@ -152,6 +158,8 @@ export default {
       typeDtl: "",
       typeCode: "",
       typeColorCode: "",
+      unit: "",
+      display: 0,
       sensorTypeList: [],
       page: 1,
       able: 0,
@@ -161,7 +169,9 @@ export default {
         typeId: 0,
         typeDtl: "",
         typeCode: "",
-        typeColorCode: ""
+        typeColorCode: "",
+        unit: "",
+        display: 0
       }
     };
   },
@@ -198,7 +208,9 @@ export default {
       tName = this.typeName,
       tDtl = this.typeDtl,
       tCode = this.typeCode,
-      tColorCode = this.typeColorCode
+      tColorCode = this.typeColorCode,
+      tunit = this.unit,
+      tdisplay = this.display
     ) {
       this.action = "등록";
       try {
@@ -209,6 +221,8 @@ export default {
             typeDtl: tDtl,
             typeCode: tCode,
             typeColorCode: tColorCode,
+            unit: tunit,
+            display: tdisplay
           }
         );
         console.log(res);
@@ -229,6 +243,8 @@ export default {
             typeDtl: type.typeDtl,
             typeCode: type.typeCode,
             typeColorCode: type.typeColorCode,
+            unit: type.unit,
+            display: type.display
           }
         );
         console.log(res);
@@ -282,5 +298,13 @@ tbody tr {
 .sub-title {
   color: #9fb0d6;
   padding: 20px;
+}
+
+select.form-control:not([size]):not([multiple]) {
+  height: auto !important;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 </style>

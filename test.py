@@ -80,7 +80,7 @@ while True:
         print(e)
 
         
-        # restart()
+        restart()
         
 
 

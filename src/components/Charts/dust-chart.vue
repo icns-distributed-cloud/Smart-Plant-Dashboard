@@ -18,8 +18,8 @@
         id="dust"
         class="dust_circle"
         style="
-          width: 145px;
-          height: 145px;
+          width: 135px;
+          height: 135px;
           border-width: 4px;
           line-height: 120px;
           flex-direction: column;
@@ -28,8 +28,8 @@
         <img
           style="
             position: relative;
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             top: 20px;
             left: 35px;
           "

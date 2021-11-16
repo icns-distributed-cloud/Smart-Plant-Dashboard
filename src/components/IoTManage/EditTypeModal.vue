@@ -83,6 +83,56 @@
 
                 <div class="col-12">
                   <div class="form-label-group position-relative has-icon-left">
+                    <label for="pos_dtl">단위</label>
+                    <div class="main-input">
+                      <input
+                        autocomplete="off"
+                        type="text"
+                        class="form-control"
+                        name="pos_dtl"
+                        placeholder="측정값 단위"
+                        maxlength="100"
+                        v-model="newType.unit"
+                      />
+                      <div class="form-control-position label-icon">
+                        <i class="bx bx-comment-detail"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                <div
+                  class="form-label-group position-relative has-icon-left controls"
+                >
+                  <label for="display_type">디스플레이 타입</label>
+                  <div class="main-input">
+                    <select
+                      v-model="newType.display"
+                      name="display_type"
+                      class="form-control"
+                      id="ss_type_select"
+                      required
+                    >
+                      <option hidden selected value="0">== 디스플레이 타입 선택 ==</option>
+                      <option
+                        v-for="dtype in displayList"
+                        :key="dtype.dtypeId"
+                        v-bind:value="dtype.dtypeId"
+                      >
+                        {{ dtype.dtypeName }}
+                      </option>
+                    </select>
+                    <div class="form-control-position label-icon">
+                      <i class="bx bx-shape-square"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+                <div class="col-12">
+                  <div class="form-label-group position-relative has-icon-left">
                     <label for="pos_dtl">색상 코드</label>
                     <div style="display: flex">
                       <div class="color-wrapper">
@@ -145,6 +195,8 @@ export default {
         this.newType.typeDtl = this.currType.typeDtl;
         this.newType.typeCode = this.currType.typeCode;
         this.newType.typeColorCode = this.currType.typeColorCode;
+        this.newType.unit = this.currType.unit;
+        this.newType.display = this.currType.display;
     },
     data() {
         return {
@@ -153,7 +205,14 @@ export default {
           "#f44336", "#e91e63", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3",
           "#00bcd4", "#009688", "#4caf50" ,"#8bc34a", "#cddc39",
           "#ffeb3b", "#ff9800", "#795548", "#9e9e9e"
-        ]
+        ],
+        displayList: [
+        { dtypeId: 1, dtypeName: "기본" },
+        { dtypeId: 2, dtypeName: "온도" },
+        { dtypeId: 3, dtypeName: "습도" },
+        { dtypeId: 4, dtypeName: "분진" },
+        { dtypeId: 5, dtypeName: "가스" },
+      ]
         };
     },
     props: {

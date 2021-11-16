@@ -49,7 +49,8 @@
         e-SOP 관리
       </div>
       <div class="menu2" style="cursor:pointer;">
-        <p @click="$router.push('/esop-editor'); menuOpen=5;">
+        <!-- <p @click="$router.push('/esop-editor'); menuOpen=5;"> -->
+        <p onclick= "window.open('http://163.180.117.38:5000')" menuOpen=5;>
           <i v-if="menuOpen==5" class="bi bi-chevron-right"></i> e-SOP 에디터
         </p>
         <p @click="$router.push('/esop-manager'); menuOpen=6;">
@@ -118,7 +119,7 @@ export default {
 }
 p {
   transition: all 0.5s;
-  font-size: .75rem;
+  font-size: .85rem;
 }
 
 p:hover {

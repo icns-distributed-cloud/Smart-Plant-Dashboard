@@ -73,6 +73,7 @@ body {
 .contents {
   order: 2;
   width: 100%;
+  background-color: #1a233a;
   overflow: hidden;
 }
 
@@ -105,6 +106,7 @@ body {
   color: #66cfcf;
   font-weight: bold;
   padding-left: 20px;
+  font-size: 1rem;
 }
 .menu2 {
   font-size: 0.85rem;

@@ -35,17 +35,17 @@
                     class="dropdown-item"
                     @click="selectedPos(pos.posId, pos.posName)"
                   >
-                    {{ pos.posName }}s
+                    {{ pos.posName }}
                   </a>
                 </div>
               </div>
 
-              <div>
-                <table class="table table-bordered table-hover">
+              <div style="display: flex; justify-content: center; margin: 20px 0px;">
+                <table class="table table-bordered table-hover" style="width: 80%">
                   <thead>
                     <tr>
-                      <th>식별번호</th>
-                      <th>센싱 장비 종류</th>
+                      <th style="width: 200px;">식별번호</th>
+                      <th style="width: 150px;">센싱 장비 종류</th>
                       <th>
                         <div
                           style="display: flex; justify-content: space-around;"

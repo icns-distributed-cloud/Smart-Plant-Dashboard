@@ -31,7 +31,7 @@
               <i class="bi bi-diamond-fill"></i> 위치 목록
             </div>
             <!-- 장소 목록 -->
-            <div style="display: flex; justify-content: center;">
+            <div style="display: flex; justify-content: center; margin: 15px 0px;">
             <table class="table table-bordered table-hover" style="width: 90%;">
               <thead>
                 <tr>

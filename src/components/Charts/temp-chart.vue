@@ -208,8 +208,8 @@ export default {
         tickWidth: "1",
       },
       layout: {
-        height: 300,
-        width: 90,
+        height: 280,
+        width: 60,
       },
     };
   },

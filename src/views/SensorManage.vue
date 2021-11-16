@@ -97,25 +97,21 @@
               </div>
 
               
-                  <nav aria-label="Page navigation example" style=" float:right">
+            <nav aria-label="Page navigation example" style=" float:right">
               <ul class="pagination">
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only"></span>
-                  </a>
+                <li v-for="i in totalPages" :key="i"
+                  @click="getSensorManage(i-1)"
+                  class="page-item"
+                ><span class="page-link">{{ i }}</span>
                 </li>
+
+                <!--
                 <li class="page-item">
                   <a class="page-link cur-page" href="#">1</a>
                 </li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only"></span>
-                  </a>
-                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>'
+                -->
               </ul>
             </nav>
             </div>
@@ -190,20 +186,24 @@ export default {
       placeModalOpen: false,
       showEditModal: false,
       ssManageList: [],
+      totalPages: 0,
     };
   },
   created() {
     this.getSensorManage();
   },
   methods: {
-    async getSensorManage() {
+    async getSensorManage(page=0) {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-manage?paged=false&sort.sorted=true"
+          "http://163.180.117.38:8281/api/sensor-manage?page="+page+"&size=5&sort.sorted=true"
         );
         this.ssManageList = res.data.data.content;
+        this.totalPages = res.data.data.totalPages;
+        console.log(res);
+        console.log(this.totalPages);
       } catch (err) {
-        console.log("hello", err);
+        console.log(err);
       }
     },
 
