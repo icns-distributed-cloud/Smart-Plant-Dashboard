@@ -2,38 +2,32 @@
   <div class="main-container">
     <SideBar></SideBar>
     <div class="contents">
-      <div class="header">
-        <div class="header-left">
+      <!-- <div class="header">
           <h3 style="color: #daa520; font-weight: 800">
             지능형 이상감지 - 대시보드
             <div class="icon" style="float: right; color: #969696"></div>
           </h3>
-        </div>
-      </div>
+        
+      </div> -->
 
       <div class="main-contents">
         <router-view></router-view>
       </div>
-      <div class="footer">2021 Smart Monitoring system</div>
+      <!-- <div class="footer">2021 Smart Monitoring system</div> -->
     </div>
   </div>
 </template>
 
 <script>
 import SideBar from "./components/SideBar.vue";
+
 export default {
-  name: "App",
+  name: 'App',
   components: {
     SideBar: SideBar,
-  },
-  data() {
-    return {
-      resList: [],
-      alertWarning: false,
-      warningInfo: {}
-    };
-  },
-};
+
+  }
+}
 </script>
 
 <style>
@@ -60,9 +54,10 @@ body {
 
 .table-main {
   margin: 20px;
-  background-color: #272e48;
   color: #a9c7f0;
   border-radius: 9px;
+  background-color: #1a233a;
+
   height: 600px;
 }
 .table-main__header {
@@ -73,8 +68,8 @@ body {
 .contents {
   order: 2;
   width: 100%;
-  background-color: #1a233a;
   overflow: hidden;
+  background-color: #1a233a;
 }
 
 .header {
@@ -89,7 +84,7 @@ body {
 }
 
 .main-contents {
-  height: calc(100% - 80px);
+  height: 100%;
   background-color: #1a233a;
   /* flex-direction: column; */
 }

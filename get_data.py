@@ -1,7 +1,8 @@
-import pymysql
 import minimalmodbus
 import os, sys, time
-import datetime
+import requests
+import json
+
 
 
 instrument1 = minimalmodbus.Instrument('/dev/ttyUSB0', 1) # temperature & humidity (USBport, slave ID)
@@ -19,54 +20,69 @@ instrument2.serial.timeout = 5
 instrument2.serial.bytesize = 8
 
 
-
-conn = pymysql.connect(           # db imformation
-        host  = "163.180.117.38",
-        port = 3306,
-        user = "root",
-        passwd = "iloveicns",
-        db = "smart-plant-dashboard")
-
-now = time.localtime()
-
 def restart():
     os.execl(sys.executable, sys.executable, *sys.argv)
     print("Restart")
-    time.sleep(1)
+    time.sleep(2)
 
-
-
-
-with conn.cursor() as cur :
-    sql = "insert into sensor_data(created_at, input_data, sensormanage_id) values(%s, %s, %s)"
-
-    while True:
-        try:
-            sensor_temp = instrument1.read_register(0,1)   # (sensor address, float)
-            sensor_humid = instrument1.read_register(1,1)
-            sensor_gyro_x = instrument2.read_register(61,2)
-            sensor_gyro_y = instrument2.read_register(62,3)
-
-            print("temperature: ", sensor_temp, "humidity: ", sensor_humid, "gyro_x: ", sensor_gyro_x, "gryo_y: ", sensor_gyro_y)
-
-            if sensor_temp is not None and sensor_humid is not None:   # insert data
-
-                cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_temp, 1))
-                cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_humid, 2))
-                cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_gyro_x, 3))
-                cur.execute(sql, (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), sensor_gyro_y, 4))
-                print("Data Save Success")
-                conn.commit()
-                
-                
+while True:
+    try:
+        sensor_temp = instrument1.read_register(0,1)   # (sensor address, float)
+        sensor_humid = instrument1.read_register(1,1)
+        sensor_gyro_x = instrument2.read_register(61,2)
+        sensor_gyro_y = instrument2.read_register(62,3)
 
         
-        except:
-            restart()
+
+        print("temperature: ", sensor_temp, "humidity: ", sensor_humid, "gyro_x: ", sensor_gyro_x, "gryo_y: ", sensor_gyro_y)
+
+       
+            
+        a_temp = {
+        "inputData": sensor_temp,
+        "sensorManageId": 1
+        }
+
+        a_humid = {
+            "inputData": sensor_humid,
+            "sensorManageId": 2
+        }
+
+        a_dust = {
+            "inputData": sensor_gyro_x,
+            "sensorManageId": 3
+        }
+
+        a_gas = {
+            "inputData": sensor_gyro_y,
+            "sensorManageId": 4
+        }
+
+
+        headers = {'Content-Type': 'application/json; charset=utf-8'}
+
+        
+
+        url = "http://163.180.117.38:8281/api/sensor-data"
+        # url = "http://163.180.117.22:8218/api/sensor-data"
+
+        response = requests.post(url, headers= headers, data=json.dumps(a_temp))
+        response = requests.post(url, headers=headers, data=json.dumps(a_humid))
+        response = requests.post(url, headers=headers, data=json.dumps(a_dust))
+        response = requests.post(url, headers=headers, data=json.dumps(a_gas))
+        print(response)
+
+        print("전송  완  료!!")
+
+        time.sleep(2)
+
+    except Exception as e:
+        print(e)
+
+        
+        restart()
+        
 
 
 
-        time.sleep(1)    
-
-
-
+    time.sleep(2)    

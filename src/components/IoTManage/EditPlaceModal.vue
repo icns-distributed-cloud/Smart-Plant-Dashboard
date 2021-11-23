@@ -110,7 +110,7 @@
 
 <script>
 export default {
-    mounted(){
+    created(){
         this.newPos.posId = this.currPos.posId;
         this.newPos.posName = this.currPos.posName;
         this.newPos.posDtl = this.currPos.posDtl;

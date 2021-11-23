@@ -41,10 +41,9 @@
         v-for="sensor in ssInfoList"
         :key="sensor.ssId"
         :is="sensor.chartName"
-        :value="sensor.value"
-        :color="sensor.color"
-        :icon="sensor.icon"
-        :status="sensor.status"
+        :infoList="infoList"
+        :ssId="sensor.ssId"
+        :sensor="sensor"
       >
       </component>
       <NewChart></NewChart>
@@ -122,10 +121,12 @@ export default {
     this.getPosList();
     this.getPosSensor();
   },
-  beforeUnmount() {
+  
+  beforeDestroy() {
     this.disconnect();
     clearInterval(this.timer);
   },
+
   methods: {
     async getPosList() {
       try {
@@ -143,7 +144,7 @@ export default {
       this.displayGraph = "";
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-range?posId=" + posId
+          "http://163.180.117.38:8281/api/sensor-manage?posId=" + posId
         );
         this.ssInfoList = res.data.data.content;
         this.makeSensorInfo();
@@ -151,7 +152,9 @@ export default {
         console.log(err);
       }
     },
+
     makeSensorInfo() {
+      console.log(this.ssInfoList);
       for (var sensor of this.ssInfoList) {
         // default 값 설정
         sensor.value = 0;
@@ -160,23 +163,48 @@ export default {
         sensor.status = "안전";
 
         // component 지정
-        switch (sensor.sensorTypeName) {
-          case "온도":
+        switch (sensor.ssType.display) {
+          case 1:
+            sensor.chartName = "anonymous-chart";
+            this.getMoreInfo(sensor);
+            break;
+          case 2:
             sensor.chartName = "temp-chart";
             break;
-          case "분진":
-            sensor.chartName = "dust-chart";
-            break;
-          case "습도":
+          case 3:
             sensor.chartName = "humidity-chart";
             break;
-          case "가스":
+          case 4:
+            sensor.chartName = "dust-chart";
+            break;
+          case 5:
             sensor.chartName = "gas-chart";
             break;
         }
       }
       this.connect();
     },
+
+  async getMoreInfo(sensor) {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    try {
+      const res = await axios.get(
+        "http://163.180.117.38:8281/api/sensor-range/" + sensor.ssId
+      )
+      const result = res.data.data;
+      sensor.range_list = [
+        result.rstart,
+        result.rlev1,
+        result.rlev2,
+        result.rlev3,
+        result.rlev4,
+        result.rend
+      ]
+    } catch(err) {
+      console.log(err);
+    }
+  },
+
     connect() {
       const serverURL = "http://163.180.117.38:8281/ws";
       var socket = new SockJS(serverURL);
@@ -191,7 +219,7 @@ export default {
           // 이상 데이터 발생하는 경우
           this.stompClient.subscribe("/alert", (res) => {
             console.log("======================WARNING======================");
-            console.log("Sub Message : ", res.body);
+            console.log("Sub Message : ", res.body, frame);
             const state = JSON.parse(res.body).sensorState;
             this.warningInfo = JSON.parse(res.body);
             this.warningInfo.color = this.infoList[state].color;
@@ -202,6 +230,7 @@ export default {
             this.$refs.addAlarmLog.getAlarmLog();
           });
 
+/*
           // 현재 보여지는 화면의 데이터값 가져오기
           for (let i = 0; i < this.ssInfoList.length; i++) {
             this.connected = true;
@@ -223,6 +252,8 @@ export default {
               }
             );
           }
+*/
+
         },
         // errorCallback
         (error) => {
@@ -267,8 +298,8 @@ export default {
     "temp-chart": TempChart,
     "humidity-chart": HumidityChart,
     "alarm-log": AlarmLog,
+    "anonymous-chart": NewChart,
      AlertWarningModal,
-     NewChart,
   },
 };
 </script>
@@ -369,7 +400,7 @@ export default {
 }
 
 .value_text {
-  color: "#5a8dee";
+  color: #5a8dee;
   font-size: 2.5rem;
   font-weight: bold;
   position: relative;
@@ -381,11 +412,11 @@ export default {
   height: 160px;
   border: 9px solid;
   border-radius: 50%;
-  border-color: "#5a8dee";
+  border-color: #5a8dee;
   display: inline-flex;
   align-self: center;
   justify-content: center;
-  color: "#5a8dee";
+  color: #5a8dee;
   font-weight: 8px;
   font-size: 40px;
   text-align: center;
@@ -401,7 +432,7 @@ export default {
   margin-top: 40px;
   margin-left: 25px;
   border-width: 9px;
-  border-color: "#5a8dee";
+  border-color: #5a8dee;
   box-shadow: 5px 5px 5px #1b1f22;
 }
 
@@ -409,7 +440,7 @@ export default {
   width: 60px;
   height: 23px;
   border-radius: 10px;
-  color: "#5a8dee";
+  color: #5a8dee;
   font-size: 15px;
   font-weight: bold;
   padding: 3px;

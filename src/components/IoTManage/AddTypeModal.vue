@@ -83,13 +83,13 @@
 
                 <div class="col-12">
                   <div class="form-label-group position-relative has-icon-left">
-                    <label for="pos_dtl">단위</label>
+                    <label for="unit">단위</label>
                     <div class="main-input">
                       <input
                         autocomplete="off"
                         type="text"
                         class="form-control"
-                        name="pos_dtl"
+                        name="unit"
                         placeholder="종류 상세"
                         maxlength="100"
                         v-model="newType.unit"

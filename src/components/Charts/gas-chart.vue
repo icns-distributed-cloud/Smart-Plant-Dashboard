@@ -18,7 +18,7 @@
         @click="smallView = false"
       ></i>
     </div>
-
+<!--
     <div v-if="!smallView" class="large_view_content">
       <div class="gauge" style="position: relative; top: -125px;">
         <ejs-circulargauge background="#FFFFFF00">
@@ -74,7 +74,7 @@
       </div>
       <div id="gas" class="value_text" style="top: -330px;">{{ value }}</div>
     </div>
-
+-->
     <div v-if="smallView" class="small_view_content">
       <div class="small_status" :style="{ backgroundColor: color }">
         <div>{{ value }}<span style="font-size: 12px"> ppm</span></div>
@@ -82,58 +82,124 @@
         <div>{{ status }}</div>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
-import {
-  CircularGaugeComponent,
-  AxesDirective,
-  AxisDirective,
-  PointersDirective,
-  PointerDirective,
-  RangesDirective,
-  RangeDirective,
-} from "@syncfusion/ej2-vue-circulargauge";
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
+// import {
+//   CircularGaugeComponent,
+//   AxesDirective,
+//   AxisDirective,
+//   PointersDirective,
+//   PointerDirective,
+//   RangesDirective,
+//   RangeDirective,
+// } from "@syncfusion/ej2-vue-circulargauge";
 
 export default {
   name: "gas-chart",
 
-  components: {
-    "ejs-circulargauge": CircularGaugeComponent,
-    "e-axes": AxesDirective,
-    "e-axis": AxisDirective,
-    "e-pointers": PointersDirective,
-    "e-pointer": PointerDirective,
-    "e-ranges": RangesDirective,
-    "e-range": RangeDirective,
-  },
-
+  // components: {
+  //   "ejs-circulargauge": CircularGaugeComponent,
+  //   "e-axes": AxesDirective,
+  //   "e-axis": AxisDirective,
+  //   "e-pointers": PointersDirective,
+  //   "e-pointer": PointerDirective,
+  //   "e-ranges": RangesDirective,
+  //   "e-range": RangeDirective,
+  // },
   data: function() {
     return {
       smallView: false,
       animation: { enable: false },
       majorTicks: { width: 1, color: "#5a8dee" },
+      value: 0,
+      color: "#5a8dee",
+      icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+      status: "안전",
     };
   },
 
+  mounted() {
+    this.connect();
+  },
+
+  beforeDestroy() {
+    this.disconnect();
+    clearInterval(this.timer);
+  },
+
+  methods: {
+    connect() {
+      const serverURL = "http://163.180.117.38:8281/ws";
+      var socket = new SockJS(serverURL);
+      this.stompClient = Stomp.over(socket);
+
+      this.stompClient.connect(
+        // headers
+        {},
+        // connetCallback
+        (frame) => {
+          // 현재 보여지는 화면의 데이터값 가져오기
+            this.connected = true;
+            console.log("Socket Connection Success", frame);
+            // subscribe(destination, callback)
+            this.stompClient.subscribe(
+              "/send/" + this.ssId,
+              (res) => {
+                console.log("Sub Message.", res.body);
+                console.log(JSON.parse(res.body).inputData);
+                // sensorState : ex) 심각 -> 4
+                // ["안전","관심","주의","경고","심각"]
+                const state = JSON.parse(res.body).sensorState;
+                this.value = JSON.parse(res.body).inputData;
+                this.color = this.infoList[state].color;
+                this.icon = this.infoList[state].icon;
+                this.status = this.infoList[state].status;
+              }
+            );
+          },
+        // errorCallback
+        (error) => {
+          console.log("Socket Connection Fail", error);
+          this.connected = false;
+        }
+      );
+      this.infSend();
+    },
+
+    infSend() {
+      setInterval(this.send, 2000);
+    },
+
+    send() {
+        //console.log("send : " + sensor.ssId);
+        if (this.stompClient && this.stompClient.connected) {
+          const msg = {
+            ssId: this.ssId,
+          };
+          this.stompClient.send(
+            "/receive/" + this.ssId,
+            JSON.stringify(msg),
+            {}
+          );
+        }
+    },
+
+    disconnect() {
+      if (this.stompClient != null) {
+        this.stompClient.disconnect();
+        console.log("Disconnected");
+      }
+    },
+  },
+
   props: {
-    value: {
-      type: Number,
-      default: 10,
-    },
-    color: {
-      type: String,
-      default: "5a8dee"
-    },
-    icon: {
-      type: String,
-      default: "<i class='bi bi-emoji-laughing-fill'></i>"
-    },
-    status: {
-      type: String,
-      default: "안전",
-    }
+    ssId: Number,
+    infoList: Array
   },
 };
 </script>

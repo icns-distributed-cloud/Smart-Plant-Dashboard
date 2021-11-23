@@ -5,7 +5,7 @@
       rel="stylesheet"
     />
     <div class="table-header">
-      담당자 관리 | <Icon icon="bx:bx-home-alt" />
+      담당자 관리 | 
     </div>
 
     <div class="table-main" style="height: fit-content">
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { Icon } from "@iconify/vue";
+// import { Icon } from "@iconify/vue";
 import AddManagerModal from "./AddManagerModal.vue";
 import EditManagerModal from "./EditManagerModal.vue";
 import AskToDelete from "@/views/ask-to-delete.vue";
@@ -262,7 +262,7 @@ export default {
 
   },
   components: {
-    Icon,
+    
     AddManagerModal,
     EditManagerModal,
     AskToDelete,

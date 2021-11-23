@@ -5,99 +5,114 @@
       rel="stylesheet"
     />
     <div class="table-header">
-      센서 위치 등록 | <Icon icon="bx:bx-home-alt" />
+      센서 위치 등록 | 
     </div>
-
 
     <div class="table-main">
-      <div>
-
+    
      <div class="table-main__header"> 센서 배치 장소 선택 </div>
-     
-        <iframe
-            :src="`./sticker/dist/stmain.html`"
-            width="100%"
-            height="830"
-            frameborder="0" >
-           </iframe>
-                  
+     <div style="display: flex; ">
+
+       <div style="width: 100%; height: 100%;">
+         <div style="width: 100%; display: flex;">
+          <div v-for="pos in posList" :key="pos.posId"
+          @click="getPosSensor(pos.posId)">
+            {{ pos.posName }}
+          </div>
+         </div>
+       </div>
+
+
+        <div class="sensor-wrapper">
+
+            <div class="sensor-title">
+                센서 선택
+            </div>
+
+            <div v-for="sensor in sensorList" :key="sensor.ssId">
+              <div class="corlor-circle"
+              :style="{backgroundColor: sensor.ssType.typeColorCode}"></div>
+              <div>{{ sensor.ssName }}</div>
+            </div>
+
+        </div>
+        
+     </div>
+
 
       </div>
-<!--
-      <div>
-          <div class="table-main__content">
-            <div class="table-main__content-intro">
-              센서 위치 지정
-            </div>
-
-           
-
-            <div>
-                <button
-                type="button"
-                class="btn btn-primary"
-                style="margin-bottom: 12px; float:left"
-                @click="showModal=true;"
-              >
-                연료유 탱크 펌프룸
-              </button>
-       
-                <button
-                type="button"
-                class="btn btn-primary"
-                style="margin-bottom: 12px; float:left"
-                @click="showModal=true;"
-              >
-                우드펠릿 버킷엘리베이터 #2
-              </button>
-
-                <button
-                type="button"
-                class="btn btn-primary"
-                style="margin-bottom: 12px; float:left"
-                @click="showModal=true;"
-              >
-                5호기 터빈 MSV/CV
-              </button>
-
-                <button
-                type="button"
-                class="btn btn-primary"
-                style="margin-bottom: 12px; float:left"
-                @click="showModal=true;"
-              >
-                정문 옹벽
-              </button>
-
-
-
-            </div>
-
-
-          </div>
-          
-      </div> 
-      -->
     </div>
-</div>
+
 </template>
 
 
 <script>
-import { Icon } from "@iconify/vue";
+import axios from "axios"
+// import { Icon } from "@iconify/vue";
 export default {
   name: "Sensor",
+  data() {
+      return {
+          posList: [],
+          sensorList: [],
+      }
+  },
+  created() {
+    this.getSensorPos();
+  },
+  methods: {
+    async getSensorPos() {
+      try {
+        const res = await axios.get(
+          "http://163.180.117.38:8281/api/sensor-pos"
+        );
+        this.posList = res.data.data.content;
+      } catch(err) {
+        console.log(err);
+      }
+    },
+
+    async getPosSensor(posId) {
+      try {
+        const res = await axios.get(
+          "http://163.180.117.38:8281/api/sensor-manage?posId=" + posId
+        );
+        this.sensorList = res.data.data.content;
+      } catch(err) {
+        console.log(err);
+      }
+    }
+
+
+  },
 
   components: {
-    Icon,
+    
   },
 };
 </script>
 
 <style>
+.sensor-title {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.sensor-wrapper {
+    height: 100%;
+    width: 300px;
+}
+
+.color-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
 .wrapper {
   margin: 10px;
 }
+
 .table-header {
   color: #727e8c;
   font-size: 20px;
@@ -108,8 +123,8 @@ export default {
   background-color: #272e48;
   color: #a9c7f0;
   border-radius: 9px;
-  height: 600px;
 }
+
 .table-main__header {
   padding: 20px;
   font-size: 20px;

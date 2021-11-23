@@ -5,7 +5,7 @@
       rel="stylesheet"
     />
     <div class="table-header">
-      문자메시지 기록 | <Icon icon="bx:bx-home-alt" />
+      문자메시지 기록 | 
     </div>
 
     <div class="table-main">
@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import { Icon } from "@iconify/vue";
+// import { Icon } from "@iconify/vue";
 export default {
   name: "MsgLog",
 
   components: {
-    Icon,
+    
   },
 };
 </script>

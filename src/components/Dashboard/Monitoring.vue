@@ -5,7 +5,7 @@
       rel="stylesheet"
     />
     <div class="table-header">
-      IoT 모니터링 | <Icon icon="bx:bx-home-alt" />
+      IoT 모니터링 |
     </div>
 
     <div class="table-main">
@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import { Icon } from "@iconify/vue";
+// import { Icon } from "@iconify/vue";
 export default {
   name: "CCTV",
 
   components: {
-    Icon,
+    
   },
 };
 </script>

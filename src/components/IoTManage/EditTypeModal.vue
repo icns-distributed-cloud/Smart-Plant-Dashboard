@@ -189,7 +189,7 @@
 
 <script>
 export default {
-    mounted() {
+    created() {
         this.newType.typeId = this.currType.typeId;
         this.newType.typeName = this.currType.typeName;
         this.newType.typeDtl = this.currType.typeDtl;
@@ -197,6 +197,7 @@ export default {
         this.newType.typeColorCode = this.currType.typeColorCode;
         this.newType.unit = this.currType.unit;
         this.newType.display = this.currType.display;
+        console.log("!!",this.newType);
     },
     data() {
         return {

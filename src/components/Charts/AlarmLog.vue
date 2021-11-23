@@ -58,6 +58,7 @@ export default {
                     "http://163.180.117.38:8281/api/abnormal-detection?page=0&size=30&sort=createdAt,DESC"
                     );
                 this.alarmLogList = res.data.data.content;
+                console.log("hellohellohello", this.alarmLogList);
             } catch(err) {
                 console.log(err);
             }

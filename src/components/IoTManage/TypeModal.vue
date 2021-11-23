@@ -191,7 +191,9 @@ export default {
         newType.typeName,
         newType.typeDtl,
         newType.typeCode,
-        newType.typeColorCode
+        newType.typeColorCode,
+        newType.unit,
+        newType.display
       );
     },
     async getSensorType() {

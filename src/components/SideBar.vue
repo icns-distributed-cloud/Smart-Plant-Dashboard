@@ -49,10 +49,11 @@
         e-SOP 관리
       </div>
       <div class="menu2" style="cursor:pointer;">
-        <!-- <p @click="$router.push('/esop-editor'); menuOpen=5;"> -->
-        <p onclick= "window.open('http://163.180.117.38:5000')" menuOpen=5;>
+       
+        <p v-on:click="openEsopEditor">
           <i v-if="menuOpen==5" class="bi bi-chevron-right"></i> e-SOP 에디터
         </p>
+        
         <p @click="$router.push('/esop-manager'); menuOpen=6;">
           <i v-if="menuOpen==6" class="bi bi-chevron-right"></i> 담당자 관리
         </p>
@@ -71,7 +72,7 @@
         <p @click="$router.push('/alertsettings'); menuOpen=8;">
           <i v-if="menuOpen==8" class="bi bi-chevron-right"></i> 이상 경고 설정
         </p>
-        <p @click="menuOpen=9;">
+        <p @click="$router.push('/abnormal-detection-log'); menuOpen=9;">
           <i v-if="menuOpen==9" class="bi bi-chevron-right"></i> 이상 감지 이력
         </p>
       </div>
@@ -82,13 +83,23 @@
 
 <script>
 
+
+
 export default {
   name: "SideBar",
+  
   data() {
     return{
       menuOpen: 0,
     }
 
+  },
+  methods: {
+    openEsopEditor() {
+      let routeData = this.$router.resolve({ path: "/esop-editor"});
+      // let routeData = this.$router.resolve({ path: "/esop-editor"});
+      window.open(routeData.href,);
+    }
   }
 };
 </script>

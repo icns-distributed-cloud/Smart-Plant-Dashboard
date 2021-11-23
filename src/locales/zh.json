@@ -1,0 +1,43 @@
+{
+    "node":{
+       "head":"외형",
+       "fill":"채우기",
+       "stroke":"테두리색",
+       "font":"폰트",
+       "fontSize":"크기",
+       "fontStyle":"글자스타일",
+       "textFill":"글자색",
+       "position":"위치",
+       "nodeAlign":"조정",
+       "prefabrication":"미리 만들어진 스타일"
+    },
+    "group":{
+        "head":"외형",
+        "fill":"채우기",
+        "stroke":"테두리색",
+        "showHead":"머리표시",
+        "font":"폰트",
+        "fontStyle":"글자스타일",
+        "fontSize":"크기",
+        "fontBackground":"배경",
+        "align":"조정",
+        "textFill":"글자색",
+        "position":"위치",
+        "prefabrication":"미리 만들어진 스타일"
+    },
+    "edge":{
+        "head":"스타일",
+        "fill":"채우기",
+        "stroke":"테두리색",
+        "lineDash":"선 스타일",
+        "lineStyle":"선 스타일",
+        "turningDistance":"회전거리",
+        "font":"폰트",
+        "fontStyle":"글자스타일",
+        "fontSize":"크기",
+        "textFill":"글자색",
+        "nodeAlign":"정렬",
+        "position":"Position",
+        "prefabrication":"미리 만들어진 스타일"
+    }
+}

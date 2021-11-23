@@ -5,7 +5,7 @@
       rel="stylesheet"
     />
     <div class="table-header">
-      CCTV 영상인식 | <Icon icon="bx:bx-home-alt" />
+      CCTV 영상인식 |
     </div>
 
     <div class="table-main">
@@ -17,13 +17,10 @@
 </template>
 
 <script>
-import { Icon } from "@iconify/vue";
 export default {
   name: "CCTV",
 
-  components: {
-    Icon,
-  },
+
 };
 </script>
 

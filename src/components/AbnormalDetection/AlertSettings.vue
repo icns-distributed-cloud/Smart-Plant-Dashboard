@@ -7,7 +7,7 @@
 
     <div class="wrapper">
       <div class="table-header">
-        이상 경고 설정 | <Icon icon="bx:bx-home-alt" />
+        이상 경고 설정 | 
       </div>
 
       <div class="table-main">
@@ -150,7 +150,7 @@
 
 <script>
 import axios from "axios";
-import { Icon } from "@iconify/vue";
+// import { Icon } from "@iconify/vue";
 import SettingModal from "@/components/AbnormalDetection/SettingModal";
 
 export default {
@@ -177,7 +177,7 @@ export default {
     };
   },
   components: {
-    Icon,
+    
     SettingModal,
   },
   mounted() {

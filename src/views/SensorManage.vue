@@ -1,11 +1,12 @@
 <template>
+<div>
   <link
     href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
     rel="stylesheet"
   />
   <div class="wrapper">
     <div class="table-header">
-      센싱 장비 관리 | <Icon icon="bx:bx-home-alt" />
+      센싱 장비 관리 | 
     </div>
 
     <div class="table-main" style="height: fit-content">
@@ -144,10 +145,11 @@
   <AskToDelete v-if="askToDelete" @close="askToDelete=false" @delete="deleteSensorManage(deleteSensorId); askToDelete=false;"></AskToDelete>
   <AlertSuccess v-if="alertSuccess" :action="action" @close="alertSuccess=false"></AlertSuccess>
   <AlertFail v-if="alertFail" :action="action" @close="alertFail=false"></AlertFail>
+  </div>
 </template>
 
 <script>
-import { Icon } from "@iconify/vue";
+// import { Icon } from "@iconify/vue";
 import Modal from "@/components/Modal.vue";
 import EditSensorModal from "@/components/IoTManage/EditSensorModal.vue";
 import PlaceModal from "@/components/IoTManage/PlaceModal.vue";
@@ -159,7 +161,7 @@ import axios from "axios";
 
 export default {
   components: {
-    Icon,
+    
     Modal,
     EditSensorModal,
     PlaceModal,

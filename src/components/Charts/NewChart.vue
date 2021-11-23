@@ -1,23 +1,42 @@
 <template>
-<div class="chart-container">
+<div class="box">
+    <div class="box_title">
+        <i class="bi bi-bar-chart-fill"></i> 
+        <span>{{ sensor.ssType.typeName }} </span>
+        <span>{{ sensor.ssCode }}</span>
+        <i v-if="!smallView" class="bi bi-caret-down-fill" id="hide_icon" style="float: right;"
+        @click="smallView=true"
+        ></i>
+        <i v-if="smallView" id="hide_icon" class="bi bi-caret-up-fill" style="rloat: right;"
+        @click="smallView=false"
+        ></i>
+    </div>
+    <!--
     <div class="chart-header">
         <div class="chart-name-wrapper">
-            <i :class="sensor.icon"></i>
-            <span>{{ sensor.ssName }}</span>
+            <i class="bi bi-bar-chart-fill"></i>
+            <span>{{ sensor.ssType.typeName }}</span>
             <span>{{ sensor.ssCode }}</span>
         </div>
-        <i style="margin-left: 10px; color: white;" class="bi bi-caret-down-fill"></i>
+        <i v-if="!smallView" class="bi bi-caret-down-fill" id="hide_icon" style="margin-left: 10px; color: white;"
+        @click="smallView=true"
+        ></i>
+        <i v-if="smallView" id="hide_icon" class="bi bi-caret-up-fill" style="margin-left: 10px; color: white;"
+      @click="smallView=false"
+      ></i>
     </div>
-    <div v-if="!smallView" class="large-content-wrapper">
+    -->
+    <div v-if="!smallView" class="large-view-content">
         <div class="value-wrapper">
             <div id="status-color" class="sensor-value">{{ value }}</div>
-            <span class="sensor-unit">{{ sensor.unit }}</span>
+            <span class="sensor-unit">{{ sensor.ssType.unit }}</span>
         </div>
 
         <div class="chart-footer-wrapper">
             <div class="status-wrapper">
-                <div id="status-color" class="status-text">
-                    <i :class="icon"></i>
+                <div id="status-color" class="status-text"
+                    :style="{ color: color }">
+                    <span v-html="icon"></span>
                     {{ status }}
                 </div>
                 <div class="status-triangle"></div>
@@ -26,23 +45,26 @@
             <div class="bar-wrapper">
                 <div class="bar"
                     v-for="(len, i) in bar_len_list" :key="i"
-                    :style="{width: len, backgroundColor: color_list[i]}"
+                    :style="{width: '20%', backgroundColor: infoList[i].color}"
                 ></div>
             </div>
         </div>
     </div>
     <div v-if="smallView" class="small_view_content">
         <div class="small_status" :style="{ backgroundColor: color }">
-        <div>{{ value }}<span style="font-size: 12px"> %</span></div>
-        <div style="font-weight: lighter;">|</div>
-        <div>{{ status }}</div>
-    </div>
+            <div>{{ value }}<span style="font-size: 12px"> {{ sensor.ssType.unit }}</span></div>
+                <div style="font-weight: lighter;">|</div>
+            <div>{{ status }}</div>
+        </div>
     </div>
 </div>
 
 
 </template>
 <script>
+import Stomp from "webstomp-client";
+import SockJS from "sockjs-client";
+
 export default {
     name: "new-chart.vue",
     data() {
@@ -52,6 +74,11 @@ export default {
             bar_len_list: [],
             bar_value_pos: 0,
             ratio: 0,
+            
+            value: 0,
+            color: "#5a8dee",
+            icon: "<i class='bi bi-emoji-laughing-fill'></i>",
+            status: "안전",
         }
     },
     props: {
@@ -63,38 +90,33 @@ export default {
                     ssCode: "I-T-1",
                     icon: "bi bi-thermometer-half",
                     unit: "°C",
-                    range_list: [10, 30, 50, 60, 70, 80, 100]
+                    range_list: [10, 30, 50, 60, 70, 80]
                 }
             }
         },
-        value: {
-            type: Number,
-            default: 10,
-        },
-        color: {
-            type: String,
-            default: "#5a8dee"
-        },
-        icon: {
-            type: String,
-            default: "bi bi-emoji-laughing-fill"
-        },
-        status: {
-            type: String,
-            default: "안전",
-        }
+        ssId: Number,
+        infoList: Array
     },
-    created() {
+
+    mounted() {
         this.calculateBarVal();
+        this.connect();
     },
+
+    beforeDestroy() {
+        this.disconnect();
+        clearInterval(this.timer);
+    },
+
     methods: {
         calculateBarVal() {
-            const maxLen = this.sensor.range_list[4] - this.sensor.range_list[0];
+            console.log("range_listlistlist",this.sensor.range_list);
+            const maxLen = this.sensor.range_list[5] - this.sensor.range_list[0];
             for (var i = 0; i < 5; i++) {
                 var len = (this.sensor.range_list[i+1] - this.sensor.range_list[i]) / maxLen * 100 + "%";
                 this.bar_len_list[i] = len;
             }
-            console.log(this.bar_len_list);
+            console.log("bar_len_list",this.bar_len_list);
             this.calcVarPos();
         },
         calcVarPos() {
@@ -103,8 +125,71 @@ export default {
             } else {
                 this.bar_value_pos = (this.value - this.sensor.range_list[0]) / 100 + "%";
             }
+        },
+
+    connect() {
+      const serverURL = "http://163.180.117.38:8281/ws";
+      var socket = new SockJS(serverURL);
+      this.stompClient = Stomp.over(socket);
+
+      this.stompClient.connect(
+        // headers
+        {},
+        // connetCallback
+        (frame) => {
+          // 현재 보여지는 화면의 데이터값 가져오기
+            this.connected = true;
+            console.log("Socket Connection Success", frame);
+            // subscribe(destination, callback)
+            this.stompClient.subscribe(
+              "/send/" + this.ssId,
+              (res) => {
+                console.log("Sub Message.", res.body);
+                console.log(JSON.parse(res.body).inputData);
+                // sensorState : ex) 심각 -> 4
+                // ["안전","관심","주의","경고","심각"]
+                const state = JSON.parse(res.body).sensorState;
+                this.value = JSON.parse(res.body).inputData;
+                this.color = this.infoList[state].color;
+                this.icon = this.infoList[state].icon;
+                this.status = this.infoList[state].status;
+              }
+            );
+          },
+        // errorCallback
+        (error) => {
+          console.log("Socket Connection Fail", error);
+          this.connected = false;
+        }
+      );
+      this.infSend();
+    },
+
+    infSend() {
+      setInterval(this.send, 2000);
+    },
+
+    send() {
+        //console.log("send : " + sensor.ssId);
+        if (this.stompClient && this.stompClient.connected) {
+          const msg = {
+            ssId: this.ssId,
+          };
+          this.stompClient.send(
+            "/receive/" + this.ssId,
+            JSON.stringify(msg),
+            {}
+          );
         }
     },
+
+    disconnect() {
+      if (this.stompClient != null) {
+        this.stompClient.disconnect();
+        console.log("Disconnected");
+      }
+    },
+  },
     watch: {
         value: function() {
             this.calcVarPos();
@@ -120,6 +205,7 @@ export default {
     background-color: rgba(26, 35, 58, 0.5);
     border-radius: 5%;
     overflow: hidden;
+    margin: 10px 0px;
 }
 
 .chart-header {
@@ -132,7 +218,7 @@ export default {
 .chart-name-wrapper {
     color: white;
     font-weight: bold;
-    background-color: rgba(26, 35, 58, 0.5);
+    /*background-color: rgba(26, 35, 58, 0.5);*/
     font-size: 1rem;
     padding: 2%;
     width: 80%;
@@ -163,7 +249,7 @@ export default {
 }
 
 .sensor-value {
-    font-size: 4.2rem;
+    font-size: 3.2rem;
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(26, 35, 58, 0.5);
 }
