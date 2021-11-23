@@ -90,7 +90,7 @@
                         type="text"
                         class="form-control"
                         name="unit"
-                        placeholder="종류 상세"
+                        placeholder="측정값 단위"
                         maxlength="100"
                         v-model="newType.unit"
                       />

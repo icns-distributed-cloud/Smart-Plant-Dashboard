@@ -2,7 +2,7 @@
 <div class="box">
     <div class="box_title">
         <i class="bi bi-bar-chart-fill"></i> 
-        <span>{{ sensor.ssType.typeName }} </span>
+        <span> {{ sensor.ssType.typeName }} </span>
         <span>{{ sensor.ssCode }}</span>
         <i v-if="!smallView" class="bi bi-caret-down-fill" id="hide_icon" style="float: right;"
         @click="smallView=true"
@@ -28,14 +28,17 @@
     -->
     <div v-if="!smallView" class="large-view-content">
         <div class="value-wrapper">
-            <div id="status-color" class="sensor-value">{{ value }}</div>
+            <div id="status-color" class="sensor-value" :style="{ color: color }">
+                {{ value }}
+            </div>
             <span class="sensor-unit">{{ sensor.ssType.unit }}</span>
         </div>
 
         <div class="chart-footer-wrapper">
-            <div class="status-wrapper">
+            <div class="status-wrapper"
+                :style="{ position: 'relative', left: bar_value_pos-'20' }">
                 <div id="status-color" class="status-text"
-                    :style="{ color: color }">
+                    :style="{color: color}">
                     <span v-html="icon"></span>
                     {{ status }}
                 </div>
@@ -64,6 +67,7 @@
 <script>
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
+import axios from "axios";
 
 export default {
     name: "new-chart.vue",
@@ -98,8 +102,8 @@ export default {
         infoList: Array
     },
 
-    mounted() {
-        this.calculateBarVal();
+    created() {
+        this.getMoreInfo();
         this.connect();
     },
 
@@ -124,6 +128,28 @@ export default {
                 this.bar_value_pos = "0%";
             } else {
                 this.bar_value_pos = (this.value - this.sensor.range_list[0]) / 100 + "%";
+            }
+        },
+
+        async getMoreInfo() {
+            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            try {
+            const res = await axios.get(
+                "http://163.180.117.38:8281/api/sensor-range/" + this.sensor.ssId
+            )
+            const result = res.data.data;
+            this.sensor.range_list = [
+                result.rstart,
+                result.rlev1,
+                result.rlev2,
+                result.rlev3,
+                result.rlev4,
+                result.rend
+            ]
+            console.log(this.sensor.range_list);
+            this.calculateBarVal();
+            } catch(err) {
+            console.log(err);
             }
         },
 
@@ -260,6 +286,7 @@ export default {
     font-size: 1rem;
     position: relative;
     top: 50%;
+    line-height: 100px;
 }
 
 .chart-footer-wrapper {

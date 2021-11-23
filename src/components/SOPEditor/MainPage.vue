@@ -3,11 +3,14 @@
     <Header />
     <Toolbar @changeDisplay="changeDisplay" />
     <Editor
-      :typeId="typeId"
+      :current="current"
+      :situationId="situationId"
       :level="level"
     />
     <!-- <Property /> -->
-    <DetailProcedure />
+    <DetailProcedure
+    :current="current"
+    />
     <Map />
   </div>
 </template>
@@ -32,8 +35,7 @@ export default {
   },
   data(){
      return{
-       typeId: 0,
-       level: 0
+       current: {},
      }
   },
   mounted(){
@@ -41,8 +43,7 @@ export default {
   },
   methods: {
     changeDisplay(current) {
-      this.typeId = current.typeId;
-      this.level = current.level;
+      this.current = current;
     }
   }
 }

@@ -62,8 +62,7 @@ export default {
   },
 
   props: {
-    posId: Number,
-    level: Number,
+    current: Object,
   },
 
   mounted() {
@@ -96,6 +95,7 @@ export default {
         this.editor.clearHistory();
         this.editor.refreshHistory();
         this.editor.init(e.data);
+        console.log(e.data);
         eventBus.$emit("refreshMap", { editor: this.editor });
       } catch (e) {
         window.console.log(e);
@@ -131,12 +131,13 @@ export default {
       switch (e.type) {
         case "json":
           var str = JSON.stringify(this.editor.getData());
+          alert("!@!@!@!@!@")
           try {
             await axios.post(
-              "http://163.180.117.38:8281/api/sop?level="+ this.level +"&typeId=" + this.typeId,
+              "http://163.180.117.38:8281/api/sop?level="+ this.current.level +"&situationId=" + this.current.situationId,
               {
-                level: this.level,
-                typeId: this.typeId,
+                level: this.current.level,
+                situationId: this.current.situationId,
                 diagram: str,
               }
             );

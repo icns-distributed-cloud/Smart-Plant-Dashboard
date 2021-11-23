@@ -1,17 +1,16 @@
 <template>
 <div class="DetailProcedure">
-    <div id="task">
-        <select 
-        v-model="selectedItem" 
-        class="form-control"
-        @change="changeTask()">
-        <option hidden>== 임무 선택 ==</option>
-        <option v-for="task in taskList" :key="task.id" :value="task.title"> 
-            {{ task.title }}
-        </option>
-        </select>
-        <div> {{selectedItem}} </div>
-    </div>
+    <span> <h2> 임무목록 : {{selectedItem}} </h2> </span>
+            <select 
+            v-model="selectedItem" 
+            class="form-control"
+            @change="changeTask()">
+            <option hidden>== 임무 선택 ==</option>
+            <option v-for="task in taskList" :key="task.id" :value="task.title"> 
+                {{ task.title }}
+            </option>
+            </select>
+     
 </div>
 </template>
 
@@ -31,16 +30,19 @@ export default {
   methods: {
     async getTaskInfo() {
         try{
-            const res = await axios.get("http://163.180.117.38:8281/api/sop-detail?level=1&typeId=1");
+            const res = await axios.get("http://163.180.117.38:8281/api/sop-detail?level="+this.current.level+"&situationId="+this.current.situationId);
             this.taskList = res.data.data;
         }catch (err) {
         console.log(err);
       }
     },
-    changeTask(value){
-        console.log(value);
-    
+    changeTask(){
+       
     }
+  },
+  props: {
+      // current : { level: 0, situationId: 0 }
+      current: Object,
   }
 }
 
@@ -60,6 +62,8 @@ export default {
     /* user-select: none;
     -webkit-user-select: none; */
 }
-
+.task{
+    width: 35%;
+}
 
 </style>

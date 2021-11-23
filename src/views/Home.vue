@@ -117,7 +117,7 @@ export default {
       ],
     };
   },
-  mounted() {
+  created() {
     this.getPosList();
     this.getPosSensor();
   },
@@ -166,7 +166,6 @@ export default {
         switch (sensor.ssType.display) {
           case 1:
             sensor.chartName = "anonymous-chart";
-            this.getMoreInfo(sensor);
             break;
           case 2:
             sensor.chartName = "temp-chart";
@@ -200,6 +199,7 @@ export default {
         result.rlev4,
         result.rend
       ]
+      console.log(sensor.range_list);
     } catch(err) {
       console.log(err);
     }

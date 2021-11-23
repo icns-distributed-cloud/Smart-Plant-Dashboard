@@ -1,5 +1,107 @@
 <template>
   <div class="toolbar">
+    <div class="select-wrapper">
+      <form class="type-wrapper">
+        <div class="shape-header">상황 선택
+          <i class="bi bi-plus-lg"
+          style="float: right"
+          data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+          ></i>
+        </div>
+        <div 
+          class="form-check"
+          v-for="situation in situationList" :key="situation.id"
+        >
+          <input
+          class="form-check-input"
+          type="radio" name="flexRadioDefault"
+          :id="situation.id"
+          :value="situation.id" 
+          v-model="current.situationId"
+          @click="
+          current.situationId=situation.id;
+          getEsopDiagram()"
+          >
+          <label class="form-check-label" :for="situation.id"
+          style="color: #4d6189; font-size: 0.7rem">
+            {{ situation.name }}
+          </label>
+
+          <i class="bi bi-trash"
+            style="float: right; font-size: 0.8rem; color: #9fb0d6; cursor: pointer;"
+            data-bs-toggle="modal" data-bs-target="#deleteAccident"
+            @click="currDeleteId=situation.id"
+            ></i>
+
+          <i class="bi bi-pencil-square"
+            style="float: right; font-size: 0.8rem; color: #9fb0d6; cursor: pointer;  margin-right: 5px;"
+            data-bs-toggle="modal" :data-bs-target="'#modifySituation'+situation.id"
+            @click="currModifyName=situation.name"
+          ></i>
+
+        <!-- Modify Modal -->
+        <form>
+        <div class="modal fade" :id="'modifySituation'+situation.id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modifySituationLabel">상황 명칭 수정하기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                
+                <div class="input-group flex-nowrap">
+                  <span class="input-group-text" id="addon-wrapping">
+                    <i class="bi bi-pen"></i>
+                  </span>
+                  <input type="text" class="form-control"
+                  aria-label="사고 유형 명칭"
+                  aria-describedby="addon-wrapping"
+                  style="background-color: #dee2e647;
+                          font-weight: 100;
+                          color: black;"
+                  v-model="currModifyName"
+                  >
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"
+                @click="modifySituation(situation.id)"
+                >
+                저장하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </form>
+        </div>
+
+      </form>
+
+      <form class="level-wrapper">
+        <div class="shape-header">레벨 선택</div>
+        <div class="form-check"
+          v-for="(lev, i) in levelList" :key="i"
+        >
+          <input class="form-check-input"
+          type="radio" name="flexRadioDefault"
+          :id="lev.levId"
+          :value="lev.levId"
+          v-model="current.level"
+          @click="
+          current.level=lev.levId;
+          getEsopDiagram();"
+          >
+          <label class="form-check-label" :for="lev.levId"
+          style="color: #4d6189; font-size: 0.7rem"
+          >
+            {{ lev.levName }}
+          </label>
+        </div>
+      </form>
+    </div>
+
     <div class="shape clearfix" v-for="s in shape" v-bind:key="s.id">
         <div class="shape-header">{{s.header}}</div>
         <ul>
@@ -72,59 +174,102 @@
             <button @click="addImage">确定</button>
          </div>
     </div> 
+    <AddAccidentModal
+    v-if="addAccident"
+    @close-add-modal="addAccident=false"
+    ></AddAccidentModal>
 
-    <div class="select-wrapper">
-      <form class="type-wrapper">
-        <div class="shape-header">센서 종류 선택</div>
-        <div 
-          class="form-check"
-          v-for="type in typeList" :key="type.typeId"
-          @click="getEsopDiagram()"
-        >
-          <input
-          class="form-check-input"
-          type="radio" name="flexRadioDefault"
-          :id="type.typeId"
-          :value="type.typeId"
-          v-model="current.typeId"
-          >
-          <label class="form-check-label" :for="type.typeId">
-            {{ type.typeName }}
-          </label>
-        </div>
-      </form>
+<!-- Add Modal -->
+<form>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">사고 유형 추가하기</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
 
-      <form class="level-wrapper">
-        <div class="shape-header">레벨 선택</div>
-        <div class="form-check"
-          v-for="(lev, i) in levelList" :key="i"
-          @click="getEsopDiagram();"
-        >
-          <input class="form-check-input"
-          type="radio" name="flexRadioDefault"
-          :id="lev.levId"
-          :value="lev.levId"
-          v-model="current.level"
+        
+        <div class="input-group flex-nowrap">
+          <span class="input-group-text" id="addon-wrapping">
+            <i class="bi bi-pen"></i>
+          </span>
+          <input type="text" class="form-control"
+          placeholder="사고 유형 명칭"
+          aria-label="사고 유형 명칭"
+          aria-describedby="addon-wrapping"
+          style="background-color: #dee2e647;
+                  font-weight: 100;
+                  color: black;"
+          v-model="newSituationName"
           >
-          <label class="form-check-label" :for="lev.levId">
-            {{ lev.levName }}
-          </label>
         </div>
-      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"
+        @click="addSituation()"
+        >
+        추가하기</button>
+      </div>
     </div>
+  </div>
+</div>
+</form>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteAccident" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteAccidentLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div style="color: #dc3545;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center">
+          <div style="font-weight: bold; font-size: 1.2rem">정말 삭제하시겠습니까?</div>
+          <i class="bi bi-exclamation-triangle"
+            style="font-size: 3rem"
+          ></i>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+        @click="deleteSituation()"
+        >삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   </div>
+
 </template>
+
 <script>
 import axios from "axios";
 import eventBus from "../../eventbus";
+import AddAccidentModal from "./Modal/AddAccidentModal.vue";
 
 export default {
   name: 'Toolbar',
+  component: {
+    AddAccidentModal,
+  },
   data(){
      return{
-       current: { typeId:1, level:1 },
-        typeList: [],
+        currModifyName: "",
+        currDeleteId: 0,
+        newSituationName: "",
+        addAccident: false,
+        current: { situationId:1, level:1 },
+        situationList: [],
         levelList: [
           { levId: 1, levName: "level 1: 관심" },
           { levId: 2, levName: "level 2: 주의" },
@@ -331,8 +476,8 @@ export default {
         return this.customize.slice().splice(0,15);
      }
   },
-  mounted(){
-    this.getTypeList();
+  created() {
+    this.getSituationList();
     this.getEsopDiagram();
     var str=localStorage.getItem('customize-icon');
     try{
@@ -351,23 +496,74 @@ export default {
         // MODIFY !!!!!
         const res = await axios.get(
           "http://163.180.117.38:8281/api/sop?level="+this.current.level
-          +"&typeId="+this.current.typeId
+          +"&situationId="+this.current.situationId
         );
-        eventBus.$emit("initFlow", {
-          data: JSON.parse(res.data.data.diagram),
-        });
+        if (res.data.data.diagram != null) {
+          eventBus.$emit("initFlow", {
+            data: JSON.parse(res.data.data.diagram),
+          });
+        } else {
+          eventBus.$emit("initFlow", {
+            data: {id: '0', type: 'cicadaFlow', node: [], group: [], edge: []},
+          });
+        }
+
       } catch (e) {
-        alert(e);
+        console.log(e);
       }
     },
 
-    async getTypeList() {
+    async getSituationList() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-type"
+          "http://163.180.117.38:8281/api/situation"
         );
-        this.typeList = res.data.data.content;
+        this.situationList = res.data.data;
       } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async addSituation() {
+      try {
+        const res = await axios.post(
+          "http://163.180.117.38:8281/api/situation",
+          {
+            name: this.newSituationName
+          }
+          );
+        console.log(res);
+        this.getSituationList();
+        this.newSituationName=""
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async modifySituation(situationId) {
+      console.log(situationId);
+      try {
+        const res = await axios.put(
+          "http://163.180.117.38:8281/api/situation/" + situationId,
+          {
+            name: this.currModifyName
+          }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async deleteSituation() {
+      try {
+        const res = await axios.delete(
+          "http://163.180.117.38:8281/api/situation/" + this.currDeleteId
+        );
+        console.log(res);
+        this.getSituationList();
+      } catch (err) {
+        alert("삭제를 실패했습니다 :(");
         console.log(err);
       }
     },
@@ -448,6 +644,27 @@ export default {
 </script>
 
 <style scoped>
+#Toolbar .modal-dialog,
+.modal-content,
+.modal-header,
+.modal-body,
+.modal-footer {
+  background-color: white;
+  border-color: #dee2e6;
+  color: black;
+}
+
+#Toolbar .form-check-label {
+  color: #4d6189;
+  font-size: 0.7rem;
+}
+
+#Toolbar input .form-control {
+  background-color: #dee2e647;
+  font-weight: 100;
+  color: black;
+}
+
 body {
   background-color: white;
 }
@@ -505,7 +722,7 @@ li img{
   width:100%;
 }
 .shape-header{
-  height:30px;
+  //height:30px;
   line-height: 30px;
   font-size: 12px;
   border-top:1px solid #e6e9ed;
