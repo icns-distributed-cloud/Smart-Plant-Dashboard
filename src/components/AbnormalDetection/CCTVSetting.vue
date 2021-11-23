@@ -35,8 +35,6 @@
                 <tr>
                   <th>식별번호</th>
                   <th>CCTV 위치</th>
-                  <th>CCTV User ID</th>
-                  <th>CCTV User Password</th>
                   <th>CCTV RTSP URL</th>
                   <th>CCTV Websocket URL</th>
 
@@ -47,8 +45,6 @@
                 <tr v-for="cctv in cctvList" :key="cctv.cctvId">
                   <td>{{ cctv.cctvId }}</td>
                   <td>{{ cctv.cctvLocation }}</td>
-                  <td>{{ cctv.userId }}</td>
-                  <td>{{ cctv.password}}</td>
                   <td>{{ cctv.streamURL }}</td>
                   <td>{{ cctv.websocketURL }}</td>
                   <td
@@ -66,7 +62,7 @@
                     </a>
 
                     <a class="btn btn-outline-danger tr_data_del"
-                       @click="deleteCCTV(cctv.cctvId);"
+                       @click="[deleteCCTV(cctv.cctvId), deleteStreamServer(cctv.websocketURL)]"
                     ><i class="bx bx-trash"></i> 삭제</a
                     >
 
@@ -153,6 +149,20 @@ export default {
         console.log(err);
       }
     },
+    async deleteStreamServer(websocket_url){
+      try {
+        const res = await axios.post(
+            "http://163.180.117.40:3000/api/deleteStream/",
+            {
+              "websocketURL": websocket_url,
+            }
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+
+    },
     async addNewCCTV(newCCTV) {
       console.log(newCCTV);
       this.showModal = false;
@@ -167,8 +177,19 @@ export default {
               "websocketURL": newCCTV.websocketURL,
             }
         );
+        const res2 = await axios.post(
+            "http://163.180.117.40:3000/api/addStream/",
+            {
+              "cctvLocation": newCCTV.cctvLocation,
+              "password": newCCTV.password,
+              "streamURL": newCCTV.streamURL,
+              "userId": newCCTV.userId,
+              "websocketURL": newCCTV.websocketURL,
+            }
+        );
         this.getCCTVInfo();
         console.log(res);
+        console.log(res2);
       } catch (err) {
         console.log(err);
       }

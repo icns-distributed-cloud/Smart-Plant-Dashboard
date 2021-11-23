@@ -82,20 +82,44 @@ export default {
       }
 
     },
+
     getWebsocketVideo: function(){
-      if(this.disconnectState === false){
         for(let i=0;i<this.cctvListLength;i++){
           this.canvasView[i] = document.getElementById('test-cctv'+String(this.cctvList[i].cctvId));
           this.url[i] = new WebSocket(this.cctvList[i].websocketURL);
           new JSMpeg(this.url[i], {canvas:this.canvasView[i]});
         }
-      }
-
     },
+/*
+이 코드는 opencv에서 받을 때
+
+          let open_socket = this.url[i]
+
+          open_socket.addEventListener("open", ()=>{
+            console.log("send connect message socket : "+String(i));
+            open_socket.send("client number of connection : "+String(i));
+          });
+
+          if(this.url && this.url.length >0){
+            console.log(this.url[i]);
+            let listen = this.url[i];
+            listen.addEventListener('message', (event)=>{
+              let ctx = this.canvasView[i].getContext("2d");
+              let image = new Image();
+              image.src = window.URL.createObjectURL(event.data);
+              image.addEventListener("load", (e) =>{
+                console.log(e);
+                ctx.drawImage(image, 0,0,this.canvasView[i].width, this.canvasView[i].height);
+                window.URL.revokeObjectURL(image.src);
+              });
+            });
+          }
+*/
+
     disconnect: function(){
       let length = this.cctvListLength;
       for(let i = 0;i< length;i++){
-        this.url[i].close();
+        this.url[i].close(1000);
       }
     },
     disconnectedState: function(){

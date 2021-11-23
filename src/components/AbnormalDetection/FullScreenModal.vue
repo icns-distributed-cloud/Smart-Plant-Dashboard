@@ -3,6 +3,12 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
+          <button
+              type="button"
+              class="btn-close btn-close-white close"
+              aria-label="Close"
+              @click="$emit('close');"
+          ></button>
           <div class="modal-body" v-bind:key="this.childCanvasId">
             {{this.childCanvasId}}
             <canvas :id=this.childCanvasId style="width: 640px; height: 480px;"></canvas>
