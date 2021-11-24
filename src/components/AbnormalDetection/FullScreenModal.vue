@@ -7,7 +7,7 @@
               type="button"
               class="btn-close btn-close-white close"
               aria-label="Close"
-              @click="$emit('close');"
+              v-on:click=" $emit('close');"
           ></button>
           <div class="modal-body" v-bind:key="this.childCanvasId">
             {{this.childCanvasId}}
@@ -45,13 +45,19 @@ export default {
   mounted() {
     this.webSocketStreaming();
   },
+  unmounted() {
+    this.disconnect2();
+  },
 
   methods : {
     webSocketStreaming: function(){
       this.canvasView = document.getElementById(this.childCanvasId);
-      this.url = new WebSocket(this.childWebsocketURL);
-      new JSMpeg(this.url, {canvas:this.canvasView});
+      this.url2 = new WebSocket(this.childWebsocketURL);
+      new JSMpeg(this.url2, {canvas:this.canvasView});
     },
+    disconnect2: function(){
+      this.url2.close(1000);
+    }
   },
 
 }

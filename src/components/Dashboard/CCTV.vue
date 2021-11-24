@@ -12,12 +12,12 @@
         <div class="cctv-main__header">{{ item.cctv_location }}</div>
         <canvas :id=item.cctv_element style="width: 320px; height: 240px; margin:10px;">
         </canvas>
-        <button @click="fullScreenModal=true; canvasId=item.cctv_element+'modal'; websocketUrl=item.cctv_websocketurl; [disconnect(),disconnectedState()]">click</button>
+        <button @click="fullScreenModal=true; canvasId=item.cctv_element+'modal'; websocketUrl=item.cctv_websocketurl; disconnectState = true;[disconnect()]">click</button>
 
       </div>
     </div>
   </div>
-  <FullScreenModal v-if="fullScreenModal" @close="fullScreenModal = false" :childCanvasId=canvasId :childWebsocketURL=websocketUrl />
+  <FullScreenModal v-if="fullScreenModal" @close="fullScreenModal = false; disconnectState = false;" :childCanvasId=canvasId :childWebsocketURL=websocketUrl />
 
 </template>
 
@@ -84,11 +84,15 @@ export default {
     },
 
     getWebsocketVideo: function(){
+      if(this.disconnectState === false){
         for(let i=0;i<this.cctvListLength;i++){
           this.canvasView[i] = document.getElementById('test-cctv'+String(this.cctvList[i].cctvId));
           this.url[i] = new WebSocket(this.cctvList[i].websocketURL);
           new JSMpeg(this.url[i], {canvas:this.canvasView[i]});
         }
+      }
+
+
     },
 /*
 이 코드는 opencv에서 받을 때
@@ -122,9 +126,16 @@ export default {
         this.url[i].close(1000);
       }
     },
+    /*
     disconnectedState: function(){
-      this.disconnectState = true;
+      if(this.disconnectState === false){
+        this.disconnectState = true;
+      }
+      else{
+        this.disconnectState = false;
+      }
     }
+     */
 
   }
 };
