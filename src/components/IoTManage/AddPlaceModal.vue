@@ -13,7 +13,7 @@
             @click="$emit('close-add-modal')"
           ></button>
         </div>
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="onSubmit" v-if="editing===true" id="add-pos-modal">
           <div class="modal-body">
             <div class="form-body" style="margin-top:10px">
               <div class="row">
@@ -73,10 +73,29 @@
                         placeholder="위치 상세"
                         maxlength="100"
                         v-model="newPos.posDtl"
+                        required
                       />
                       <div class="form-control-position label-icon">
                         <i class="bx bx-comment-detail"></i>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div class="form-label-group position-relative has-icon-left">
+                    <label for="pos_dtl">조감도 이미지</label>
+                    <div class="main-input">
+                      <input
+                        autocomplete="off"
+                        type="file"
+                        class="form-control"
+                        id="position-img"
+                        placeholder="조감도 이미지"
+                        maxlength="100"
+                        style="margin-left: 0px"
+                        required
+                      />
                     </div>
                   </div>
                 </div>
@@ -88,6 +107,7 @@
               type="submit"
               class="btn btn-primary"
               @click="
+                submitForm();
                 $emit('add-new-pos', newPos);
                 $emit('close-add-modal');
               "
@@ -113,8 +133,15 @@ export default {
   data() {
     return {
       newPos: { posName: "", posDtl: "", posCode: "" },
+      editing: true,
     };
   },
+  methods: {
+    submitForm: () => {
+      var form = document.getElementById("add-pos-modal");
+      document.body.appendChild(form);
+    }
+  }
 };
 </script>
 

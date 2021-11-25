@@ -20,11 +20,14 @@
 
 <script>
 import SideBar from "./components/SideBar.vue";
+// import VueCookies from 'vue-cookies';
 
 export default {
   name: 'App',
   components: {
     SideBar: SideBar,
+  },
+  methods: {
 
   }
 }

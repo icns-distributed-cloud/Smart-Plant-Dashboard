@@ -26,7 +26,8 @@
       ></i>
     </div>
     -->
-    <div v-if="!smallView" class="large-view-content">
+    <div v-if="!smallView" class="large-view-content"
+    style="position: relative; top: 10px;">
         <div class="value-wrapper">
             <div id="status-color" class="sensor-value" :style="{ color: color }">
                 {{ value }}
@@ -36,7 +37,7 @@
 
         <div class="chart-footer-wrapper">
             <div class="status-wrapper"
-                :style="{ position: 'relative', left: bar_value_pos-'20' }">
+                :style="{ position: 'relative', left: bar_value_pos }">
                 <div id="status-color" class="status-text"
                     :style="{color: color}">
                     <span v-html="icon"></span>
@@ -124,10 +125,11 @@ export default {
             this.calcVarPos();
         },
         calcVarPos() {
+            const maxLen = this.sensor.range_list[5] - this.sensor.range_list[0];
             if (this.value < this.sensor.range_list[0]) {
                 this.bar_value_pos = "0%";
             } else {
-                this.bar_value_pos = (this.value - this.sensor.range_list[0]) / 100 + "%";
+                this.bar_value_pos = (this.value - this.sensor.range_list[0]) / maxLen * 100 + "%";
             }
         },
 
@@ -303,12 +305,12 @@ export default {
     align-items: center;
 }
 .status-text {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: bold;
     background-color: rgba(26, 35, 58, 1);
     padding: 2px;
-    width: 50px;
-    border-radius: 5%;
+    width: 55px;
+    border-radius: 10px;
     display: flex;
     justify-content: space-around;
 }
@@ -317,15 +319,17 @@ export default {
   width: 0px; height: 0px;
   border-bottom:1rem solid none;
   border-top: 1rem solid rgba(26, 35, 58, 1);
-  border-right: 0.5rem solid transparent;
-  border-left: 0.5rem solid  transparent;
+  border-right: 0.35rem solid transparent;
+  border-left: 0.35rem solid  transparent;
 }
 
 .bar-wrapper {
-    width: 100%;
+    width: calc(100% + 20px);
     height: 15px;
     opacity: 0.6;
     display: flex;
+    position: relative;
+    right: 10px;
 }
 
 .bar {

@@ -5,18 +5,19 @@ import routes from './router/routes';
 import i18n from './locales'
 import './assets/fonticon/iconfont.css'
 
-
-const router =new VueRouter({
+const router = new VueRouter({
     routes
 })
 
-Vue.use(VueRouter);
 
+
+Vue.use(VueRouter);
 
 Vue.config.productionTip = false
 
 new Vue({
   i18n,
+  
   render: h => h(App),
   router
 }).$mount('#app')

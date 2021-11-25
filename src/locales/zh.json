@@ -1,6 +1,6 @@
 {
     "node":{
-       "head":"외형",
+       "head":"",
        "fill":"채우기",
        "stroke":"테두리색",
        "font":"폰트",
@@ -9,10 +9,10 @@
        "textFill":"글자색",
        "position":"위치",
        "nodeAlign":"조정",
-       "prefabrication":"미리 만들어진 스타일"
+       "prefabrication":"센서선택"
     },
     "group":{
-        "head":"외형",
+        "head":"",
         "fill":"채우기",
         "stroke":"테두리색",
         "showHead":"머리표시",
@@ -23,7 +23,7 @@
         "align":"조정",
         "textFill":"글자색",
         "position":"위치",
-        "prefabrication":"미리 만들어진 스타일"
+        "prefabrication":"센서선택"
     },
     "edge":{
         "head":"스타일",
@@ -38,6 +38,6 @@
         "textFill":"글자색",
         "nodeAlign":"정렬",
         "position":"Position",
-        "prefabrication":"미리 만들어진 스타일"
+        "prefabrication":"센서선택"
     }
 }

@@ -5,7 +5,7 @@ import Detection from "../components/Dashboard/Detection.vue";
 import Monitoring from "../components/Dashboard/Monitoring.vue";
 import SensorManage from "../views/SensorManage.vue";
 import AlertSettings from "../components/AbnormalDetection/AlertSettings.vue";
-import SensorPos from "../components/IoTManage/SensorPos.vue";
+import SensorPos from "../components/IoTManage/LocationRegistration1/src/components/MainPage.vue";
 // import SensorPos from "../components/SOPEditor/test.vue"
 import EsopEidtor from "../components/SOPEditor/MainPage.vue";
 import EsopManager from "../components/Esop/EsopManager.vue";
@@ -14,9 +14,15 @@ import PageNotfound from "../views/PageNotFound.vue";
 import AbnormalDetectionLog from "../components/AbnormalDetection/AbnormalDetectionLog.vue";
 import EditEsopHome from "../components/SOPEditor/EditEsopHome.vue";
 import EsopEditor from "../components/SOPEditor/MainPage.vue";
+import Login from "../views/Login.vue";
 
 
 const routes = [
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
   {
     path: "/cctv",
     name: "CCTV",
@@ -75,7 +81,7 @@ const routes = [
   },
   {
     path: "/sensorpos",
-    name: "sensorPos",
+    name: "SensorPos",
     component: SensorPos,
   },
   {
@@ -92,7 +98,5 @@ const routes = [
     component: PageNotfound,
   }
 ];
-
-
  
 export default routes

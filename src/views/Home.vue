@@ -4,7 +4,10 @@
       style="display: flex; flex-direction: column; justify-content: space-between"
     >
       <show-cctv></show-cctv>
-      <multi-chart></multi-chart>
+      <alarm-log
+        ref="addAlarmLog"
+      >
+      </alarm-log>
     </div>
 
     <div
@@ -22,10 +25,6 @@
         {{ pos.posName }}
       </div>
 
-      <alarm-log
-        ref="addAlarmLog"
-      >
-      </alarm-log>
     </div>
 
     <div
@@ -69,7 +68,7 @@ import axios from "axios";
 import Stomp from "webstomp-client";
 import SockJS from "sockjs-client";
 import ShowCCTV from "@/components/Charts/show-cctv.vue";
-import MultiChart from "@/components/Charts/multi-chart.vue";
+//import MultiChart from "@/components/Charts/multi-chart.vue";
 import GasChart from "@/components/Charts/gas-chart.vue";
 import DustChart from "@/components/Charts/dust-chart.vue";
 import TempChart from "@/components/Charts/temp-chart.vue";
@@ -292,7 +291,7 @@ export default {
   },
   components: {
     "show-cctv": ShowCCTV,
-    "multi-chart": MultiChart,
+    //"multi-chart": MultiChart,
     "gas-chart": GasChart,
     "dust-chart": DustChart,
     "temp-chart": TempChart,
@@ -424,8 +423,8 @@ export default {
 }
 
 .humid {
-  width: 140px;
-  height: 140px;
+  width: 130px;
+  height: 130px;
   border-radius: 0 50% 50% 50%;
   border: 3px solid black;
   transform: rotate(45deg);
@@ -437,17 +436,18 @@ export default {
 }
 
 .status {
-  width: 60px;
-  height: 23px;
+  width: 65px;
+  height: 25px;
   border-radius: 10px;
   color: #5a8dee;
   font-size: 15px;
   font-weight: bold;
-  padding: 3px;
   text-align: center;
   margin: 2px;
   position: absolute;
   bottom: 10px;
+  background-color: rgba(26, 35, 58, 1);
+  line-height: 25px;
 }
 
 .ssPos {

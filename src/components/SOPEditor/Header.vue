@@ -48,24 +48,24 @@ export default {
       language: "zh",
       showLang: false,
       icon: [
-        {
-          icon: "icon-undo",
-          name: "뒤로",
-          cmd: "undo",
-          class: "disable",
-        },
-        {
-          icon: "icon-redo",
-          name: "앞으로",
-          cmd: "redo",
-          class: "disable",
-        },
-        {
-          icon: "icon-fengexian",
-          name: "分割",
-          cmd: "line",
-          class: "disable",
-        },
+        // {
+        //   icon: "icon-undo",
+        //   name: "뒤로",
+        //   cmd: "undo",
+        //   class: "disable",
+        // },
+        // {
+        //   icon: "icon-redo",
+        //   name: "앞으로",
+        //   cmd: "redo",
+        //   class: "disable",
+        // },
+        // {
+        //   icon: "icon-fengexian",
+        //   name: "分割",
+        //   cmd: "line",
+        //   class: "disable",
+        // },
        
         {
           icon: "icon-shanchu",

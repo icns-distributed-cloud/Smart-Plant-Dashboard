@@ -68,6 +68,10 @@
                       @click="editPos=true; currPos=sensorPos;"
                       ><i class="bx bx-edit"></i> 수정
                     </a>
+                      <button type="button" class="btn btn-outline-success"
+                      @click="editImg=true; currPos=sensorPos;"
+                      ><i class="bx bx-edit"></i> 이미지 변경
+                    </button>
                     <a
                       class="btn btn-outline-danger tr_data_del"
                       @click="askToDelete = true; able=sensorPos.posId"
@@ -102,6 +106,12 @@
             @close-edit-modal="editPos=false"
             :currPos="currPos"
           ></EditPlaceModal>
+          <EditPosImgModal
+            v-if="editImg"
+            @edit-pos-img="editPosImg"
+            @close-edit-modal="editImg=false"
+            :currPos="currPos"
+          ></EditPosImgModal>
         </div>
         <div class="modal-footer">
           <button
@@ -121,6 +131,7 @@
 // eslint-disable-next-line no-unused-vars
 import AddPlaceModal from "./AddPlaceModal.vue";
 import EditPlaceModal from "./EditPlaceModal.vue";
+import EditPosImgModal from "./EditPosImgModal.vue";
 import AskToDelete from "@/views/ask-to-delete.vue";
 import AlertSuccess from "@/views/alert-success.vue";
 import AlertFail from "@/views/alert-fail.vue";
@@ -137,6 +148,7 @@ export default {
       able: 0,
       addPos: false,
       editPos: false,
+      editImg: false,
       currPos: {
         posId: 0,
         posName: "",
@@ -155,10 +167,35 @@ export default {
     AlertSuccess,
     AlertFail,
     EditPlaceModal,
+    EditPosImgModal,
   },
   methods: {
+    addPosition(newPos) {
+      this.action = "추가"
+      var frm = new FormData();
+      var imgFile = document.getElementById("position-img");
+      frm.append("backgroundImg", imgFile.files[0]);
+      axios.post("http://163.180.117.38:8281/api/sensor-pos?posCode="+newPos.posCode
+      +"&posDtl="+newPos.posDtl+"&posName="+newPos.posName,
+      frm, {
+        headers: {
+          'Content-Type' : 'multipart/form-data'
+        }
+      })
+      .then((response) => {
+        this.getSensorPos();
+        this.alertSuccess=true;
+        console.log(response);
+      })
+      .catch((error) => {
+        this.alertFail=true;
+        console.log(error);
+      })
+    },
+
     AddPos(newPos) {
-      this.addSensorPos(newPos.posName, newPos.posDtl, newPos.posCode);
+      //this.addSensorPos(newPos.posName, newPos.posDtl, newPos.posCode);
+      this.addPosition(newPos);
       console.log("add pos");
     },
     async getSensorPos() {
@@ -187,6 +224,7 @@ export default {
           }
         );
         console.log(res);
+        //this.addPosImage(pos);
         this.alertSuccess=true;
         this.getSensorPos();
       } catch (err) {
@@ -223,6 +261,29 @@ export default {
         console.log(err);
       }
     },
+
+    async editPosImg(newPos) {
+      this.action = "이미지가 변경"
+      var frm = new FormData();
+      var imgFile = document.getElementById("position-img");
+      frm.append("backgroundImg", imgFile.files[0]);
+      axios.post("http://163.180.117.38:8281/api/sensor-pos/background-img/"+newPos.posId,
+      frm, {
+        headers: {
+          'Content-Type' : 'multipart/form-data'
+        }
+      })
+      .then((response) => {
+        this.getSensorPos();
+        this.alertSuccess=true;
+        console.log(response);
+      })
+      .catch((error) => {
+        this.alertFail=true;
+        console.log(error);
+      })
+    },
+
     async deleteSensorPos(posId) {
       this.action = "삭제";
       try {

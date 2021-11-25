@@ -1,20 +1,18 @@
-var webpack =require('webpack');
+var webpack = require("webpack");
 module.exports = {
-
-    publicPath: './',
-    configureWebpack: {
-      plugins: [
-        new webpack.ProvidePlugin({
-           zrender:"zrender",
-          "windows.zrender":"zrender"
-        })
-      ]
+  publicPath: "",
+  configureWebpack: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        zrender: "zrender",
+        "windows.zrender": "zrender",
+      }),
+    ],
   },
   devServer: {
-      public: "server.inhun.io",
-	    disableHostCheck: true  
+    public: "server.inhun.io",
+    disableHostCheck: true,
   },
-  
-    lintOnSave: undefined
+
+  lintOnSave: undefined,
 };
-  

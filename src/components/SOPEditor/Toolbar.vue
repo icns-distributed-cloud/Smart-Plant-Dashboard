@@ -477,7 +477,7 @@ export default {
      }
   },
   created() {
-    this.getSituationList();
+    this.getSituationList(true);
     this.getEsopDiagram();
     var str=localStorage.getItem('customize-icon');
     try{
@@ -513,12 +513,15 @@ export default {
       }
     },
 
-    async getSituationList() {
+    async getSituationList(created=false) {
       try {
         const res = await axios.get(
           "http://163.180.117.38:8281/api/situation"
         );
         this.situationList = res.data.data;
+        if (created && this.situationList.length != 0) {
+          this.current.situationId=this.situationList[0].id;
+        }
       } catch (err) {
         console.log(err);
       }
@@ -722,7 +725,7 @@ li img{
   width:100%;
 }
 .shape-header{
-  //height:30px;
+  /* height:30px; */
   line-height: 30px;
   font-size: 12px;
   border-top:1px solid #e6e9ed;
