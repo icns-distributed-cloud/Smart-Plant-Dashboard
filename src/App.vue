@@ -23,19 +23,27 @@ import SideBar from "./components/SideBar.vue";
 // import VueCookies from 'vue-cookies';
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     SideBar: SideBar,
   },
-  methods: {
-
-  }
-}
+  methods: {},
+};
 </script>
 
 <style>
+@import url("https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css");
+
 html,
 body {
+  font-family: "NanumSquareLight";
+  font-family: "NanumSquare";
+  font-family: "NanumSquareBold";
+  font-family: "NanumSquareExtraBold";
+  font-family: "NanumSquareAcb";
+  font-family: "NanumSquareAceb";
+  font-family: "NanumSquareAcl";
+  font-family: "NanumSquareAcr";
   margin: 0;
   height: 100%;
 }
@@ -49,10 +57,6 @@ body {
 
 .wrapper {
   margin: 10px;
-}
-.table-header {
-  color: #727e8c;
-  font-size: 20px;
 }
 
 .table-main {

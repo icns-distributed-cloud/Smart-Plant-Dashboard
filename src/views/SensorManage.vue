@@ -1,150 +1,177 @@
 <template>
-<div>
-  <link
-    href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
-    rel="stylesheet"
-  />
-  <div class="wrapper">
-    <div class="table-header">
-      센싱 장비 관리 | 
-    </div>
+  <div>
+    <link
+      href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <div class="wrapper">
+      <div class="table-header">센싱 장비 관리</div>
 
-    <div class="table-main" style="height: fit-content">
-      <div>
-        <div class="table-main__header">
-          센싱 장비 관리 설정
-        </div>
-
+      <div class="table-main" style="height: fit-content">
         <div>
-          <div class="table-main__content">
-            <div class="table-main__content-intro">
-              센싱 장비를 관리하는 화면입니다.
-            </div>
+          <div class="table-main__header">센싱 장비 관리 설정</div>
 
-            <div>
-              <button
-                type="button"
-                class="btn btn-primary"
-                style="margin-bottom: 12px; margin-left: 12px; float:right"
-                @click="showModal = true"
-              >
-                신규 등록
-              </button>
-
-              <button
-                type="button"
-                class="btn btn-primary"
-                style="margin-bottom: 12px; margin-left: 12px;  float:right"
-                @click="sensorModalOpen = true"
-              >
-                <i class="bi bi-wrench"></i> 센서 종류 관리
-              </button>
-
-              <button
-                type="button"
-                class="btn btn-primary"
-                style="margin-bottom: 12px; float:right;"
-                @click="placeModalOpen = true"
-              >
-                <i class="bi bi-wrench"></i> 장소 관리
-              </button>
-
-              <div style="width: 100%; display: flex; justify-content: center;">
-              <table class="table table-bordered table-hover" style="width: 95%;">
-                <thead>
-                  <tr>
-                    <th>식별번호</th>
-                    <th>센싱 장비 위치</th>
-                    <th>센싱 장비 종류</th>
-                    <th>담당자</th>
-
-                    <th>담당자 내선</th>
-                    <th>담당자 휴대번호</th>
-
-                    <th style="width: 175px">ACTION</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="sensor in ssManageList" :key="sensor.ssId">
-                    <td>{{ sensor.ssCode }}</td>
-                    <td>{{ sensor.ssPos.posName }}</td>
-                    <td>{{ sensor.ssType.typeName }}</td>
-                    <td>{{ sensor.ssContact }}</td>
-                    <td>{{ sensor.ssContactExt }}</td>
-                    <td>{{ sensor.ssContactPhone }}</td>
-                    <td
-                      style="
-                          vertical-align: middle;
-                          padding-right: 0px;
-                          padding-left: 0px;
-                          text-align: center;
-                        "
-                    >
-                      <a
-                        class="btn btn-outline-primary mod-btn"
-                        @click="readyToEdit(sensor)"
-                        ><i class="bx bx-edit"></i> 수정
-                      </a>
-
-                      <a
-                        class="btn btn-outline-danger tr_data_del"
-                        @click="askToDelete=true; deleteSensorId = sensor.ssId"
-                        ><i class="bx bx-trash"></i> 삭제</a
-                      >
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <div>
+            <div class="table-main__content">
+              <div class="table-main__content-intro">
+                센싱 장비를 관리하는 화면입니다.
               </div>
 
-              
-            <nav aria-label="Page navigation example" style=" float:right">
-              <ul class="pagination">
-                <li v-for="i in totalPages" :key="i"
-                  @click="getSensorManage(i-1)"
-                  class="page-item"
-                ><span class="page-link">{{ i }}</span>
-                </li>
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  style="margin-bottom: 12px; margin-left: 12px; float: right"
+                  @click="showModal = true"
+                >
+                  신규 등록
+                </button>
 
-                <!--
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  style="margin-bottom: 12px; margin-left: 12px; float: right"
+                  @click="sensorModalOpen = true"
+                >
+                  <i class="bi bi-wrench"></i> 센서 종류 관리
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  style="margin-bottom: 12px; float: right"
+                  @click="placeModalOpen = true"
+                >
+                  <i class="bi bi-wrench"></i> 장소 관리
+                </button>
+
+                <div
+                  style="width: 100%; display: flex; justify-content: center"
+                >
+                  <table
+                    class="table table-bordered table-hover"
+                    style="width: 95%"
+                  >
+                    <thead>
+                      <tr>
+                        <th>식별번호</th>
+                        <th>센싱 장비 위치</th>
+                        <th>센싱 장비 종류</th>
+                        <th>담당자</th>
+
+                        <th>담당자 내선</th>
+                        <th>담당자 휴대번호</th>
+
+                        <th style="width: 175px">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="sensor in ssManageList" :key="sensor.ssId">
+                        <td>{{ sensor.ssCode }}</td>
+                        <td>{{ sensor.ssPos.posName }}</td>
+                        <td>{{ sensor.ssType.typeName }}</td>
+                        <td>{{ sensor.ssContact }}</td>
+                        <td>{{ sensor.ssContactExt }}</td>
+                        <td>{{ sensor.ssContactPhone }}</td>
+                        <td
+                          style="
+                            vertical-align: middle;
+                            padding-right: 0px;
+                            padding-left: 0px;
+                            text-align: center;
+                          "
+                        >
+                          <a
+                            class="btn btn-outline-primary mod-btn"
+                            @click="readyToEdit(sensor)"
+                            ><i class="bx bx-edit"></i> 수정
+                          </a>
+
+                          <a
+                            class="btn btn-outline-danger tr_data_del"
+                            @click="
+                              askToDelete = true;
+                              deleteSensorId = sensor.ssId;
+                            "
+                            ><i class="bx bx-trash"></i> 삭제</a
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <nav aria-label="Page navigation example" style="float: right">
+                  <ul class="pagination">
+                    <li
+                      v-for="i in totalPages"
+                      :key="i"
+                      @click="getSensorManage(i - 1)"
+                      class="page-item"
+                    >
+                      <span class="page-link">{{ i }}</span>
+                    </li>
+
+                    <!--
                 <li class="page-item">
                   <a class="page-link cur-page" href="#">1</a>
                 </li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
                 <li class="page-item"><a class="page-link" href="#">3</a></li>'
                 -->
-              </ul>
-            </nav>
+                  </ul>
+                </nav>
+              </div>
             </div>
-
           </div>
         </div>
       </div>
-
     </div>
-  </div>
-  <Modal
-    v-if="showModal"
-    @close="showModal = false"
-    @add-new-sensor="addNewSensor"
-  />
-  <EditSensorModal
-    v-if="showEditModal"
-    :sensorPosId="sensorPosId"
-    :sensorTypeId="sensorTypeId"
-    :ssContact="ssContact"
-    :ssContactExt="ssContactExt"
-    :ssContactPhone="ssContactPhone"
-    :ssId="ssId"
-    @edit-sensor="editSensor"
-    @close="showEditModal=false"
-  >
-  </EditSensorModal>
-  <TypeModal v-if="sensorModalOpen" @close="sensorModalOpen = false" @modified="getSensorManage" />
-  <PlaceModal v-if="placeModalOpen" @close="placeModalOpen = false" @modified="getSensorManage"/>
-  <AskToDelete v-if="askToDelete" @close="askToDelete=false" @delete="deleteSensorManage(deleteSensorId); askToDelete=false;"></AskToDelete>
-  <AlertSuccess v-if="alertSuccess" :action="action" @close="alertSuccess=false"></AlertSuccess>
-  <AlertFail v-if="alertFail" :action="action" @close="alertFail=false"></AlertFail>
+    <Modal
+      v-if="showModal"
+      @close="showModal = false"
+      @add-new-sensor="addNewSensor"
+    />
+    <EditSensorModal
+      v-if="showEditModal"
+      :sensorPosId="sensorPosId"
+      :sensorTypeId="sensorTypeId"
+      :ssContact="ssContact"
+      :ssContactExt="ssContactExt"
+      :ssContactPhone="ssContactPhone"
+      :ssId="ssId"
+      @edit-sensor="editSensor"
+      @close="showEditModal = false"
+    >
+    </EditSensorModal>
+    <TypeModal
+      v-if="sensorModalOpen"
+      @close="sensorModalOpen = false"
+      @modified="getSensorManage"
+    />
+    <PlaceModal
+      v-if="placeModalOpen"
+      @close="placeModalOpen = false"
+      @modified="getSensorManage"
+    />
+    <AskToDelete
+      v-if="askToDelete"
+      @close="askToDelete = false"
+      @delete="
+        deleteSensorManage(deleteSensorId);
+        askToDelete = false;
+      "
+    ></AskToDelete>
+    <AlertSuccess
+      v-if="alertSuccess"
+      :action="action"
+      @close="alertSuccess = false"
+    ></AlertSuccess>
+    <AlertFail
+      v-if="alertFail"
+      :action="action"
+      @close="alertFail = false"
+    ></AlertFail>
   </div>
 </template>
 
@@ -155,20 +182,19 @@ import EditSensorModal from "@/components/IoTManage/EditSensorModal.vue";
 import PlaceModal from "@/components/IoTManage/PlaceModal.vue";
 import TypeModal from "@/components/IoTManage/TypeModal.vue";
 import AskToDelete from "@/views/ask-to-delete.vue";
-import AlertSuccess from '@/views/alert-success.vue';
-import AlertFail from '@/views/alert-fail.vue';
+import AlertSuccess from "@/views/alert-success.vue";
+import AlertFail from "@/views/alert-fail.vue";
 import axios from "axios";
 
 export default {
   components: {
-    
     Modal,
     EditSensorModal,
     PlaceModal,
     TypeModal,
     AskToDelete,
     AlertSuccess,
-    AlertFail
+    AlertFail,
   },
   data() {
     return {
@@ -195,10 +221,12 @@ export default {
     this.getSensorManage();
   },
   methods: {
-    async getSensorManage(page=0) {
+    async getSensorManage(page = 0) {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-manage?page="+page+"&size=5&sort.sorted=true"
+          "http://163.180.117.38:8281/api/sensor-manage?page=" +
+            page +
+            "&size=5&sort.sorted=true"
         );
         this.ssManageList = res.data.data.content;
         this.totalPages = res.data.data.totalPages;
@@ -216,7 +244,7 @@ export default {
       this.ssContact = sensor.ssContact;
       this.ssContactExt = sensor.ssContactExt;
       this.ssContactPhone = sensor.ssContactPhone;
-      this.showEditModal=true;
+      this.showEditModal = true;
     },
 
     async editSensor(newSensor) {
@@ -245,7 +273,7 @@ export default {
 
     async deleteSensorManage(ssId) {
       this.showEditModal = false;
-      this.action = "삭제"
+      this.action = "삭제";
       try {
         const res = await axios.delete(
           "http://163.180.117.38:8281/api/sensor-manage/" + ssId
@@ -274,7 +302,7 @@ export default {
         );
         this.getSensorManage();
         this.showModal = false;
-        this.alertSuccess=true;
+        this.alertSuccess = true;
 
         console.log(res);
       } catch (err) {
@@ -291,7 +319,8 @@ export default {
 }
 .table-header {
   color: #727e8c;
-  font-size: 1rem;
+  font-size: 500px;
+  margin: 30px;
 }
 .table {
   color: #464d5c;

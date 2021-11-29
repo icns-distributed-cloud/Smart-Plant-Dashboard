@@ -4,9 +4,7 @@
       href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
       rel="stylesheet"
     />
-    <div class="table-header">
-      IoT 모니터링 |
-    </div>
+    <div class="table-header">IoT 모니터링</div>
 
     <div class="table-main">
       <div>
@@ -21,9 +19,7 @@
 export default {
   name: "CCTV",
 
-  components: {
-    
-  },
+  components: {},
 };
 </script>
 

@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import eventBus from '../eventbus'
+import eventBus from '../positioneventbus'
 import flowEditor from '../flow/flowEditor';
   export default {
     name: 'Map',

@@ -26,8 +26,8 @@
       ></i>
     </div>
     -->
-    <div v-if="!smallView" class="large-view-content"
-    style="position: relative; top: 10px;">
+    <div v-if="!smallView" class="large_view_content"
+    style="position: relative; top: 10px; overflow: visible">
         <div class="value-wrapper">
             <div id="status-color" class="sensor-value" :style="{ color: color }">
                 {{ value }}
@@ -287,7 +287,8 @@ export default {
     font-weight: bold;
     font-size: 1rem;
     position: relative;
-    top: 50%;
+    margin-left: 10px;
+    /*top: 50%;*/
     line-height: 100px;
 }
 

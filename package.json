@@ -16,6 +16,7 @@
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
     "vue": "^2.6.14",
+    "jsmpeg": "^1.0.0",
     "vue-color": "^2.7.0",
     "vue-cookies": "^1.7.4",
     "vue-i18n": "^8.15.3",

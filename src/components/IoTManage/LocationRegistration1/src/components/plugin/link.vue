@@ -57,7 +57,7 @@
     </div>
 </template>
 <script>
-import eventBus from '../../eventbus';
+import eventBus from '../../positioneventbus';
 import { Sketch } from 'vue-color';
 import { setup } from "../../locales/index.js";
 export default {

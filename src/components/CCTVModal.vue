@@ -3,29 +3,30 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">센싱 장비 관리</h5>
+          <h5 class="modal-title" id="exampleModalLabel">CCTV 장비 관리</h5>
           <button
-            type="button"
-            class="btn-close btn-close-white close"
-            aria-label="Close"
-            @click="$emit('close')"
+              type="button"
+              class="btn-close btn-close-white close"
+              aria-label="Close"
+              @click="$emit('close');"
           ></button>
         </div>
         <div class="modal-body">
           <div class="form-body" style="margin-top:10px">
             <div class="row">
-              
+
               <div class="col-12">
-                <div
-                  class="form-label-group position-relative has-icon-left controls"
-                >
-                  <label for="sensor_pos">센서 위치</label>
+
+                <div class="form-label-group position-relative has-icon-left controls">
+                  <label for="cctv_location">CCTV 장소</label>
                   <div class="main-input">
+
+                      
                     <select
-                      name="sensor_pos"
+                      name="cctv_location"
                       class="form-control"
                       required
-                      v-model="newSensor.sensorPosId"
+                      v-model="newCCTV.posId"
                     >
                       <option value="0" hidden>== 위치 선택 ==</option>
                       <option
@@ -36,37 +37,9 @@
                         {{ pos.posName }}
                       </option>
                     </select>
-                    <div class="form-control-position label-icon">
-                      <i class="bx bx-shape-polygon"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div class="col-12">
-                <div
-                  class="form-label-group position-relative has-icon-left controls"
-                >
-                  <label for="sensor_pos">센서 종류</label>
-                  <div class="main-input">
-                    <select
-                      v-model="newSensor.sensorTypeId"
-                      name="sensor_type"
-                      class="form-control"
-                      id="ss_type_select"
-                      required
-                    >
-                      <option hidden value="0">== 종류 선택 ==</option>
-                      <option
-                        v-for="type in typeList"
-                        :key="type.typeId"
-                        v-bind:value="type.typeId"
-                      >
-                        {{ type.typeName }}
-                      </option>
-                    </select>
                     <div class="form-control-position label-icon">
-                      <i class="bx bx-shape-square"></i>
+                      <i class="bx bx-comment-detail"></i>
                     </div>
                   </div>
                 </div>
@@ -74,15 +47,53 @@
 
               <div class="col-12">
                 <div class="form-label-group position-relative has-icon-left">
-                  <label for="sensor_contact">담당자</label>
+                  <label for="user_id">CCTV User ID</label>
                   <div class="main-input">
                     <input
-                      type="text"
-                      class="form-control"
-                      name="sensor_contact"
-                      placeholder="담당자"
-                      maxlength="100"
-                      v-model="newSensor.ssContact"
+                        type="text"
+                        class="form-control"
+                        name="user_id"
+                        placeholder="CCTV User ID를 입력하세요."
+                        maxlength="100"
+                        v-model= "newCCTV.userId"
+                    />
+                    <div class="form-control-position label-icon">
+                      <i class="bx bx-comment-detail"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-label-group position-relative has-icon-left">
+                  <label for="password">CCTV Password</label>
+                  <div class="main-input">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="password"
+                        placeholder="기타 정보"
+                        maxlength="100"
+                        v-model= "newCCTV.password"
+                    />
+                    <div class="form-control-position label-icon">
+                      <i class="bx bx-comment-detail"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-label-group position-relative has-icon-left">
+                  <label for="stream_url">CCTV RTSP URL</label>
+                  <div class="main-input">
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="stream_url"
+                        placeholder="RTSP URL을 입력하세요."
+                        maxlength="200"
+                        v-model="newCCTV.streamURL"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-street-view"></i>
@@ -91,17 +102,17 @@
                 </div>
               </div>
 
-              <div class="col-12">
+              <!-- <div class="col-12">
                 <div class="form-label-group position-relative has-icon-left">
-                  <label for="sensor_contact_ext">담당자 내선번호</label>
+                  <label for="websocket_url">WebSocket URL</label>
                   <div class="main-input">
                     <input
-                      type="number"
-                      class="form-control"
-                      name="sensor_contact_ext"
-                      placeholder="담당자 내선번호"
-                      maxlength="100"
-                      v-model="newSensor.ssContactExt"
+                        type="text"
+                        class="form-control"
+                        name="websocket_url"
+                        placeholder="WebSocket URL을 입력하세요."
+                        maxlength="100"
+                        v-model="newCCTV.websocketURL"
                     />
                     <div class="form-control-position label-icon">
                       <i class="bx bx-phone"></i>
@@ -109,40 +120,35 @@
                   </div>
                 </div>
               </div>
+
               <div class="col-12">
                 <div class="form-label-group position-relative has-icon-left">
-                  <label for="sensor_contact_phone">담당자 휴대번호</label>
+                  <label for="abnormal_websocket_url">이상감지 WebSocket URL</label>
                   <div class="main-input">
                     <input
-                      type="number"
-                      class="form-control"
-                      name="sensor_constact_phone"
-                      placeholder="담당자 휴대번호"
-                      maxlength="100"
-                      v-model="newSensor.ssContactPhone"
+                        type="text"
+                        class="form-control"
+                        name="abnormal_websocket_url"
+                        placeholder="WebSocket URL을 입력하세요."
+                        maxlength="100"
+                        v-model="newCCTV.abnormalWebsocketUrl"
                     />
                     <div class="form-control-position label-icon">
-                      <i class="bx bx-mobile"></i>
+                      <i class="bx bx-phone"></i>
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
+
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="$emit('add-new-sensor', newSensor)"
-          >
+          <button type="button" class="btn btn-primary"
+                  @click="$emit('add-new-cctv',newCCTV)">
             저장
           </button>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            @click="$emit('close')"
-          >
+          <button type="button" class="btn btn-secondary" @click="$emit('close');">
             닫기
           </button>
         </div>
@@ -154,22 +160,22 @@
 <script>
 import axios from "axios";
 export default {
-  data() {
+  data () {
     return {
       posList: [],
-      typeList: [],
-      newSensor: {
-        sensorPosId: 0,
-        sensorTypeId: 0,
-        ssContact: "",
-        ssContactExt: "",
-        ssContactPhone: "",
+      cctvList: [],
+      newCCTV: {
+        cctvId: 0,
+        userId: "",
+        password: "",
+        cctvLocation: "",
+        streamURL: "",
       },
     };
   },
   created() {
     this.getPosInfo();
-    this.getTypeInfo();
+    this.getCCTVInfo();
   },
   methods: {
     async getPosInfo() {
@@ -182,17 +188,20 @@ export default {
         console.log(err);
       }
     },
-    async getTypeInfo() {
+    async getCCTVInfo() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-type"
+            "http://163.180.117.38:8281/api/cctv?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
-        this.typeList = res.data.data.content;
+        this.cctvList = res.data.data.content;
       } catch (err) {
         console.log(err);
       }
     },
+
+
   },
+
 };
 </script>
 

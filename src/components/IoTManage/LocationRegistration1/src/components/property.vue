@@ -1,7 +1,7 @@
 <template>
   <div class="property">
      <v-canvas v-show="showCanvas"/>
-     <Node v-show="showNode"/>
+     <Node v-show="showNode" :currPos="currPos" />
      <Group v-show="showGroup"/>
      <Edge v-show="showEdge"/>
      <!-- <Node v-if="showNode"/>  -->
@@ -13,7 +13,7 @@ import Group from './plugin/group'
 import Canvas from './plugin/canvas'
 import Edge from './plugin/link'
 
-import eventBus from '../eventbus'
+import eventBus from '../positioneventbus'
 export default {
   name: 'Property',
   components:{
@@ -26,7 +26,7 @@ export default {
      return{
          showCanvas:true,
          showGroup:false,
-         showNode:false,
+         showNode:true,
          showLink:false,
          showEdge:false,
          node:null,
@@ -35,12 +35,15 @@ export default {
          edge:null
      }
   },
+  props: {
+       currPos: Object,
+  },
   mounted(){
     eventBus.$on('clearSelect',()=>{
          this.showGroup=false;
-         this.showNode=false;
+         this.showNode=true;
          this.showLink=false;
-         this.showCanvas=true;
+         this.showCanvas=false;
          this.showEdge=false;
     });
      eventBus.$on('selectNode',()=>{
@@ -59,7 +62,7 @@ export default {
     });
     eventBus.$on('selectLink',()=>{
          this.showGroup=false;
-         this.showNode=false;
+         this.showNode=true;
          this.showLink=true;
          this.showCanvas=false;
          this.showEdge=false;
@@ -67,14 +70,14 @@ export default {
 
     eventBus.$on('selectGroup',()=>{
          this.showGroup=true;
-         this.showNode=false;
+         this.showNode=true;
          this.showLink=false;
          this.showCanvas=false;
           this.showEdge=false;
     });
      eventBus.$on('selectEdge',()=>{
          this.showGroup=false;
-         this.showNode=false;
+         this.showNode=true;
          this.showLink=false;
          this.showCanvas=false;
          this.showEdge=true;
@@ -91,7 +94,7 @@ export default {
 .property{
      height: 500px;
 
-    width: 260px;
+    width: 200px;
     /* position: absolute; */
     /* right: 200px; */
     /* top:40px; */

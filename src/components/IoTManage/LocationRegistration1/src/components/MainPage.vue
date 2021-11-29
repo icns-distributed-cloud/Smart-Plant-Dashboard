@@ -6,12 +6,14 @@
     </div>
     <div class="table-main" style="height: fit-content">
       
-        <div class="table-main__header">
+        <div class="table-main__header" style="font-weight: bold">
           {{ currPos.posName }} 구역 센서 위치 관리 설정
         </div>
         <div>
           <button v-for="pos in posList" :key="pos.posId"
-          @click="currPos = pos"
+          @click="currPos = pos; getSensorPosEditor()"
+          class="btn btn-secondary"
+          style="margin: 5px"
           >
             {{ pos.posName }}
           </button>
@@ -24,7 +26,7 @@
       </div>
       <div>
         <Toolbar />
-        <Property />
+        <Property :currPos="currPos"/>
       </div>
     </div>
 
@@ -40,6 +42,7 @@ import Header from './Header'
 import Toolbar from './Toolbar'
 import Editor from './Editor'
 import Property from './property'
+import eventBus from '../positioneventbus'
 // import Map from './Map'
 
 export default {
@@ -58,17 +61,44 @@ export default {
      }
   },
   created() {
-    this.getPosList();
+    this.getPosList(true);
   },
   methods: {
-    async getPosList() {
+    async getPosList(created=false) {
       try {
         const res = await axios.get(
           'http://163.180.117.38:8281/api/sensor-pos'
         );
         this.posList = res.data.data.content;
+        if (created) {
+          this.currPos = this.posList[0];
+          this.getSensorPosEditor();
+        }
       } catch (err) {
         console.log(err);
+      }
+    },
+
+    async getSensorPosEditor() {
+      this.$emit("changeDisplay" ,this.currPos);
+      try {
+        // MODIFY !!!!!
+        const res = await axios.get(
+          "http://163.180.117.38:8281/api/sensor-pos/"+this.currPos.posId
+        );
+        console.log(res.data.data.position);
+        if (res.data.data.position != null) {
+          eventBus.$emit("initFlow", {
+            //data: JSON.parse(res.data.data.position),
+            data: JSON.parse(res.data.data.position),
+          });
+        } else {
+          eventBus.$emit("initFlow", {
+            data: {id: '0', type: 'cicadaFlow', node: [], group: [], edge: []},
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
   },

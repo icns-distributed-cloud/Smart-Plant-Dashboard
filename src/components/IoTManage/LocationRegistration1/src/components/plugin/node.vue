@@ -45,7 +45,7 @@
              </p>
           </div> -->
 
-          <div class="section-group clearfix" v-if="multipleSelect">
+          <!-- <div class="section-group clearfix" v-if="multipleSelect">
                 <h3>{{$t("node.nodeAlign")}}</h3>
                 <ul>
                   <li @click="align('horizontalAlign')" class="iconfont icon-halign"></li>
@@ -53,20 +53,31 @@
                   <li @click="align('leftAlign')" class="iconfont icon-align-left"></li>
                   <li @click="align('rightAlign')" class="iconfont icon-youduiqi"></li>
                 </ul>
-          </div>
+          </div> -->
 
-           <div class="section-group clearfix">
+           <div class="section-group clearfix" >
                 <h3>{{$t("node.prefabrication")}}</h3>
-                <ul class="theme">
-                  <li class="theme-item" @click="changeNodeStyle(item)" v-for="(item,index) in preStyle" v-bind:key="index" :style="{background:item.fill,'border-color':item.stroke}"></li>
+                <ul class="theme" >
+                  <div v-for="(item,index) in sensorStyle.node" :key="index"
+                  class="theme-wrapper">
+                    <div
+                    class="theme-item"
+                     @click="changeNodeStyle(item)"
+                     :style="{width: '20px', height: '20px', background:item.fill,'border-color':item.stroke}"
+                    ></div>
+                    <div class="sensor-type-name">
+                       {{ posSensorList[index].ssType.typeName }}
+                    </div>
+                  </div>
                 </ul>
             </div>
+              
       </div>
 </template>
 <script>
-
+import axios from "axios";
 import { Sketch } from 'vue-color';
-import eventBus from '../../eventbus';
+import eventBus from '../../positioneventbus';
 import { setup } from "../../locales/index.js";
 
 import preStyle from '../preStyle';
@@ -78,6 +89,8 @@ export default {
   },
   data(){
      return{
+       posSensorList: [],
+       sensorStyle: {},
          text:'편집',
          multipleSelect:false,
          fontsize:[8,10,12,14,16,18,20,24,28,32,36,40],
@@ -107,12 +120,16 @@ export default {
          
      }
   },
-  mounted(){
+  props: {
+    currPos: Object,
+  },
+  mounted() {
+    this.getPosSensor();
     //  eventBus.$on('clearSelect',()=>{
     //      this.multipleSelect=false;
     //  });
      eventBus.$on('selectNode',(e)=>{
-         this.text="Single Node";
+         this.text="편집";
          this.multipleSelect=false;
          this.node=e.node;
          var data=this.node.getData();
@@ -132,7 +149,32 @@ export default {
     this.language=localStorage.getItem('localeLanguage')||'zh';
     setup(this.language);
   },
+  watch: {
+    currPos: function () {
+      this.getPosSensor();
+    }
+  },
   methods:{
+    async getPosSensor() {
+      try {
+        const res = await axios.get(
+          'http://163.180.117.38:8281/api/sensor-manage?posId=' + this.currPos.posId
+        )
+        this.posSensorList = res.data.data.content;
+        this.sensorStyle = { node:[] };
+        
+        for(var sensor of this.posSensorList) {
+          let newNode = {};
+          newNode.fill = sensor.ssType.typeColorCode;
+          newNode.stroke = sensor.ssType.typeColorCode;
+          newNode.textFill = "black";
+          this.sensorStyle.node.push(newNode);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
    align(align){
        eventBus.$emit('align',{align})
    },
@@ -252,6 +294,7 @@ export default {
           if(p.nodeType==1){
              if(p&&p.className&&p.className.indexOf('vc-sketch')>-1){
                flag=true;
+               
                break;
              }
           }
@@ -266,6 +309,11 @@ export default {
 </script>
 
 <style scoped>
+.theme-wrapper {
+  width: 100%;
+  height: 40px;
+}
+
 h3 {
   margin: 8px 0 0 0;
   border-bottom:1px solid #e6e9ed;
@@ -369,6 +417,7 @@ span.textPos.active{
 }
 
 .theme-item{
+  /*
     border-width: 1px;
     border-style: solid;
     width:50px;
@@ -376,6 +425,19 @@ span.textPos.active{
     margin-top:3px;
     margin-left:3px;
     float: left;
+  */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  float: left;
+  margin-top: 5px;
+  margin-left: 3px;
+  margin-right: 5px;
+}
+
+.sensor-type-name {
+  color: #272e48a9;
+  
 }
 
 

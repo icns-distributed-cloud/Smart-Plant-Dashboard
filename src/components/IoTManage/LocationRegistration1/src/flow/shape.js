@@ -53,8 +53,8 @@ var shapeConfig = {
         shape: {
             cx: 0,
             cy: 0,
-            rx: 15,
-            ry: 15
+            rx: 10,
+            ry: 10
         },
         z: 10,
         draggable: true

@@ -1,7 +1,7 @@
 <template>
     <div class="canvas" >
         <div class="node-header">Canvas</div>
-        <div class="section-group">
+        <div class="section-group" >
             <!-- <p>
                 <input class="magic-checkbox" type="checkbox" @change="changeShadow"  id="shadow" v-model="shadow"  name="checkbox" />
                 <label for="shadow">节点阴影</label>
@@ -10,7 +10,7 @@
     </div>
 </template>
 <script>
-import eventBus from '../../eventbus';
+import eventBus from '../../positioneventbus';
 export default {
     name:'Canvas',
     data(){

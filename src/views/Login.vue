@@ -64,6 +64,7 @@ import VueCookies from 'vue-cookies';
 import AlertSuccess from "./alert-success.vue";
 import AlertFail from "./alert-fail.vue";
 import SignUp from "./SignUp.vue";
+import EventBus from "../eventbus";
 
 export default {
     name: "Login",
@@ -115,28 +116,13 @@ export default {
                 this.token = res.data.data.token;
                 console.log(this.token, this.currUser);
                 VueCookies.set("token", this.token, "1h");
-                VueCookies.set("email", this.currUser.email);
-                this.getAuth();
+                EventBus.$emit('log-in-success');
+                this.$router.push('/')
             } catch (err) {
                 this.alertFail = true;
                 console.log(err);
             }
         },
-        async getAuth() {
-            try {
-                const res = await axios.get(
-                    "http://163.180.117.38:8281/api/auth",
-                    {
-                        headers: {
-                            Authorization: 'Bearer ' + this.token
-                        }
-                    }
-                );
-                console.log(res);
-            } catch(err) {
-                console.log(err);
-            }
-        }
     },
     props: {
         token: String,

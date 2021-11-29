@@ -7,12 +7,17 @@
             <li @click="command(item)" v-for="(item ,index) in icon" v-bind:key="index" :title="item.cmd" v-bind:class="'iconfont '+item.icon+' '+item.class"></li>
             <li>
           
+                <!--
                 <span class="iconfont icon-upload-demo" @click.stop="showUpload"></span>
-                <ul v-show="upload">
+                -->
+                <button class="btn btn-primary"
+                  @click.stop="save('json')"
+                >저장</button>
+                <!-- <ul v-show="upload">
                   <li class="iconfont icon-JSON" @click.stop="save('json')"><span>JSON</span></li>
                   <li class="iconfont icon-PNG" @click.stop="save('png')"><span>PNG</span></li>
                   <li class="iconfont icon-jpg" @click.stop="save('jpg')"><span>JPG</span></li>
-                </ul>
+                </ul> -->
             </li>
         </ul>
         <input type="file" id="file" style="display:none"/>
@@ -25,17 +30,25 @@
              </ul>
         </div>
          -->
-        
+        <alert-success
+        v-if="alertSuccess"
+        :action = "action"
+        @close="alertSuccess=false"
+        ></alert-success>
   </div>
 </template>
 
 <script>
 // import Axios from "axios"
-import eventBus from '../eventbus';
+import eventBus from '../positioneventbus';
+import AlertSuccess from '../../../../../views/alert-success.vue'
+
 export default {
   name: 'Header',
   data(){
      return{
+       alertSuccess: false,
+       action: "",
         language:'zh',
         showLang:false,
         icon:[
@@ -116,6 +129,9 @@ export default {
         upload:false
         
      }
+  },
+  components: {
+    AlertSuccess
   },
   computed:{
     lang(){

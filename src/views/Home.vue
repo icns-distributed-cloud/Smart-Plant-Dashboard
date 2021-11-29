@@ -1,7 +1,25 @@
 <template>
-  <div class="background" style="display: flex;">
+  <div class="background"
+  :style="{
+    backgroundImage: 'url('+'http://163.180.117.38:8281/api/image?path='+this.currPos.positionImgPath+
+    '),url('+'http://163.180.117.38:8281/api/image?path='+this.currPos.backgroundImgPath+')',
+  }"
+  >
+  <div class="pos-nav-bar">
+      <div
+        class="ssPos"
+        v-for="pos in ssPosList"
+        :key="pos.posId"
+        @click="getPosSensor(pos.posId);
+        currPos = pos"
+      >
+        {{ pos.posName }}
+      </div>
+  </div>
+
+  <div style="width: 100%; height: 100%; display: flex">
     <div
-      style="display: flex; flex-direction: column; justify-content: space-between"
+      style="display: flex; flex-direction: column; justify-content: space-between; height: calc(100%-50px);"
     >
       <show-cctv></show-cctv>
       <alarm-log
@@ -16,14 +34,6 @@
       align-items: flex-end;
       justify-content: center;"
     >
-      <div
-        class="ssPos"
-        v-for="pos in ssPosList"
-        :key="pos.posId"
-        @click="getPosSensor(pos.posId)"
-      >
-        {{ pos.posName }}
-      </div>
 
     </div>
 
@@ -47,6 +57,7 @@
       </component>
       <NewChart></NewChart>
     </div>
+    </div>
     <div style="display: flex; flex-direction: column">
       <gas-chart v-if="false" :gas="90"></gas-chart>
       <dust-chart v-if="false"></dust-chart>
@@ -59,6 +70,11 @@
     :warningInfo="warningInfo"
     @close-warning-modal="alertWarning=false"
     ></AlertWarningModal>
+    <FireDetectionModal
+    v-if="fireWarning"
+    :fireWarningInfo="fireWarningInfo"
+    @close-fire-detection-modal="fireWarning=false [fireDetection()]"
+    ></FireDetectionModal>
   </div>
 </template>
 
@@ -76,7 +92,8 @@ import HumidityChart from "@/components/Charts/humidity-chart.vue";
 import AlarmLog from "../components/Charts/AlarmLog.vue";
 import AlertWarningModal from "./AlertWarningModal.vue";
 import NewChart from "@/components/Charts/NewChart.vue";
-
+import FireDetectionModal from "../components/AbnormalDetection/FireDetectionModal.vue";
+import eventBus from "../cctveventbus"
 export default {
   name: "Home",
   data() {
@@ -87,6 +104,9 @@ export default {
       ssPosList: [],
       warningInfo: {},
       alertWarning: false,
+      fireWarning : false,
+      fireWarningInfo : {detectionUrl: ''},
+      currPos: {},
       infoList: [
         {
           color: "#5a8dee",
@@ -114,25 +134,31 @@ export default {
           icon: "<i class='bi bi-exclamation-triangle-fill'></i>",
         },
       ],
+      fireDetectionPolling: null,
     };
   },
   created() {
-    this.getPosList();
+    this.getPosList(true);
     this.getPosSensor();
+    this.fireDetection();
   },
   
   beforeDestroy() {
     this.disconnect();
     clearInterval(this.timer);
+    clearInterval(this.fireDetectionPolling);
   },
 
   methods: {
-    async getPosList() {
+    async getPosList(isCreated=false) {
       try {
         const res = await axios.get(
           "http://163.180.117.38:8281/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
         this.ssPosList = res.data.data.content;
+        if(isCreated) {
+          this.currPos = this.ssPosList[0];
+        }
       } catch (err) {
         console.log(err);
       }
@@ -288,7 +314,31 @@ export default {
         console.log("Disconnected");
       }
     },
+    fireDetection(){
+      this.fireDetectionPolling = setInterval(() => {
+        const url = "http://163.180.117.40:3000/api/fireDetection/"
+        fetch(url).then(res => {
+          return res.json();
+        }).then(json => {
+          console.log(json);
+          if(json.detection === true){
+            this.fireWarning = true;
+            this.fireWarningInfo.detectionUrl = json.detectionUrl;
+            console.log("detection URL!!!!!!!!!!!")
+            console.log(this.fireWarningInfo.detectionUrl)
+            eventBus.$emit('fireWebsocketUrl', json.detectionUrl);
+            clearInterval(this.fireDetectionPolling);
+          }
+        }).catch(function (error){
+          console.warn(error);
+        })
+      }, 1000);
+    }
   },
+
+
+
+
   components: {
     "show-cctv": ShowCCTV,
     //"multi-chart": MultiChart,
@@ -299,11 +349,23 @@ export default {
     "alarm-log": AlarmLog,
     "anonymous-chart": NewChart,
      AlertWarningModal,
+     FireDetectionModal,
   },
 };
 </script>
 <style>
+.pos-nav-bar {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #00000024;
+}
+
 .background {
+  display: flex;
+  flex-direction: column;
   background-size: cover;
   width: 100%;
   height: 100%;
@@ -346,7 +408,7 @@ export default {
 
 .large_view_content {
   width: 100%;
-  height: 190px;
+  height: 180px;
   overflow: hidden;
   animation: large-view 0.2s;
 }
@@ -362,7 +424,7 @@ export default {
     opacity: 0;
   }
   to {
-    height: 200px;
+    height: 190px;
     opacity: 1;
   }
 }
@@ -451,8 +513,7 @@ export default {
 }
 
 .ssPos {
-  width: 50px;
-  height: 50px;
+  padding: 0px 15px;
   color: white;
 }
 </style>

@@ -8,16 +8,19 @@
   >
     <div
       :style="{
-        backgroundImage: 'url('+'http://163.180.117.38:8281/api/image?path='+this.currPos.backgroundImgPath+')',
+        backgroundImage:
+          'url(' +
+          'http://163.180.117.38:8281/api/image?path=' +
+          this.currPos.backgroundImgPath +
+          ')',
         //backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
+        backgroundSize: '100% auto',
         width: '100%',
-        height: '100%'
-        
-        }
-      "
+        height: '100%',
+      }"
     ></div>
-    
+
     <div id="flowEditor" style="background-color: transparent"></div>
     <Edit
       class="text-editor"
@@ -43,28 +46,46 @@
       </div>
       <div id="download-canvas"></div>
     </div>
+
+    <AlertSuccess
+      v-if="alertSuccess"
+      :action="action"
+      @close="alertSuccess = false"
+    ></AlertSuccess>
+    <AlertFail
+      v-if="alertFail"
+      :action="action"
+      @close="alertFail = false"
+    ></AlertFail>
   </div>
 </template>
 
 <script>
 import flowEditor from "../flow/flowEditor";
-import eventBus from "../eventbus";
+import eventBus from "../positioneventbus";
 import Edit from "./plugin/edit";
 import zrender from "zrender";
+import AlertSuccess from "../../../../../views/alert-success.vue";
+import AlertFail from "../../../../../views/alert-fail.vue";
 
 import getPlainTxt from "../flow/ued/getPlainTxt";
-// import axios from "axios";
+import axios from "axios";
 
 export default {
   name: "Editor",
   components: {
     Edit,
+    AlertSuccess,
+    AlertFail,
   },
   props: {
     currPos: Object,
   },
   data() {
     return {
+      alertSuccess: false,
+      alertFail: false,
+      action: "",
       left: 0,
       top: 0,
       width: 0,
@@ -143,138 +164,140 @@ export default {
     });
 
     eventBus.$on("saveData", async (e) => {
-      var box = null,
-        editor = null;
+      
+        var box = null,
+          editor = null;
+
       switch (e.type) {
         case "json":
+          // png 뽑는곳
           
-          
-          //png 뽑는곳
-          // box = this.editor.getBoundingRect(
-          //   this.editor.nodes
-          //     .concat(this.editor.groups)
-          //     .concat(this.editor.edges)
-          // );
-          // document.getElementById('download-canvas').style.width='1000px';
-          // document.getElementById('download-canvas').style.height='1000Px';
-          // editor = new flowEditor("download-canvas");
-          // editor.init(JSON.parse(JSON.stringify(this.editor.getData())), true);
-          // editor.attr({
-          //   position: [0, 0],
-            
-          // });
-
-          //  try {
-          //   editor.zr.painter
-          //     .getRenderedCanvas({
-          //       backgroundColor: "transparent",
-                
-          //     })
-          //     .toBlob((blob) => {
-          //       var url = window.URL.createObjectURL(blob);
-          //       alert(url)
-          //       // window.console.log(url);
-          //       window.open(url);
-                
-          //     }, "image/png", 1);
-          //     // document.getElementById("image").src = this.url;
-              
-          // } 
-          
-          
-          // catch (e) {
-          //   document.getElementById("download-win").style.display = "block";
-          // }
-          
-          //json으로 넘기는 곳
-          var str = JSON.stringify(this.editor.getData());
-          alert(JSON.stringify(str))
-
-          // try {
-          //   await axios.post(
-          //     "http://163.180.117.38:8281/api/sensor-pos"+this.current.posId+"?position="+str+"positionImg="+this.url
-              
-          //   );
-          //   alert('저장완료')
-          // } catch (err) {
-          //   alert("에러!");
-          // }
-          // downloadFile(str,'flowchart.json');
-          
-
-
-
-          // alert(JSON.stringify(str))
-          // downloadFile(str, "flowchart.json");
-
-          break;
-        case "png":
+          console.log(box)
           box = this.editor.getBoundingRect(
             this.editor.nodes
               .concat(this.editor.groups)
               .concat(this.editor.edges)
           );
-          document.getElementById('download-canvas').style.width='1000px';
-          document.getElementById('download-canvas').style.height='1000Px';
-          // document.getElementById("download-canvas").style.width =
-          //   box.width + "px";
-          // document.getElementById("download-canvas").style.height =
-          //   box.height + "px";
-          editor = new flowEditor("download-canvas");
-          editor.init(JSON.parse(JSON.stringify(this.editor.getData())), true);
-          editor.attr({
-            position: [0, 0],
-            // position:[-parseInt(box.x),-parseInt(box.y)]
-          });
-
-          try {
-            editor.zr.painter
-              .getRenderedCanvas({
-                backgroundColor: "transparent",
-                //backgroundImage: "url('https://mdn.mozillademos.org/files/7693/catfront.png')"
-              })
-              .toBlob((blob) => {
-                var url = window.URL.createObjectURL(blob);
-                window.console.log(url);
-                window.open(url);
-              }, "image/png");
-          } catch (e) {
-            document.getElementById("download-win").style.display = "block";
-          }
-          break;
-        case "jpg":
-          box = this.editor.getBoundingRect(
-            this.editor.nodes
-              .concat(this.editor.groups)
-              .concat(this.editor.edges)
-          );
-          // document.getElementById("download-canvas").style.width = "2000px";
-          // document.getElementById("download-canvas").style.height = "1000px";
-
-          document.getElementById('download-canvas').style.width=box.width+'px';
-          document.getElementById('download-canvas').style.height=box.height+'px';
-          // document.getElementById('download-canvas').style.backgroundColor="yellow";
+          document.getElementById("download-canvas").style.width = "1000px";
+          document.getElementById("download-canvas").style.height = "1000Px";
           editor = new flowEditor("download-canvas");
           editor.init(JSON.parse(JSON.stringify(this.editor.getData())), true);
           editor.attr({
             position: [0, 0],
           });
 
-          try {
-            editor.zr.painter
-              .getRenderedCanvas({
-                backgroundColor: "#fff",
-                // backgroundImage: "url('https://mdn.mozillademos.org/files/7693/catfront.png')"
-                // backgroundImg: "url('../assets/image/test.jpg')"
-              })
-              .toBlob((blob) => {
-                var url = window.URL.createObjectURL(blob);
-                window.open(url);
-              }, "image/jpeg");
-          } catch (e) {
-            document.getElementById("download-win").style.display = "block";
-          }
+          var currPosId = this.currPos.posId;
+          editor.zr.painter
+            .getRenderedCanvas({
+              backgroundColor: "transparent",
+            })
+
+            .toBlob(
+              async (blob, posId = currPosId) => {
+                this.action = "센서 위치 저장";
+                console.log("positionId : ", posId, currPosId);
+                var frm = new FormData();
+                frm.append("positionImg", blob, "test.png");
+                var str = encodeURIComponent(
+                  JSON.stringify(this.editor.getData())
+                );
+                try {
+                  await axios.post(
+                    "http://163.180.117.38:8281/api/sensor-pos/position/" +
+                      posId +
+                      "?position=" +
+                      str,
+                    frm,
+                    {
+                      headers: {
+                        "Content-type": "multipart/form-data",
+                      },
+                    }
+                  );
+                  this.alertSuccess = true;
+                } catch (err) {
+                  this.alertFail = true;
+                  console.log(err);
+                }
+
+                // var url = window.URL.createObjectURL(blob);
+
+                // window.console.log(url);
+              },
+              "image/png",
+              1
+            );
+
           break;
+        // case "png":
+        //   box = this.editor.getBoundingRect(
+        //     this.editor.nodes
+        //       .concat(this.editor.groups)
+        //       .concat(this.editor.edges)
+        //   );
+        //   document.getElementById("download-canvas").style.width = "1000px";
+        //   document.getElementById("download-canvas").style.height = "1000Px";
+        //   // document.getElementById("download-canvas").style.width =
+        //   //   box.width + "px";
+        //   // document.getElementById("download-canvas").style.height =
+        //   //   box.height + "px";
+        //   editor = new flowEditor("download-canvas");
+        //   editor.init(JSON.parse(JSON.stringify(this.editor.getData())), true);
+        //   editor.attr({
+        //     position: [0, 0],
+        //     // position:[-parseInt(box.x),-parseInt(box.y)]
+        //   });
+
+        //   try {
+        //     editor.zr.painter
+        //       .getRenderedCanvas({
+        //         backgroundColor: "transparent",
+        //         //backgroundImage: "url('https://mdn.mozillademos.org/files/7693/catfront.png')"
+        //       })
+        //       .toBlob((blob) => {
+        //         var url = window.URL.createObjectURL(blob);
+        //         window.console.log(url);
+        //         window.open(url);
+        //       }, "image/png");
+        //   } catch (e) {
+        //     document.getElementById("download-win").style.display = "block";
+        //   }
+        //   break;
+        // case "jpg":
+        //   box = this.editor.getBoundingRect(
+        //     this.editor.nodes
+        //       .concat(this.editor.groups)
+        //       .concat(this.editor.edges)
+        //   );
+        //   // document.getElementById("download-canvas").style.width = "2000px";
+        //   // document.getElementById("download-canvas").style.height = "1000px";
+
+        //   document.getElementById("download-canvas").style.width =
+        //     box.width + "px";
+        //   document.getElementById("download-canvas").style.height =
+        //     box.height + "px";
+        //   // document.getElementById('download-canvas').style.backgroundColor="yellow";
+        //   editor = new flowEditor("download-canvas");
+        //   editor.init(JSON.parse(JSON.stringify(this.editor.getData())), true);
+        //   editor.attr({
+        //     position: [0, 0],
+        //   });
+
+        //   try {
+        //     editor.zr.painter
+        //       .getRenderedCanvas({
+        //         backgroundColor: "#fff",
+        //         // backgroundImage: "url('https://mdn.mozillademos.org/files/7693/catfront.png')"
+        //         // backgroundImg: "url('../assets/image/test.jpg')"
+        //       })
+        //       .toBlob((blob) => {
+        //         var url = window.URL.createObjectURL(blob);
+        //         window.open(url);
+        //       }, "image/jpeg");
+        //   } catch (e) {
+        //     document.getElementById("download-win").style.display = "block";
+        //   }
+        //   break;
       }
     });
 

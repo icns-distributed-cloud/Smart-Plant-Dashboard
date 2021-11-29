@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import eventBus from '../../eventbus';
+import eventBus from '../../positioneventbus';
 import { setup } from "../../locales/index.js";
 import { Sketch } from 'vue-color';
 import style from '../preStyle';

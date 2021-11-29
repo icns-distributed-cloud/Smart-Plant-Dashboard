@@ -6,9 +6,7 @@
     />
 
     <div class="wrapper">
-      <div class="table-header">
-        이상 경고 설정 | 
-      </div>
+      <div class="table-header">이상 경고 설정</div>
 
       <div class="table-main">
         <div>
@@ -20,9 +18,9 @@
                 {{ posName }} 구역의 센서 이상 경고 설정
               </div>
 
-              <div class="dropdown" style="margin: 10px;">
+              <div class="dropdown" style="margin: 10px">
                 <button
-                  class="btn  btn-primary  dropdown-toggle"
+                  class="btn btn-primary dropdown-toggle"
                   data-toggle="dropdown"
                   color="#000080"
                 >
@@ -40,15 +38,20 @@
                 </div>
               </div>
 
-              <div style="display: flex; justify-content: center; margin: 20px 0px;">
-                <table class="table table-bordered table-hover" style="width: 80%">
+              <div
+                style="display: flex; justify-content: center; margin: 20px 0px"
+              >
+                <table
+                  class="table table-bordered table-hover"
+                  style="width: 80%"
+                >
                   <thead>
                     <tr>
-                      <th style="width: 200px;">식별번호</th>
-                      <th style="width: 150px;">센싱 장비 종류</th>
+                      <th style="width: 200px">식별번호</th>
+                      <th style="width: 150px">센싱 장비 종류</th>
                       <th>
                         <div
-                          style="display: flex; justify-content: space-around;"
+                          style="display: flex; justify-content: space-around"
                         >
                           <span
                             v-for="(block, k) in infoList"
@@ -88,12 +91,12 @@
                       </td>
                       <td
                         style="
-                        vertical-align: middle;
-                        padding-right: 0px;
-                        padding-left: 0px;
-                        
-                        text-align: center;
-                      "
+                          vertical-align: middle;
+                          padding-right: 0px;
+                          padding-left: 0px;
+
+                          text-align: center;
+                        "
                       >
                         <a
                           class="btn btn-outline-primary mod-btn"
@@ -177,7 +180,6 @@ export default {
     };
   },
   components: {
-    
     SettingModal,
   },
   mounted() {
