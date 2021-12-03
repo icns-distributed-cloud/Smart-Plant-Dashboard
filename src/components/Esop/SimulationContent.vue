@@ -2,12 +2,12 @@
   <div class="main">
     <div class="sop-header">e-SOP 수행</div>
     <div class="sop-statusbar">
-      <div id="situation-label">상황</div>
+      <div class="sop-label">상황</div>
       <div class="situation-name">{{ this.situationName }}</div>
-      <div id="level-label">레벨</div>
+      <div class="sop-label">레벨</div>
       <div class="levelId">{{ this.levelId }}</div>
     </div>
-    <div class="sop-diagram"></div>
+    <div class="sop-diagram"><div>e-SOP 흐름도</div></div>
     <div class="Simulation">
       <h2>
         임무목록 수행
@@ -223,51 +223,58 @@ export default {
   position: absolute;
   top: 0px;
   width: 100%;
-  padding: 30px 40px;
+  padding: 40px;
   font-size: 30px;
   color: #a9c7f0;
   font-weight: 550;
-  height: 10%;
+  height: 12%;
+  line-height: 12%;
+  vertical-align: center;
 
   border-bottom: 1px solid #7575753b;
 }
 
 .sop-diagram {
+  margin: 2%;
   position: absolute;
-  top: 10%;
-  left: 15%;
+  top: 12%;
+  left: 11%;
   width: 35%;
   height: 100%;
   background-color: white;
+  border-radius: 20px;
   padding: 20px;
   background-image: url("http://163.180.117.38:8281/api/image?path=/root/icns-smart-plant-server/Smart-Plant-Dashboard-API/build/libs/sop-diagram/1-1-img.png");
   background-size: 60% auto;
   background-repeat: no-repeat;
   background-position: center;
+  position: relative;
+  z-index: 1;
 }
 .sop-statusbar {
   position: absolute;
-  top: 10%;
+  top: 12%;
   left: 0px;
-  width: 15%;
+  width: 11%;
   height: 100%;
   color: white;
   border-right: 1px solid #7575753b;
 }
 .situation-name {
-  background-color: rgba(0, 0, 0, 0.178);
+  background-color: #93c0ff91;
   text-align: center;
   font-size: 30px;
   height: 70px;
   margin: 10px;
   line-height: 70px;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 .Simulation {
   width: 50%;
   position: absolute;
+  height: 100%;
   right: 0;
-  top: 10%;
+  top: 12%;
   bottom: 0;
   border-left: 1px solid #7575753b;
   background-color: #1a233a;
@@ -310,6 +317,11 @@ export default {
   background-color: #f2b707;
 }
 
+.sop-label {
+  margin: 10px;
+  font-size: 20px;
+}
+
 h2 {
   margin: 20px;
   color: #727e8c;
@@ -333,6 +345,14 @@ h2 {
   border-radius: 50px;
   height: fit-content;
 }
+.sop-diagram > div {
+  color: #727e87;
+  font-weight: 600;
+  width: 130px;
+  border-radius: 20px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.068);
+}
 
 .title__main {
   font-size: 20px;
@@ -354,5 +374,14 @@ td {
   font-size: 15px;
   padding: 2px;
   color: #cedfff;
+}
+
+#sop-label {
+  color: rgb(124, 124, 124);
+  font-size: 20px;
+  position: absolute;
+  z-index: 2;
+  top: 12%;
+  left: 16%;
 }
 </style>

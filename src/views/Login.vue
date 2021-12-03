@@ -104,6 +104,7 @@ export default {
             }
         },
         async logIn() {
+            console.log('로그인 시도')
             this.action = "로그인";
             try {
                 const res = await axios.post(
@@ -115,6 +116,7 @@ export default {
                 );
                 this.token = res.data.data.token;
                 console.log(this.token, this.currUser);
+                console.log('로그인 성공')
                 VueCookies.set("token", this.token, "1h");
                 EventBus.$emit('log-in-success');
                 this.$router.push('/')

@@ -71,8 +71,8 @@
                         <td>{{ sensor.ssPos.posName }}</td>
                         <td>{{ sensor.ssType.typeName }}</td>
                         <td>{{ sensor.ssContact }}</td>
-                        <td>{{ sensor.ssContactExt }}</td>
-                        <td>{{ sensor.ssContactPhone }}</td>
+                        <td style="font-size: 1rem;">{{ sensor.ssContactExt }}</td>
+                        <td style="font-size: 1rem;">{{ sensor.ssContactPhone }}</td>
                         <td
                           style="
                             vertical-align: middle;
@@ -230,8 +230,6 @@ export default {
         );
         this.ssManageList = res.data.data.content;
         this.totalPages = res.data.data.totalPages;
-        console.log(res);
-        console.log(this.totalPages);
       } catch (err) {
         console.log(err);
       }

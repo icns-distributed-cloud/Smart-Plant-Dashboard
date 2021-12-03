@@ -20,6 +20,7 @@
 
 <script>
 import SideBar from "./components/SideBar.vue";
+//import SideBar from "./views/SideBar";
 // import VueCookies from 'vue-cookies';
 
 export default {

@@ -46,13 +46,13 @@
                   v-for="sensorPos in sensorPosList"
                   :key="sensorPos.posId"
                 >
-                  <td>
+                  <td style="font-size: 0.85rem;">
                     <div>{{ sensorPos.posName }}</div>
                   </td>
                   <td>
                     <div>{{ sensorPos.posCode }}</div>
                   </td>
-                  <td>
+                  <td style="font-size: 0.85rem;">
                     <div>{{ sensorPos.posDtl }}</div>
                   </td>
                   <td
@@ -70,6 +70,7 @@
                     </a>
                       <button type="button" class="btn btn-outline-success"
                       @click="editImg=true; currPos=sensorPos;"
+                      style="font-size: 0.85rem;"
                       ><i class="bx bx-edit"></i> 이미지 변경
                     </button>
                     <a

@@ -145,11 +145,16 @@ export default {
   overflow: auto;
 }
 .header {
-  padding: 30px 40px;
   font-size: 30px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 40px;
   color: #a9c7f0;
   font-weight: 550;
-  height: 8%;
+  height: 12%;
+  line-height: 12%;
+  vertical-align: center;
 }
 #situation {
   color: white;
@@ -227,11 +232,15 @@ input[type="radio"].levelRadio:checked + label {
 }
 .table-main__box {
   padding: 20px;
-  margin: 20px;
   background-color: #272e48;
   color: #a9c7f0;
   border-radius: 9px;
   overflow: auto;
+  position: absolute;
+  top: 12%;
+  width: 95%;
+  margin: 0 2.5%;
+  padding-bottom: 3%;
 }
 #sop-button {
   float: right;

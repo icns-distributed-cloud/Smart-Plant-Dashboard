@@ -195,7 +195,7 @@ export default {
             .toBlob(
               async (blob, posId = currPosId) => {
                 this.action = "센서 위치 저장";
-                console.log("positionId : ", posId, currPosId);
+                console.log("[ POST ] positionId : ", posId, currPosId);
                 var frm = new FormData();
                 frm.append("positionImg", blob, "test.png");
                 var str = encodeURIComponent(
@@ -203,7 +203,7 @@ export default {
                 );
                 try {
                   await axios.post(
-                    "http://163.180.117.38:8281/api/sensor-pos/position/" +
+                    "http://163.180.117.22:8218/api/sensor-pos/position/" +
                       posId +
                       "?position=" +
                       str,
@@ -469,6 +469,9 @@ export default {
         keepLastIndex(that.$refs["edit"].$el);
       });
     });
+  },
+  beforeDestroy() {
+    eventBus.$off("saveData");
   },
   methods: {
     dragover(e) {

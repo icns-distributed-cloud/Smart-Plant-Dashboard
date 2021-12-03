@@ -73,7 +73,7 @@
               menuOpen = 4;
             "
           >
-            <i v-if="menuOpen == 4" class="bi bi-arrow-right"></i> CCTV 설정
+            <i v-if="menuOpen == 4" class="bi bi-chevron-right"></i> CCTV 설정
           </p>
         </div>
       </div>
@@ -84,7 +84,10 @@
           e-SOP 관리
         </div>
         <div class="menu2" style="cursor: pointer">
-          <p v-on:click="openEsopEditor">
+          <p @click="openEsopSimulation">
+            <i v-if="menuOpen == 11" class="bi bi-chevron-right"></i> e-SOP 수행
+          </p>
+          <p @click="openEsopEditor">
             <i v-if="menuOpen == 5" class="bi bi-chevron-right"></i> e-SOP
             에디터
           </p>
@@ -187,7 +190,6 @@ export default {
   },
   mounted() {
     EventBus.$on("log-in-success", () => {
-      console.log("hello");
       this.getUserInfo();
     });
   },
@@ -195,6 +197,13 @@ export default {
     EventBus.$off("log-in-success");
   },
   methods: {
+    openEsopSimulation() {
+      console.log("hello")
+      let routeData = this.$router.resolve({ path: "/esop-simulation" });
+      // let routeData = this.$router.resolve({ path: "/esop-editor"});
+      window.open(routeData.href);
+    },
+
     openEsopEditor() {
       let routeData = this.$router.resolve({ path: "/esop-editor" });
       // let routeData = this.$router.resolve({ path: "/esop-editor"});
@@ -207,7 +216,7 @@ export default {
           const res = await axios.get("http://163.180.117.38:8281/api/auth", {
             headers: {
               Authorization: "Bearer " + token,
-            },
+            }
           });
           console.log(res.data.data.email);
           this.currUser.email = res.data.data.email;

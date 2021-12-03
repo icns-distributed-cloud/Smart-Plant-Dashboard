@@ -24,7 +24,7 @@
       <div class="editor-wrapper">
       <Editor :currPos="currPos"/>
       </div>
-      <div>
+      <div class="toolbal-wrapper">
         <Toolbar />
         <Property :currPos="currPos"/>
       </div>
@@ -84,9 +84,9 @@ export default {
       try {
         // MODIFY !!!!!
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-pos/"+this.currPos.posId
+          "http://163.180.117.22:8218/api/sensor-pos/"+this.currPos.posId
         );
-        console.log(res.data.data.position);
+        console.log("[ GET ]")
         if (res.data.data.position != null) {
           eventBus.$emit("initFlow", {
             //data: JSON.parse(res.data.data.position),
@@ -145,5 +145,9 @@ a {
 .editor-wrapper {
   width: 800px;
   height: 450px;
+}
+
+.toolbar-wrapper {
+  width: 150px;
 }
 </style>

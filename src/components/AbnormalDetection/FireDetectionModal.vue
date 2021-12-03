@@ -1,8 +1,8 @@
 <template>
-  <div class="modal-wrapper">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
+  <div class="cctv-modal-wrapper">
+    <!--<div class="modal-dialog">-->
+      <div class="cctv-modal-content">
+        <div class="cctv-modal-header">
           <button
               type="button"
               class="btn btn-secondary"
@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-  </div>
+  <!--</div>-->
 </template>
 
 <script>
@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style scoped>
-.modal-wrapper {
+.cctv-modal-wrapper {
   position: fixed;
   z-index: 100;
   top: 0;
@@ -92,10 +92,11 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
 }
-.modal-header {
+.cctv-modal-header {
   background-color: #272e48;
   color: #9fb0d6;
   border-bottom: #464d5c 0.5px solid;
+  width: 640px;
 }
 .modal-title {
   font-size: 15px;
@@ -105,8 +106,9 @@ export default {
   padding: 10px 25px;
   margin-bottom: 20px;
 }
-.modal-content {
+.cctv-modal-content {
   background-color: #1a233a;
+  width: 640px;
 }
 .modal-footer {
   border-top: #464d5c 0.5px solid;
