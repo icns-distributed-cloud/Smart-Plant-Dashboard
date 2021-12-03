@@ -14,7 +14,7 @@
         v-bind:class="'iconfont ' + item.icon + ' ' + item.class"
       ></li>
       <li>
-        <span class="iconfont icon-upload-demo" @click.stop="save('json')"></span>
+        <span class="iconfont icon-upload-demo" @click.stop="save('png')"></span>
         <!-- <ul v-show="upload"> -->
           <!-- <li class="iconfont icon-JSON" @click.stop="save('json')">
             <span>JSON</span>
@@ -247,6 +247,9 @@ a {
   -webkit-box-sizing: border-box;
   text-align: center;
   background-color: white;
+
+  position: absolute;
+  top: 0px;
 }
 ul li.disable {
   color: #ccc;

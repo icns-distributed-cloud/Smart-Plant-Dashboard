@@ -1,5 +1,5 @@
 <template>
-  <div class="toolbar">
+  <div class="toolbar" style="width: 210px;">
     <div class="select-wrapper">
       <form class="type-wrapper">
         <div class="shape-header">상황 선택
@@ -489,6 +489,7 @@ export default {
        window.console.log(e);
     }
   },
+  
   methods:{
     async getEsopDiagram() {
       this.$emit("changeDisplay" ,this.current);
@@ -688,7 +689,8 @@ a {
   color: #42b983;
 }
 .toolbar{
-  width:210px;
+  /*width:210px;*/
+  width: 100%;
   position: absolute;
   left:0;
   bottom:0;
@@ -716,7 +718,7 @@ a {
 .toolbar ul li:hover{
   background: #e5e5e5;
 }
-li{
+li {
   display: inline-block;
   width:40px;
   height:auto;

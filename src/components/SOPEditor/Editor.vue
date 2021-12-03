@@ -2,9 +2,18 @@
   <div class="editor" @dragover="dragover" @dragstart="dragstart" @drop="drop">
 
     <button type="button" class="btn btn-primary"
-    @click.stop="save('json')">저장</button>
+    @click.stop="save('png')">저장</button>
+    
+    <!-- 삭제 버튼 -->
+    <li
+      @click="command(item)"
+      :title="item.cmd"
+      v-bind:class="'iconfont ' + item.icon + ' ' + item.class"
+      style="cursor: pointer"
+    ></li>
     
     <div id="flowEditor"></div>
+    <Header></Header>
     <Edit
       class="text-editor"
       ref="edit"
@@ -39,11 +48,13 @@ import Edit from "./plugin/edit";
 import zrender from "zrender";
 import axios from "axios";
 import getPlainTxt from "../../flow/ued/getPlainTxt";
+import Header from "./Header";
 
 export default {
   name: "Editor",
   components: {
     Edit,
+    Header
   },
   data() {
     return {
@@ -58,6 +69,13 @@ export default {
       colors: "#194d33",
       show: false,
       edge: null,
+      deleteNodeIdList: [],
+      item: {
+          icon: "icon-shanchu",
+          name: "삭제",
+          cmd: "delete",
+          class: "disable",
+      },
     };
   },
 
@@ -114,6 +132,7 @@ export default {
     });
 
     eventBus.$on("delete", () => {
+      this.deleteNodeIdList.push(this.node.id);
       if (this.status == "selectNode") {
         this.editor.execute("deleteNode", { node: this.node });
       } else if (this.status == "selectNodes") {
@@ -131,7 +150,6 @@ export default {
       switch (e.type) {
         case "json":
           var str = JSON.stringify(this.editor.getData());
-          alert("!@!@!@!@!@")
           try {
             await axios.post(
               "http://163.180.117.38:8281/api/sop?level="+ this.current.level +"&situationId=" + this.current.situationId,
@@ -141,6 +159,7 @@ export default {
                 diagram: str,
               }
             );
+            // 언니가 여기에 추가해주면 돼요!
             alert('저장완료')
           } catch (err) {
             alert("에러!");
@@ -164,15 +183,53 @@ export default {
             position: [-parseInt(box.x), -parseInt(box.y)],
           });
 
+          var currSituationId = this.current.situationId;
+          var currLevel = this.current.level;
+          
+          // 삭제된 노드의 아이디와 대응되는 sop-detail 삭제
+          for (var nodeId of this.deleteNodeIdList) {
+            try {
+              axios.delete(
+                "http://163.180.117.38:8281/api/sop-detail/" + nodeId
+              )
+            } catch(err) {
+              console.log(err);
+            }
+          }
+          this.deleteNodeIdList=[]; // 초기화
+
           try {
             editor.zr.painter
               .getRenderedCanvas({
                 backgroundColor: "transparent",
               })
-              .toBlob((blob) => {
-                var url = window.URL.createObjectURL(blob);
-                window.console.log(url);
-                window.open(url);
+              .toBlob((blob, situationId = currSituationId, level = currLevel) => {
+                console.log(situationId, level);
+                var frm = new FormData();
+                frm.append("diagramImg", blob, "test.png");
+                var str = encodeURIComponent(
+                  JSON.stringify(this.editor.getData())
+                );
+                try {
+                  axios.post(
+                    "http://163.180.117.38:8281/api/sop?diagram="+ str +"&level="+ level +"&situationId=" + situationId,
+                    frm,
+                    {
+                      headers: {
+                        "Content-type": "multipart/form-data",
+                      },
+                    }
+                  );
+                  alert("저장 완료")
+                  eventBus.$emit("updateDiagram")
+                } catch (err) {
+                  this.alertFail = true;
+                  console.log(err);
+                }
+                // var url = window.URL.createObjectURL(blob);
+                // window.console.log(url);
+                // window.open(url);
+                
               }, "image/png");
           } catch (e) {
             document.getElementById("download-win").style.display = "block";
@@ -379,7 +436,16 @@ export default {
       });
     });
   },
+  beforeDestroy() {
+    eventBus.$off("saveData");
+  },
   methods: {
+    command(item) {
+      if (item.class != "disable") {
+        eventBus.$emit(item.cmd);
+      }
+    },
+
     save(type) {
       this.upload = false;
       eventBus.$emit("saveData", { type });
@@ -452,6 +518,9 @@ export default {
     closeDownLoadWin() {
       document.getElementById("download-win").style.display = "none";
     },
+    resetDeleteNodeIdList() {
+      this.deleteNodeIdList = [];
+    }
   },
 };
 </script>

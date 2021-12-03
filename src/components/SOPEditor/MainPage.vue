@@ -1,22 +1,21 @@
 <template>
   <div class="MainPage">
-    <Header />
     <Toolbar @changeDisplay="changeDisplay" />
     <Editor
       :current="current"
       :situationId="situationId"
       :level="level"
+      ref="resetDelete"
     />
     <!-- <Property /> -->
     <DetailProcedure
     :current="current"
+    ref="currUpdate"
     />
     <Map />
   </div>
 </template>
 <script>
-
-import Header from './Header'
 import Toolbar from './Toolbar'
 import Editor from './Editor'
 // import Property from './property'
@@ -26,7 +25,6 @@ import Map from './Map'
 export default {
   name: 'MainPage',
   components:{
-     Header,
      Toolbar,
      Editor,
     //  Property,
@@ -35,15 +33,18 @@ export default {
   },
   data(){
      return{
+       // current : { situationId : 0, level : 0 }
        current: {},
      }
   },
-  mounted(){
-     
+  mounted() {
+     this.$refs.currUpdate.getTitleInfo(this.current);
   },
   methods: {
     changeDisplay(current) {
       this.current = current;
+      this.$refs.currUpdate.getTitleInfo(current);
+      this.$refs.resetDelete.resetDeleteNodeIdList();
     }
   }
 }
