@@ -41,6 +41,27 @@
         </table>
         </div>
     </div>
+
+    <nav aria-label="Page navigation example" style="float: right">
+      <ul class="pagination">
+        <li
+          v-for="i in totalPages"
+          :key="i"
+          @click="getMsgLog(i - 1)"
+          class="page-item"
+        >
+          <span class="page-link">{{ i }}</span>
+        </li>
+
+        <!--
+    <li class="page-item">
+      <a class="page-link cur-page" href="#">1</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>'
+    -->
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -53,18 +74,21 @@ export default {
   data() {
     return  {
       msgLogList: [],
+      totalPages: 0,
     }
   },
   created() {
     this.getMsgLog();
   },
   methods: {
-    async getMsgLog() {
+    async getMsgLog(page = 0) {
       try {
         const res = await axios.get(
-          'http://163.180.117.38:8281/api/message/log'
+          'http://163.180.117.38:8281/api/message/log?page=' + page +
+            "&size=5&sort.sorted=true"
         )
         this.msgLogList = res.data.data;
+        this.totalPages = res.data.data.totalPages;
       } catch (err) {
         console.log(err);
       }

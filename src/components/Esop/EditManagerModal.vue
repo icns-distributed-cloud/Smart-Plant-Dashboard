@@ -111,7 +111,7 @@
                 $emit('close-edit-modal');
               "
             >
-              위치 등록
+              담당자 등록
             </button>
             <button
               type="button"

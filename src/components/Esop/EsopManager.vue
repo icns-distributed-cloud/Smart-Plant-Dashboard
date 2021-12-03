@@ -205,7 +205,7 @@ export default {
           {
             name: manager.name,
             phone: manager.phone,
-            sensorPosId: manager.sensorPosId,
+            posId: manager.sensorPosId,
           }
         );
         this.reloadManager();
@@ -225,7 +225,7 @@ export default {
           {
             name: manager.name,
             phone: manager.phone,
-            sensorPosId: manager.sensorPosId
+            posId: manager.sensorPosId
           }
         );
         console.log(res);

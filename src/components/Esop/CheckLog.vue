@@ -37,6 +37,27 @@
           </tbody>
         </table>
         </div>
+
+        <nav aria-label="Page navigation example" style="float: right">
+          <ul class="pagination">
+            <li
+              v-for="i in totalPages"
+              :key="i"
+              @click="getCheckLog(i - 1)"
+              class="page-item"
+            >
+              <span class="page-link">{{ i }}</span>
+            </li>
+
+            <!--
+        <li class="page-item">
+          <a class="page-link cur-page" href="#">1</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>'
+        -->
+          </ul>
+        </nav>
     </div>
   </div>
 </template>
@@ -51,18 +72,21 @@ export default {
     return  {
         checkLogList: [],
         levelList: [ "안전", "관심", "주의", "경고", "심각" ],
+        totlaPages: 0,
     }
   },
   created() {
     this.getCheckLog();
   },
   methods: {
-    async getCheckLog() {
+    async getCheckLog(page = 0) {
       try {
         const res = await axios.get(
-          'http://163.180.117.38:8281/api/e-sop/check-log'
+          'http://163.180.117.38:8281/api/e-sop/check-log?page=' + page +
+            "&size=5&sort.sorted=true"
         )
         this.checkLogList = res.data.data;
+        this.totalPages = res.data.data.totalPages;
       } catch (err) {
         console.log(err);
       }
