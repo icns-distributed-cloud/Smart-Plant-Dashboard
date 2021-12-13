@@ -60,9 +60,11 @@
               <table class="table table-bordered table-hover" style="width: 95%;">
                 <thead>
                   <tr>
-                    <th>위치 이름</th>
-                    <th>담당자</th>
-                    <th>핸드폰 번호</th>
+                    <th style="width:300px;">위치 이름</th>
+                    <th style="width:200px;">담당자</th>
+                    <th style="width:100px;">관련 단계</th>
+                    <th style="width:300px;">핸드폰 번호</th>
+                    <th>이메일 주소</th>
                     <th style="width: 175px">ACTION</th>
                   </tr>
                 </thead>
@@ -70,7 +72,9 @@
                   <tr v-for="manager in managerList" :key="manager.Id">
                     <td>{{ manager.posName }}</td>
                     <td>{{ manager.name }}</td>
+                    <td>{{ manager.level }}</td>
                     <td>{{ manager.phone }}</td>
+                    <td>{{ manager.email }}</td>
                     <td
                       style="
                           vertical-align: middle;
@@ -203,6 +207,8 @@ export default {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/contact",
           {
+            email: manager.email,
+            level: manager.level,
             name: manager.name,
             phone: manager.phone,
             posId: manager.sensorPosId,
@@ -223,6 +229,8 @@ export default {
         const res = await axios.put(
           "http://163.180.117.38:8281/api/contact/" + manager.id,
           {
+            email: manager.email,
+            level: manager.level,
             name: manager.name,
             phone: manager.phone,
             posId: manager.sensorPosId

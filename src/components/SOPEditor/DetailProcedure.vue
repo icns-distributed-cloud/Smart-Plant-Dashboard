@@ -296,12 +296,13 @@ export default {
   width: 50%;
   position: absolute;
   right: 0;
-  top: 40px;
+  /*top: 40px;*/
+  top: 9%;
   bottom: 0;
-  border-left: 1px solid #e6e9ed;
+  border-left: 1px solid #7575753b;
   background-color: #1a233a;
   font-size: 14px;
-
+  overflow-y: scroll;
   /* line-height: 26px; */
 }
 

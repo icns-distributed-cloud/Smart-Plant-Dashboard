@@ -81,7 +81,6 @@
                   <div class="main-input">
                     <input
                       :disabled="newContent.efunction == 0"
-                      type="number"
                       class="form-control"
                       name="messageContent"
                       placeholder="발송 내용을 입력하세요"

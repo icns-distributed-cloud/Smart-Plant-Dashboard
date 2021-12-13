@@ -324,8 +324,8 @@ export default {
           if(json.detection === true){
             this.fireWarning = true;
             this.fireWarningInfo.detectionUrl = json.detectionUrl;
-            console.log("detection URL!!!!!!!!!!!")
-            console.log(this.fireWarningInfo.detectionUrl)
+            console.log("detection URL!!!!!!!!!!!");
+            console.log(this.fireWarningInfo.detectionUrl);
             eventBus.$emit('fireWebsocketUrl', json.detectionUrl);
             clearInterval(this.fireDetectionPolling);
           }

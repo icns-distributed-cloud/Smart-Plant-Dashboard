@@ -30,22 +30,16 @@
                 <table class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>식별번호</th>
                       <th>CCTV 위치</th>
                       <th>CCTV RTSP URL</th>
-                      <th>CCTV Websocket URL</th>
-                      <th>CCTV 이상감지 Websocket URL</th>
 
-                      <th style="width: 175px">ACTION</th>
+                      <th style="width: 200px">ACTION</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="cctv in cctvList" :key="cctv.cctvId">
-                      <td>{{ cctv.cctvId }}</td>
                       <td>{{ cctv.posName }}</td>
                       <td>{{ cctv.streamURL }}</td>
-                      <td>{{ cctv.websocketURL }}</td>
-                      <td>{{ cctv.abnormalWebsocketUrl }}</td>
                       <td
                         style="
                           padding-top: 2px;
@@ -53,6 +47,7 @@
                           padding-left: 0px;
                           padding-bottom: 2px;
                           text-align: center;
+                          vertical-align: middle;
                         "
                       >
                         <a
@@ -127,9 +122,9 @@ export default {
       userId: "",
       password: "",
       normalStreamPortNumber: 0,
-      abneormalStreamPortNumber : 0,
-    //   streamURL: "",
-    //   websocketURL: "",
+      abneormalStreamPortNumber: 0,
+      //   streamURL: "",
+      //   websocketURL: "",
     };
   },
   created() {
@@ -142,15 +137,26 @@ export default {
           "http://163.180.117.38:8281/api/cctv?pageSize=1&paged=true&sort.sorted=true"
         );
         this.cctvList = res.data.data.content;
-        if(this.cctvList.length === 0){
-            this.normalStreamPortNumber = 30000;
-            this.abneormalStreamPortNumber = 30500;
-        }
-        else{
-            var websocket_string = this.cctvList[this.cctvList.length-1].websocketURL;
-            var abnormal_websocket_string = this.cctvList[this.cctvList.length-1].abnormalWebsocketUrl;
-            this.normalStreamPortNumber = Number(websocket_string.substr(websocket_string.indexOf(':',4)+1,websocket_string.length))
-            this.abneormalStreamPortNumber = Number(abnormal_websocket_string.substr(abnormal_websocket_string.indexOf(':',4)+1,abnormal_websocket_string.length))
+        if (this.cctvList.length === 0) {
+          this.normalStreamPortNumber = 30000;
+          this.abneormalStreamPortNumber = 30500;
+        } else {
+          var websocket_string =
+            this.cctvList[this.cctvList.length - 1].websocketURL;
+          var abnormal_websocket_string =
+            this.cctvList[this.cctvList.length - 1].abnormalWebsocketUrl;
+          this.normalStreamPortNumber = Number(
+            websocket_string.substr(
+              websocket_string.indexOf(":", 4) + 1,
+              websocket_string.length
+            )
+          );
+          this.abneormalStreamPortNumber = Number(
+            abnormal_websocket_string.substr(
+              abnormal_websocket_string.indexOf(":", 4) + 1,
+              abnormal_websocket_string.length
+            )
+          );
         }
       } catch (err) {
         console.log(err);
@@ -185,16 +191,18 @@ export default {
       console.log(newCCTV);
       this.showModal = false;
       try {
-        this.normalStreamPortNumber = this.normalStreamPortNumber+1;
-        this.abneormalStreamPortNumber = this.abneormalStreamPortNumber+1;
-        var websocket_string = "ws://163.180.117.40:"+this.normalStreamPortNumber;
-        var abnormal_websocket_string = "ws://163.180.117.40:"+this.abneormalStreamPortNumber;
+        this.normalStreamPortNumber = this.normalStreamPortNumber + 1;
+        this.abneormalStreamPortNumber = this.abneormalStreamPortNumber + 1;
+        var websocket_string =
+          "ws://163.180.117.40:" + this.normalStreamPortNumber;
+        var abnormal_websocket_string =
+          "ws://163.180.117.40:" + this.abneormalStreamPortNumber;
         const res = await axios.post("http://163.180.117.38:8281/api/cctv/", {
           posId: newCCTV.posId,
           password: newCCTV.password,
           streamURL: newCCTV.streamURL,
           userId: newCCTV.userId,
-          
+
           websocketURL: websocket_string,
           abnormalWebsocketUrl: abnormal_websocket_string,
         });
@@ -205,7 +213,6 @@ export default {
             password: newCCTV.password,
             streamURL: newCCTV.streamURL,
             userId: newCCTV.userId,
-
 
             websocketURL: websocket_string,
             abnormalWebsocketUrl: abnormal_websocket_string,

@@ -6,7 +6,6 @@ import Monitoring from "../components/Dashboard/Monitoring.vue";
 import SensorManage from "../views/SensorManage.vue";
 import AlertSettings from "../components/AbnormalDetection/AlertSettings.vue";
 import SensorPos from "../components/IoTManage/LocationRegistration1/src/components/MainPage.vue";
-// import SensorPos from "../components/SOPEditor/test.vue"
 import EsopManager from "../components/Esop/EsopManager.vue";
 import EsopSimulation from "../components/Esop/EsopSimulation.vue";
 import SimulationContent from "../components/Esop/SimulationContent.vue";

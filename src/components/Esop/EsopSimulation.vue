@@ -52,7 +52,7 @@
             <label
               class="RadioLabel"
               for="level2"
-              style="color: #fdac41; border: 5px solid #fdac41"
+              style="color: #fdce41; border: 5px solid #fdce41"
             >
               주의
             </label>
@@ -66,7 +66,7 @@
             <label
               class="RadioLabel"
               for="level3"
-              style="color: #fdce41; border: 5px solid #fdce41"
+              style="color: #fdac41; border: 5px solid #fdac41"
             >
               경고
             </label>
@@ -91,14 +91,22 @@
         </div>
       </div>
     </div>
+    <AlertCheck 
+    v-if="alertCheck"
+    :action="action"
+    @close="alertCheck=false"
+    ></AlertCheck>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import AlertCheck from "@/views/alert-check.vue"
 export default {
   name: "MainSimulation",
-  components: {},
+  components: {
+    AlertCheck,
+  },
   data() {
     return {
       situationList: [],
@@ -106,6 +114,8 @@ export default {
         situationSelect: 0,
         levelSelect: 0,
       },
+      alertCheck:false,
+      action:"",
     };
   },
   created() {
@@ -123,12 +133,19 @@ export default {
       }
     },
     openContent(Info) {
-      this.$router.push(
+      if(Info.situationSelect==0||Info.levelSelect==0){
+        this.action="체크";
+        this.alertCheck=true;
+      }
+      else{
+        this.$router.push(
         "/simulation-content?situationId=" +
           Info.situationSelect +
           "&levelId=" +
           Info.levelSelect
       );
+      }
+      
     },
   },
 };
@@ -152,7 +169,7 @@ export default {
   padding: 40px;
   color: #a9c7f0;
   font-weight: 550;
-  height: 12%;
+  height: 9%;
   line-height: 12%;
   vertical-align: center;
 }
@@ -161,7 +178,7 @@ export default {
   padding: 10px;
 }
 .SituationLabel {
-  width: 310px;
+  width: 290px;
   height: 120px;
   line-height: 120px;
   border-radius: 70px;
@@ -218,6 +235,8 @@ input[type="radio"].levelRadio:checked + label {
 
 .select-header {
   font-size: 30px;
+  padding-bottom: 10px;
+  border-bottom: #93c0ff91 0.5px solid;
 }
 
 .select-step {
@@ -237,7 +256,7 @@ input[type="radio"].levelRadio:checked + label {
   border-radius: 9px;
   overflow: auto;
   position: absolute;
-  top: 12%;
+  top: 9%;
   width: 95%;
   margin: 0 2.5%;
   padding-bottom: 3%;

@@ -1,10 +1,10 @@
 <template>
   <div class="toolbar" style="width: 210px;">
     <div class="select-wrapper">
-      <form class="type-wrapper">
+      <div class="type-wrapper">
         <div class="shape-header">상황 선택
           <i class="bi bi-plus-lg"
-          style="float: right"
+          style="float: right; cursor: pointer;"
           data-bs-toggle="modal" data-bs-target="#staticBackdrop"
           ></i>
         </div>
@@ -14,33 +14,34 @@
         >
           <input
           class="form-check-input"
-          type="radio" name="flexRadioDefault"
-          :id="situation.id"
+          type="radio" name="situation"
+          :id="'situation'+situation.id"
           :value="situation.id" 
           v-model="current.situationId"
           @click="
           current.situationId=situation.id;
           getEsopDiagram()"
           >
-          <label class="form-check-label" :for="situation.id"
-          style="color: #4d6189; font-size: 0.7rem">
+          <label class="form-check-label" :for="'situation'+situation.id"
+          style="width: 120px;">
             {{ situation.name }}
           </label>
 
           <i class="bi bi-trash"
-            style="float: right; font-size: 0.8rem; color: #9fb0d6; cursor: pointer;"
+            style="float: right; font-size: 0.8rem; color: #9fb0d6; cursor: pointer; line-height: 30px"
             data-bs-toggle="modal" data-bs-target="#deleteAccident"
             @click="currDeleteId=situation.id"
             ></i>
 
           <i class="bi bi-pencil-square"
-            style="float: right; font-size: 0.8rem; color: #9fb0d6; cursor: pointer;  margin-right: 5px;"
+            style="float: right; font-size: 0.8rem; color: #9fb0d6; cursor: pointer;  margin-right: 5px; line-height: 30px"
             data-bs-toggle="modal" :data-bs-target="'#modifySituation'+situation.id"
             @click="currModifyName=situation.name"
           ></i>
 
+
         <!-- Modify Modal -->
-        <form>
+        <div>
         <div class="modal fade" :id="'modifySituation'+situation.id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -50,16 +51,15 @@
               </div>
               <div class="modal-body">
                 
-                <div class="input-group flex-nowrap">
-                  <span class="input-group-text" id="addon-wrapping">
+                <div class="input-group flex-nowrap" style="margin-top: 20px;">
+                  <span class="input-group-text" id="addon-wrapping"
+                  style="background-color: #FFFFFF90; border: none;">
                     <i class="bi bi-pen"></i>
                   </span>
                   <input type="text" class="form-control"
                   aria-label="사고 유형 명칭"
                   aria-describedby="addon-wrapping"
-                  style="background-color: #dee2e647;
-                          font-weight: 100;
-                          color: black;"
+                  style="font-size: 16px; background-color: rgb(38 45 70);"
                   v-model="currModifyName"
                   >
                 </div>
@@ -74,10 +74,10 @@
             </div>
           </div>
         </div>
-        </form>
+        </div>
         </div>
 
-      </form>
+      </div>
 
       <form class="level-wrapper">
         <div class="shape-header">레벨 선택</div>
@@ -85,23 +85,22 @@
           v-for="(lev, i) in levelList" :key="i"
         >
           <input class="form-check-input"
-          type="radio" name="flexRadioDefault"
-          :id="lev.levId"
+          type="radio" name="level"
+          :id="'level'+lev.levId"
           :value="lev.levId"
           v-model="current.level"
           @click="
           current.level=lev.levId;
           getEsopDiagram();"
           >
-          <label class="form-check-label" :for="lev.levId"
-          style="color: #4d6189; font-size: 0.7rem"
-          >
+          <label class="form-check-label" :for="'level'+lev.levId" :style="{color: lev.levColor}">
             {{ lev.levName }}
           </label>
         </div>
       </form>
     </div>
 
+    <div style="padding: 0px 10px">
     <div class="shape clearfix" v-for="s in shape" v-bind:key="s.id">
         <div class="shape-header">{{s.header}}</div>
         <ul>
@@ -109,6 +108,7 @@
               <div v-html="item.path" :title="item.text"></div>
             </li>
         </ul>
+    </div>
     </div>
     
     <div class="shape clearfix shape-image" v-if="customize.length">
@@ -191,17 +191,16 @@
       <div class="modal-body">
 
         
-        <div class="input-group flex-nowrap">
-          <span class="input-group-text" id="addon-wrapping">
+        <div class="input-group flex-nowrap" style="margin-top: 20px;">
+          <span class="input-group-text" id="addon-wrapping"
+          style="background-color: #FFFFFF90; border: none;">
             <i class="bi bi-pen"></i>
           </span>
           <input type="text" class="form-control"
           placeholder="사고 유형 명칭"
           aria-label="사고 유형 명칭"
           aria-describedby="addon-wrapping"
-          style="background-color: #dee2e647;
-                  font-weight: 100;
-                  color: black;"
+          style="font-size: 16px; background-color: rgb(38 45 70);"
           v-model="newSituationName"
           >
         </div>
@@ -231,7 +230,7 @@
                   display: flex;
                   flex-direction: column;
                   align-items: center">
-          <div style="font-weight: bold; font-size: 1.2rem">정말 삭제하시겠습니까?</div>
+          <div style="margin-top: 20px; font-weight: bold; font-size: 1.2rem">정말 삭제하시겠습니까?</div>
           <i class="bi bi-exclamation-triangle"
             style="font-size: 3rem"
           ></i>
@@ -271,10 +270,10 @@ export default {
         current: { situationId:1, level:1 },
         situationList: [],
         levelList: [
-          { levId: 1, levName: "level 1: 관심" },
-          { levId: 2, levName: "level 2: 주의" },
-          { levId: 3, levName: "level 3: 경고" },
-          { levId: 4, levName: "level 4: 심각" }
+          { levId: 1, levName: "level 1: 관심", levColor: "#39da8a" },
+          { levId: 2, levName: "level 2: 주의", levColor: "#fdac41" },
+          { levId: 3, levName: "level 3: 경고", levColor: "#fdce41" },
+          { levId: 4, levName: "level 4: 심각", levColor: "#ff5b5c" }
           ],
         showCustomize:false,
         showUpload:false, 
@@ -283,7 +282,7 @@ export default {
         shape:[
           {
             id:'flowChart',
-            header:'FlowChart_Editor',
+            header:'도형 선택',
             icon:[
               {
                 path:'<svg style="left: 1px; top: 1px; width: 32px; height: 30px; display: block; position: relative; overflow: hidden;"><g><g></g><g><g transform="translate(0.5,0.5)" style="visibility: visible;"><rect x="1.44" y="7.68" width="28.8" height="14.4" rx="2.16" ry="2.16" fill="#ffffff" stroke="#000000" stroke-width="1.3" pointer-events="all"></rect></g></g><g></g><g></g></g></svg>',
@@ -653,14 +652,70 @@ export default {
 .modal-header,
 .modal-body,
 .modal-footer {
+  /*
   background-color: white;
   border-color: #dee2e6;
   color: black;
+  */
 }
 
-#Toolbar .form-check-label {
-  color: #4d6189;
-  font-size: 0.7rem;
+.form-check-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  width: 22px;
+  height: 22px;
+  background-color: #E7E6E5;
+  color: white;
+  border-radius: 50%;
+  transition: 0.2s linear;
+  display: none;
+}
+
+.form-check-input:checked {
+  background-color: aqua;
+}
+
+/*
+.situation-wrapper {
+  width: 110%;
+  padding-right: 10px;
+  border: 2px solid transparent;
+  border-radius: 30px;
+  transition: 0.2s;
+}
+
+.situation-wrapper:hover {
+  background-color: rgb(38 45 70);
+}
+
+
+.form-check-input:checked  + .situation-wrapper {
+  border: 2px solid rgb(159, 176, 214);
+}
+*/
+
+.form-check-label {
+  /*color: #4d6189;*/
+  color: rgb(159, 176, 214);
+  font-size: 16px;
+  font-weight: bold;
+  width: 140px;
+  line-height: 30px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  transition: 0.2s;
+}
+
+.form-check-label:hover {
+  /*color: #4d6189;*/
+  background-color: rgb(38 45 70);
+}
+
+.form-check-input:checked + .form-check-label {
+  background-color: rgb(38 45 70);
+  border: 2px solid rgb(159, 176, 214);
 }
 
 #Toolbar input .form-control {
@@ -691,13 +746,13 @@ a {
 .toolbar{
   /*width:210px;*/
   width: 100%;
-  position: absolute;
+  /*position: absolute; */
   left:0;
   bottom:0;
   top:0px;
-  border-right:1px solid #e5e5e5;
+  border-right:1px solid #7575753b;
   padding-top:10px;
-  background: #fafafa;
+  background-color: #1a233a;
   user-select: none;
 }
 .toolbar ul{
@@ -727,13 +782,15 @@ li img{
   width:100%;
 }
 .shape-header{
-  /* height:30px; */
-  line-height: 30px;
-  font-size: 12px;
-  border-top:1px solid #e6e9ed;
-  border-bottom:1px solid #e6e9ed;
-  cursor: pointer;
+  height:35px;
+  line-height: 35px;
+  font-size: 16px;
+  font-weight: bold;
   text-indent: 4px;
+  padding: 0px 10px;
+  color: #727e8c;
+  font-size: 20px;
+  margin: 10px 0px;
 }
 .shape-image{
   margin-top:10px;
@@ -903,12 +960,14 @@ li img{
 }
 
 .select-wrapper {
-  padding: 10px;
+  padding: 0px 10px;
 }
 
 .type-wrapper,
 .level-wrapper {
-  margin: 20px 0px;
+    margin: 0px 0px 20px 0px;
+    border-bottom: 1px solid #2f3648;
+    padding-bottom: 20px;
 }
 
 </style>

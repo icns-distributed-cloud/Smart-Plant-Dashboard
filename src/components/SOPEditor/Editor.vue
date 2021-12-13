@@ -1,19 +1,26 @@
 <template>
   <div class="editor" @dragover="dragover" @dragstart="dragstart" @drop="drop">
+    <div class="editor-header">
+      <div class="editor-title">다이어그램</div>
 
-    <button type="button" class="btn btn-primary"
-    @click.stop="save('png')">저장</button>
-    
-    <!-- 삭제 버튼 -->
-    <li
-      @click="command(item)"
-      :title="item.cmd"
-      v-bind:class="'iconfont ' + item.icon + ' ' + item.class"
-      style="cursor: pointer"
-    ></li>
+      <div class="btn-wrapper">        
+        <!-- 삭제 버튼 -->
+        <li
+          @click="command(item)"
+          :title="item.cmd"
+          v-bind:class="'iconfont ' + item.icon + ' ' + item.class"
+          id="delete-btn"
+        ></li>
+        <span>|</span>
+        <button type="button" class="save-btn"
+        @click.stop="save('png')">저장</button>
+      </div>
+
+    </div>
+
     
     <div id="flowEditor"></div>
-    <Header></Header>
+    <!---<Header></Header>-->
     <Edit
       class="text-editor"
       ref="edit"
@@ -48,13 +55,13 @@ import Edit from "./plugin/edit";
 import zrender from "zrender";
 import axios from "axios";
 import getPlainTxt from "../../flow/ued/getPlainTxt";
-import Header from "./Header";
+// import Header from "./Header";
 
 export default {
   name: "Editor",
   components: {
     Edit,
-    Header
+    // Header
   },
   data() {
     return {
@@ -441,9 +448,12 @@ export default {
   },
   methods: {
     command(item) {
+      eventBus.$emit(item.cmd);
+      /*
       if (item.class != "disable") {
         eventBus.$emit(item.cmd);
       }
+      */
     },
 
     save(type) {
@@ -541,13 +551,18 @@ a {
   color: #42b983;
 }
 .editor {
+  /*
   position: absolute;
-  width: 50%;
+  width: calc(50% - 210px);
   left: 210px;
-  top: 40px;
+  top: 0px;
   right: 0px;
   bottom: 0px;
+  */
+  width: 100%;
+  height: 100%;
   background-color: white;
+  border-radius: 20px 20px 0px 0px;
   /* background: url('../assets/image/wg.png') repeat; */
 }
 #flowEditor {
@@ -584,4 +599,68 @@ a {
 .download-header span {
   cursor: pointer;
 }
+
+.editor-header {
+  width: 100%;
+  height: 10px;
+  padding: 10px;
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+.editor-title {
+    color: #55595c;
+    font-weight: 600;
+    font-size: 20px;
+    width: 160px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 20px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.068);
+}
+
+.btn-wrapper {
+  float: right;
+  background-color: #727e8c;
+  border-radius: 30px;
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.save-btn {
+  font-weight: bold;
+  border: none;
+  border-radius: 40px;
+  font-weight: bold;
+  width: 80px;
+  height: 40px;
+  color: white;
+  background-color: transparent;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.save-btn:hover {
+  background-color: #ffffff20;
+}
+
+#delete-btn {
+  cursor: pointer;
+  line-height: 40px;
+  /*background-color: rgba(0, 0, 0, 0.068);*/
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border-radius: 50%;
+  color: white;
+  transition: 0.2s;
+}
+#delete-btn:hover {
+  background-color: #ffffff20;
+}
+
+
 </style>

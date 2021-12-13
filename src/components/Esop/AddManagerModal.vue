@@ -50,7 +50,6 @@
                   </div>
                 </div>
 
-
                 <div class="col-12">
                   <div
                     class="form-label-group position-relative has-icon-left controls"
@@ -79,6 +78,50 @@
                   <div
                     class="form-label-group position-relative has-icon-left controls"
                   >
+                    <label for="sensor_posId">관련 단계</label>
+                    <div class="main-input">
+                      <select
+                        v-model="newManager.level"
+                        name="manger_level"
+                        class="form-control"
+                        id="level_select"
+                        required
+                      >
+                        <option hidden value="0"
+                          >== 관련 단계 ==</option
+                        >
+                        <option
+                          :value="1"
+                        >
+                          관심 단계
+                        </option>
+                        <option
+                          :value="2"
+                        >
+                          주의 단계
+                        </option>
+                        <option
+                          :value="3"
+                        >
+                          경고 단계
+                        </option>
+                        <option
+                          :value="4"
+                        >
+                          심각 단계
+                        </option>
+                      </select>
+                      <div class="form-control-position label-icon">
+                        <i class="bx bx-shape-square"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <div
+                    class="form-label-group position-relative has-icon-left controls"
+                  >
                     <label for="phone_number">핸드폰 번호</label>
                     <div class="main-input">
                       <input
@@ -90,6 +133,29 @@
                         minlength="1"
                         maxlength="100"
                         v-model="newManager.phone"
+                        required
+                      />
+                      <div class="form-control-position label-icon">
+                        <i class="bx bx-grid-alt"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                 <div class="col-12">
+                  <div
+                    class="form-label-group position-relative has-icon-left controls"
+                  >
+                    <label for="phone_number">이메일 주소</label>
+                    <div class="main-input">
+                      <input
+                        autocomplete="off"
+                        class="form-control"
+                        name="phone_number"
+                        placeholder="이메일 주소"
+                        minlength="1"
+                        maxlength="100"
+                        v-model="newManager.email"
                         required
                       />
                       <div class="form-control-position label-icon">
@@ -134,6 +200,7 @@ export default {
       newManager: {
           name: "",
           sensorPosId: 0,
+          level:0,
       }
     };
   },
