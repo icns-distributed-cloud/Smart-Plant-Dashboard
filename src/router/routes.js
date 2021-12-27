@@ -7,10 +7,10 @@ import SensorManage from "../views/SensorManage.vue";
 import AlertSettings from "../components/AbnormalDetection/AlertSettings.vue";
 import SensorPos from "../components/IoTManage/LocationRegistration1/src/components/MainPage.vue";
 import EsopManager from "../components/Esop/EsopManager.vue";
-import EsopSimulation from "../components/Esop/EsopSimulation.vue";
-import SimulationContent from "../components/Esop/SimulationContent.vue";
+import EsopMainPage from "../components/Esop/EsopMainPage.vue";
+import Simulation from "../components/Esop/Simulation.vue";
 import MsgLog from "../components/Esop/MsgLog.vue";
-import CheckLog from "../components/Esop/CheckLog.vue";
+import SimulationLog from "../components/Esop/SimulationLog.vue";
 import PageNotfound from "../views/PageNotFound.vue";
 import AbnormalDetectionLog from "../components/AbnormalDetection/AbnormalDetectionLog.vue";
 import EditEsopHome from "../components/SOPEditor/EditEsopHome.vue";
@@ -20,6 +20,7 @@ import VueRouter from "vue-router";
 import axios from "axios";
 import VueCookies from "vue-cookies";
 import CCTVSetting from "../components/AbnormalDetection/CCTVSetting";
+import SensorDataLog from "../components/AbnormalDetection/SensorDataLog.vue"
 
 const routes = [
   {
@@ -68,7 +69,7 @@ const routes = [
   {
     path: "/check-log",
     name: "CheckLog",
-    component: CheckLog,
+    component: SimulationLog,
   },
   {
     path: "/abnormal-detection-log",
@@ -88,12 +89,12 @@ const routes = [
   {
     path: "/esop-simulation/",
     name: "EsopSimulation",
-    component: EsopSimulation,
+    component: EsopMainPage,
   },
   {
-    path: "/simulation-content",
-    name: "SimulationContent",
-    component: SimulationContent,
+    path: "/simulation",
+    name: "Simulation",
+    component: Simulation,
   },
   {
     path: "/",
@@ -116,6 +117,11 @@ const routes = [
     component: CCTVSetting,
   },
   {
+    path: "/sensor-data-log",
+    name: "SensorDataLog",
+    component: SensorDataLog,
+  },
+  {
     path: "/*",
     redirect: "/404",
   },
@@ -129,22 +135,6 @@ var router = new VueRouter({
   mode: "history",
   routes,
 });
-
-// const getAuth = async (token) => {
-//   try {
-//     return await axios.get(
-//       "http://163.180.117.38:8281/api/auth",
-//       {
-//           headers: {
-//               Authorization: 'Bearer ' + token
-//           }
-//       }
-//     )
-//   } catch (err) {
-//     alert("토큰 유효성 검사 실패");
-//     console.log(err);
-//   }
-// };
 
 router.beforeEach(async (to, from, next) => {
   if (to.fullPath == "/login") {
@@ -175,18 +165,6 @@ router.beforeEach(async (to, from, next) => {
         alert("토큰 유효성 검사 실패");
         console.log(err);
       }
-
-      // // 토큰의 유효성을 검사함
-      // const auth = await getAuth();
-      // console.log(auth);
-      //   // 토큰이 유효한 경우 (메시지 코드가 400대가 아닌 경우)
-      // if (auth.data.code[0] != '4') {
-      //     next();
-      // // 토큰이 유효하지 않은 경우
-      // } else {
-      //     alert('로그인 해주세요')
-      //     next('/login');
-      // }
     } else {
       alert("로그인 해주세요");
       next("/login");

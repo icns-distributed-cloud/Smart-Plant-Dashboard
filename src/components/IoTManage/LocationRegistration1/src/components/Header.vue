@@ -2,34 +2,14 @@
   <div class="header">
         
         <ul>
-          
-          <!-- <span @click.stop="openFile" class="iconfont icon-open" style="float:left;margin-left:10px;font-size:18px"></span> -->
             <li @click="command(item)" v-for="(item ,index) in icon" v-bind:key="index" :title="item.cmd" v-bind:class="'iconfont '+item.icon+' '+item.class"></li>
             <li>
-          
-                <!--
-                <span class="iconfont icon-upload-demo" @click.stop="showUpload"></span>
-                -->
                 <button class="btn btn-primary"
                   @click.stop="save('json')"
                 >저장</button>
-                <!-- <ul v-show="upload">
-                  <li class="iconfont icon-JSON" @click.stop="save('json')"><span>JSON</span></li>
-                  <li class="iconfont icon-PNG" @click.stop="save('png')"><span>PNG</span></li>
-                  <li class="iconfont icon-jpg" @click.stop="save('jpg')"><span>JPG</span></li>
-                </ul> -->
             </li>
         </ul>
         <input type="file" id="file" style="display:none"/>
-        
-        <!-- <div class="language" @mouseenter="mouseenter" @mouseleave="mouseleave">
-              <span>{{lang}}</span>
-              <ul v-show="showLang">
-                  <li @click.stop="changeLanguage('zh')">中文</li>
-                  <li @click.stop="changeLanguage('en')">English</li>
-             </ul>
-        </div>
-         -->
         <alert-success
         v-if="alertSuccess"
         :action = "action"

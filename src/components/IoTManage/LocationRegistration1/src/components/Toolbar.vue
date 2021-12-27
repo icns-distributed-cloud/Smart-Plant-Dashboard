@@ -2,7 +2,7 @@
   <div class="toolbar">
     <div class="shape clearfix" v-for="s in shape" v-bind:key="s.id">
         <div class="shape-header">{{s.header}}</div>
-        <ul>
+        <ul class="shape-wrapper">
             <li draggable="true"  @dragstart="dragstart($event,item)" v-for="item in s.icon" v-bind:key="item.command" :class="'iconfont '+item.iconName">
               <div v-html="item.path" :title="item.text"></div>
             </li>
@@ -26,11 +26,6 @@
               <li draggable="true" v-for="(item,index) in customize" v-bind:key="index"  @dragstart="dragstart($event,item)"><img draggable="false" :src="item.image" alt=""></li>
           </ul>
     </div>
-    
-
-    <!-- <div @click.stop="showCustomize=!showCustomize" class="toolbar-btn">
-       Add Images
-    </div> -->
 
     <div class="customize-win" v-if="showCustomize">
         <div class="customize-win-header">
@@ -87,7 +82,7 @@ export default {
         shape:[
           {
             id:'flowChart',
-            header:'추가하기',
+            header:'센서 추가하기',
             icon:[
               
               {
@@ -213,16 +208,13 @@ a {
   color: #42b983;
 }
 .toolbar{
-  width:140px;
-  /* position: relative; */
   left:0;
   bottom:0;
   top:40px;
-  border-right:1px solid #e5e5e5;
-  padding-top:10px;
-  background: #fafafa;
+  padding-top:15px;
+  padding-bottom:10px;
   user-select: none;
-  /* float: right */
+  background: #1a233a;
 }
 .toolbar ul{
   text-align: center;
@@ -254,11 +246,20 @@ li img{
   height:30px;
   line-height: 30px;
   font-size: 12px;
-  border-top:1px solid #e6e9ed;
-  border-bottom:1px solid #e6e9ed;
   cursor: pointer;
   text-indent: 4px;
+  padding: 0px 10px;
+  color: #727e8c;
+  font-size: 20px;
+  font-weight: bold;
 }
+
+.shape-wrapper {
+  position: relative;
+  left: 10px;
+  top: 5px;
+}
+
 .shape-image{
   margin-top:10px;
 }

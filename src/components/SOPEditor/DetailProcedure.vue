@@ -1,6 +1,12 @@
 <template>
   <div class="DetailProcedure">
-    <h2>임무 내용 작성</h2>
+    <h2>임무 내용 작성
+    <button type="button"
+            class="btn btn-primary"
+            style="margin-bottom: 12px; margin-left: 12px; float: right"
+            @click="getSopDoc"><i class="bx bx-edit"></i> 시나리오 불러오기
+      </button>
+      </h2>
     <div>
       <div class="accordion accordion-flush" id="accordionExample">
         <div
@@ -47,7 +53,7 @@
                     <tr>
                       <th style="min-width: 160px">상세임무</th>
                       <th style="width: 80px">기능</th>
-                      <th style="min-width: 200px">정보(문자,이메일,방송내용,url)</th>
+                      <th style="min-width: 200px">정보</th>
                       <th style="width: 150px">ACTION</th>
                     </tr>
                   </thead>

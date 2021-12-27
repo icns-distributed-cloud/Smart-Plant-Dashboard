@@ -36,7 +36,8 @@ export default {
   text-indent: 6px;
   border-bottom:1px solid #e6e9ed;
   background: #f5f5f5;
-  margin-bottom:20px;
+  /* margin-bottom:20px; */
+  display: none;
 }
 .section-group{
     line-height: initial;

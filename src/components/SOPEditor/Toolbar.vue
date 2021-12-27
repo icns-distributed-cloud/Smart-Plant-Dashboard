@@ -552,6 +552,7 @@ export default {
             name: this.currModifyName
           }
         );
+        this.getSituationList();
         console.log(res);
       } catch (err) {
         console.log(err);

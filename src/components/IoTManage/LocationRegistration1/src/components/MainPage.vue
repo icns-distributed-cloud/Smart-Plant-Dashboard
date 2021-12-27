@@ -1,9 +1,9 @@
 <template>
 <div class="wrapper">
-<div class="table-main" style="height: fit-content">
-  <div class="table-header">
+    <div class="table-header">
       센싱 위치 관리 | 
     </div>
+<div class="table-main" style="height: fit-content">
     <div class="table-main" style="height: fit-content">
       
         <div class="table-main__header" style="font-weight: bold">
@@ -19,9 +19,20 @@
           </button>
         </div>
   <div class="MainPage" >
-    <Header />
-    <div style="display: flex;">
+    <div class="sensor-position-editor-wrapper">
       <div class="editor-wrapper">
+                  <div class="btn-wrapper">        
+          <!-- 삭제 버튼 -->
+          <li
+            @click="command(item)"
+            :title="item.cmd"
+            v-bind:class="'iconfont ' + item.icon + ' ' + item.class"
+            id="delete-btn"
+          ></li>
+          <span>|</span>
+          <button type="button" class="save-btn"
+          @click.stop="save('json')">저장</button>
+        </div>
       <Editor :currPos="currPos"/>
       </div>
       <div class="toolbal-wrapper">
@@ -38,7 +49,6 @@
 </template>
 <script>
 import axios from "axios"
-import Header from './Header'
 import Toolbar from './Toolbar'
 import Editor from './Editor'
 import Property from './property'
@@ -48,7 +58,6 @@ import eventBus from '../positioneventbus'
 export default {
   name: 'MainPage',
   components:{
-     Header,
      Toolbar,
      Editor,
      Property,
@@ -57,13 +66,28 @@ export default {
   data(){
      return{
        posList: [],
-       currPos: {posName: ""}
+       currPos: {posName: ""},
+       item: {
+          icon: "icon-shanchu",
+          name: "삭제",
+          cmd: "delete",
+          class: "disable",
+      },
      }
   },
   created() {
     this.getPosList(true);
   },
   methods: {
+    command(item) {
+      eventBus.$emit(item.cmd);
+    },
+
+    save(type) {
+      this.upload = false;
+      eventBus.$emit("saveData", { type });
+    }, 
+
     async getPosList(created=false) {
       try {
         const res = await axios.get(
@@ -84,7 +108,7 @@ export default {
       try {
         // MODIFY !!!!!
         const res = await axios.get(
-          "http://163.180.117.22:8218/api/sensor-pos/"+this.currPos.posId
+          "http://163.180.117.38:8218/api/sensor-pos/"+this.currPos.posId
         );
         console.log("[ GET ]")
         if (res.data.data.position != null) {
@@ -102,23 +126,6 @@ export default {
       }
     },
   },
-  mounted() {
-//     var canvas = document.getElementById("canvas"),
-//     ctx = canvas.getContext("2d");
-
-// canvas.width = 934;
-// canvas.height = 622;
-
-
-// var background = new Image();
-// background.src = "http://i.imgur.com/yf6d9SX.jpg";
-
-// background.onload = function(){
-//     ctx.drawImage(background,0,0);   
-// }
-
-     
-  }
 }
 </script>
 
@@ -137,6 +144,11 @@ li {
 a {
   color: #42b983;
 }
+
+.table-main {
+  padding-bottom: 10px;
+}
+
 .MainPage{
   width:100%;
   height:100%;
@@ -145,9 +157,68 @@ a {
 .editor-wrapper {
   width: 800px;
   height: 450px;
+  position: relative;
 }
 
 .toolbar-wrapper {
   width: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sensor-position-editor-wrapper {
+    width: fit-content;
+    display: flex;
+    border-radius: 20px;
+    padding: 30px 20px 20px;
+    background-color: #1a233a;
+    margin-top: 20px;
+}
+
+.btn-wrapper {
+  float: right;
+  background-color: #727e8c;
+  border-radius: 30px;
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: white;
+  margin-right: 10px;
+  margin-top: 10px;
+  z-index: 10;
+  position: absolute;
+  right: 5px;
+}
+
+.save-btn {
+  font-weight: bold;
+  border: none;
+  border-radius: 40px;
+  font-weight: bold;
+  width: 80px;
+  height: 40px;
+  color: white;
+  background-color: transparent;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.save-btn:hover {
+  background-color: #ffffff20;
+}
+
+#delete-btn {
+  cursor: pointer;
+  line-height: 40px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border-radius: 50%;
+  color: white;
+  transition: 0.2s;
+}
+#delete-btn:hover {
+  background-color: #ffffff20;
 }
 </style>

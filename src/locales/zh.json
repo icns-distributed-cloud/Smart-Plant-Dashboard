@@ -9,7 +9,7 @@
        "textFill":"글자색",
        "position":"위치",
        "nodeAlign":"조정",
-       "prefabrication":"센서선택"
+       "prefabrication":"센서 선택"
     },
     "group":{
         "head":"",
@@ -23,7 +23,7 @@
         "align":"조정",
         "textFill":"글자색",
         "position":"위치",
-        "prefabrication":"센서선택"
+        "prefabrication":"센서 선택"
     },
     "edge":{
         "head":"스타일",
@@ -38,6 +38,6 @@
         "textFill":"글자색",
         "nodeAlign":"정렬",
         "position":"Position",
-        "prefabrication":"센서선택"
+        "prefabrication":"센서 선택"
     }
 }

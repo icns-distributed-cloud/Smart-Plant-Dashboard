@@ -142,7 +142,7 @@
                   </div>
                 </div>
 
-                 <div class="col-12">
+                <div class="col-12">
                   <div
                     class="form-label-group position-relative has-icon-left controls"
                   >
@@ -164,6 +164,7 @@
                     </div>
                   </div>
                 </div>
+
 
               </div>
             </div>
@@ -201,6 +202,7 @@ export default {
           name: "",
           sensorPosId: 0,
           level:0,
+          email:"",
       }
     };
   },

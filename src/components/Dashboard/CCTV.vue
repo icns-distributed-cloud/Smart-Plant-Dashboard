@@ -76,7 +76,7 @@ export default {
   created() {
     this.getCCTVInfo();
     console.log("get CCTV Info");
-    this.fireDetection();
+    //this.fireDetection();
   },
   updated() {
     //console.log(" mount");
@@ -88,7 +88,7 @@ export default {
   //},
   beforeDestroy() {
     this.disconnect();
-    clearInterval(this.fireDetectionPolling);
+    //clearInterval(this.fireDetectionPolling);
   },
 
   methods: {

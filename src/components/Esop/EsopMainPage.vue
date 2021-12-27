@@ -139,7 +139,7 @@ export default {
       }
       else{
         this.$router.push(
-        "/simulation-content?situationId=" +
+        "/simulation?situationId=" +
           Info.situationSelect +
           "&levelId=" +
           Info.levelSelect

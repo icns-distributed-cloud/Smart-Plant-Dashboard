@@ -449,11 +449,6 @@ export default {
   methods: {
     command(item) {
       eventBus.$emit(item.cmd);
-      /*
-      if (item.class != "disable") {
-        eventBus.$emit(item.cmd);
-      }
-      */
     },
 
     save(type) {

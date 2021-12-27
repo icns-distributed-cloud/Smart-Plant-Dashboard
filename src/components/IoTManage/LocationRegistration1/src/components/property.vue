@@ -92,15 +92,9 @@ export default {
 
 <style scoped>
 .property{
-     height: 500px;
-
     width: 200px;
-    /* position: absolute; */
-    /* right: 200px; */
-    /* top:40px; */
-    /* bottom:0; */
-    border-left:1px solid #e6e9ed;
-    background: #fff;
+    background: #1a233a;
+    color: #727e8c;
     font-size:14px;
     line-height: 26px;
     user-select: none;

@@ -50,7 +50,7 @@
                 </div>
               </div>
 
-              <div class="col-12">
+              <div class="col-12" v-if="newContent.efunction ==1 ||newContent.efunction ==2">
                 <div class="form-label-group position-relative">
                   <label for="sensor_contact">담당부서(수신인)</label>
                   <div class="main-input">
@@ -76,21 +76,55 @@
                 </div>
               </div>
 
-              <div class="col-12">
+              <div class="col-12" v-if="newContent.efunction ==1 ||newContent.efunction ==2">
                 <div class="form-label-group position-relative">
-                  <label for="messageContent">정보(문자,이메일,방송내용,url):</label>
+                  <label for="messageContent">문자 이메일 발송 내용:</label>
                   <div class="main-input">
                     <input
                       :disabled="newContent.efunction == 0"
                       class="form-control"
                       name="messageContent"
-                      placeholder="점보를 입력하세요"
+                      placeholder="발송 내용을 입력하세요"
                       maxlength="100"
                       v-model="newContent.info"
                     />
                   </div>
                 </div>
               </div>
+
+              <div class="col-12" v-if="newContent.efunction ==3">
+                <div class="form-label-group position-relative">
+                  <label for="sensor_contact">방송 내용</label>
+                  <div class="main-input">
+                    <input
+                      :disabled="newContent.efunction == 0"
+                      class="form-control"
+                      name="messageContent"
+                      placeholder="방송 내용를 입력하세요"
+                      maxlength="100"
+                      v-model="newContent.info"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12" v-if="newContent.efunction ==4">
+                <div class="form-label-group position-relative">
+                  <label for="sensor_contact">URL 링크</label>
+                  <div class="main-input">
+                    <input
+                      :disabled="newContent.efunction == 0"
+                      class="form-control"
+                      name="messageContent"
+                      placeholder="URL 링크를 입력하세요"
+                      maxlength="100"
+                      v-model="newContent.info"
+                    />
+                  </div>
+                </div>
+              </div>
+
+
             </div>
           </div>
         </div>

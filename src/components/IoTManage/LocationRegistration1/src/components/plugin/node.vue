@@ -58,15 +58,17 @@
            <div class="section-group clearfix" >
                 <h3>{{$t("node.prefabrication")}}</h3>
                 <ul class="theme" >
-                  <div v-for="(item,index) in sensorStyle.node" :key="index"
-                  class="theme-wrapper">
-                    <div
-                    class="theme-item"
-                     @click="changeNodeStyle(item)"
-                     :style="{width: '20px', height: '20px', background:item.fill,'border-color':item.stroke}"
-                    ></div>
-                    <div class="sensor-type-name">
-                       {{ posSensorList[index].ssType.typeName }}
+                  <div class="theme-content-wrapper">
+                    <div v-for="(item,index) in sensorStyle.node" :key="index"
+                    class="theme-wrapper">
+                      <div
+                      class="theme-item"
+                      @click="changeNodeStyle(item)"
+                      :style="{width: '20px', height: '20px', background:item.fill,'border-color':item.stroke}"
+                      ></div>
+                      <div class="sensor-type-name">
+                        {{ posSensorList[index].ssType.typeName }}
+                      </div>
                     </div>
                   </div>
                 </ul>
@@ -309,15 +311,40 @@ export default {
 </script>
 
 <style scoped>
+.theme-content-wrapper {
+  height: 200px;
+  overflow: auto;
+}
+
+.theme-content-wrapper::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 10px;
+}
+
+.theme-content-wrapper::-webkit-scrollbar-thumb {
+  background-color: #C8D9F8;
+  border-radius: 10px;
+}
+
+.theme-content-wrapper::-webkit-scrollbar-track {
+  background-color: #C8D9F820;
+  border-radius: 10px;
+}
+
 .theme-wrapper {
   width: 100%;
   height: 40px;
+  padding: 10px;
 }
 
 h3 {
   margin: 8px 0 0 0;
-  border-bottom:1px solid #e6e9ed;
   font-size: 14px;
+  padding: 10px 10px;
+  color: #727e8c;
+  font-size: 20px !important;
+  font-weight: bold;
+  border-top: 1px solid #7575753b;
 }
 ul {
   list-style-type: none;
@@ -350,15 +377,15 @@ a {
   border-bottom:1px solid #e6e9ed;
   background: #f5f5f5;
   margin-bottom:20px;
+  display: none;
 }
 .color-picker{
   float: right;
   display: block;
   width:24px;
   height:24px;
-  margin-top:6px;
-  border:1px solid #f5f5f5;
   line-height: 24px;
+  border-radius: 3px;
 }
 .color-picker .vc-sketch{
   right:200px;
@@ -373,6 +400,14 @@ a {
   font-size: 12px;
   clear:both;
 }
+
+span {
+    padding: 10px 10px;
+    color: #727e8c;
+    font-size: 20px !important;
+    font-weight: bold;
+}
+
 span.left{
    clear: both;
 }
@@ -417,15 +452,6 @@ span.textPos.active{
 }
 
 .theme-item{
-  /*
-    border-width: 1px;
-    border-style: solid;
-    width:50px;
-    height:20px;
-    margin-top:3px;
-    margin-left:3px;
-    float: left;
-  */
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -433,11 +459,12 @@ span.textPos.active{
   margin-top: 5px;
   margin-left: 3px;
   margin-right: 5px;
+  cursor: pointer;
 }
 
 .sensor-type-name {
-  color: #272e48a9;
-  
+  color: rgb(159, 176, 214);
+  font-weight: bold;
 }
 
 

@@ -203,6 +203,7 @@ export default {
 
     async addManager(manager) {
       this.action = "등록"
+      alert(manager.email);
       try {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/contact",

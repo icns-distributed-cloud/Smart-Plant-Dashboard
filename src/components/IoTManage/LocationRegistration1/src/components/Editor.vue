@@ -6,6 +6,7 @@
     @drop="drop"
     style="background-color: transparent"
   >
+
     <div
       :style="{
         backgroundImage:
@@ -18,6 +19,7 @@
         backgroundSize: '100% auto',
         width: '100%',
         height: '100%',
+        zIndex: 0,
       }"
     ></div>
 
@@ -99,6 +101,7 @@ export default {
       edge: null,
       currPosInfo: [],
       currImgURL: "",
+
     };
   },
   mounted() {
@@ -229,75 +232,6 @@ export default {
             );
 
           break;
-        // case "png":
-        //   box = this.editor.getBoundingRect(
-        //     this.editor.nodes
-        //       .concat(this.editor.groups)
-        //       .concat(this.editor.edges)
-        //   );
-        //   document.getElementById("download-canvas").style.width = "1000px";
-        //   document.getElementById("download-canvas").style.height = "1000Px";
-        //   // document.getElementById("download-canvas").style.width =
-        //   //   box.width + "px";
-        //   // document.getElementById("download-canvas").style.height =
-        //   //   box.height + "px";
-        //   editor = new flowEditor("download-canvas");
-        //   editor.init(JSON.parse(JSON.stringify(this.editor.getData())), true);
-        //   editor.attr({
-        //     position: [0, 0],
-        //     // position:[-parseInt(box.x),-parseInt(box.y)]
-        //   });
-
-        //   try {
-        //     editor.zr.painter
-        //       .getRenderedCanvas({
-        //         backgroundColor: "transparent",
-        //         //backgroundImage: "url('https://mdn.mozillademos.org/files/7693/catfront.png')"
-        //       })
-        //       .toBlob((blob) => {
-        //         var url = window.URL.createObjectURL(blob);
-        //         window.console.log(url);
-        //         window.open(url);
-        //       }, "image/png");
-        //   } catch (e) {
-        //     document.getElementById("download-win").style.display = "block";
-        //   }
-        //   break;
-        // case "jpg":
-        //   box = this.editor.getBoundingRect(
-        //     this.editor.nodes
-        //       .concat(this.editor.groups)
-        //       .concat(this.editor.edges)
-        //   );
-        //   // document.getElementById("download-canvas").style.width = "2000px";
-        //   // document.getElementById("download-canvas").style.height = "1000px";
-
-        //   document.getElementById("download-canvas").style.width =
-        //     box.width + "px";
-        //   document.getElementById("download-canvas").style.height =
-        //     box.height + "px";
-        //   // document.getElementById('download-canvas').style.backgroundColor="yellow";
-        //   editor = new flowEditor("download-canvas");
-        //   editor.init(JSON.parse(JSON.stringify(this.editor.getData())), true);
-        //   editor.attr({
-        //     position: [0, 0],
-        //   });
-
-        //   try {
-        //     editor.zr.painter
-        //       .getRenderedCanvas({
-        //         backgroundColor: "#fff",
-        //         // backgroundImage: "url('https://mdn.mozillademos.org/files/7693/catfront.png')"
-        //         // backgroundImg: "url('../assets/image/test.jpg')"
-        //       })
-        //       .toBlob((blob) => {
-        //         var url = window.URL.createObjectURL(blob);
-        //         window.open(url);
-        //       }, "image/jpeg");
-        //   } catch (e) {
-        //     document.getElementById("download-win").style.display = "block";
-        //   }
-        //   break;
       }
     });
 
@@ -546,6 +480,7 @@ export default {
 </script>
 
 <style scoped>
+
 h3 {
   margin: 40px 0 0;
 }

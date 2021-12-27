@@ -275,9 +275,12 @@ export default {
           "http://163.180.117.38:8281/api/sop-detail/content/complete/" +
             content.id
         );
-        if (content.message == true) {
+        if (content.efunction == 1) {
           this.sendMessage(content.id);
         }
+        else if (content.efunction ==2) {
+          this.sendEmail(content.id);
+        } 
         console.log(res);
         this.getContent(this.titleIdList);
       } catch (err) {
@@ -288,6 +291,16 @@ export default {
       try {
         const res = await axios.post(
           "http://163.180.117.38:8281/api/message/send?contentId=" + contentId
+        );
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async sendEmail(contentId) {
+      try {
+        const res = await axios.post(
+          "http://163.180.117.38:8281/api/mail/send?contentId=" + contentId
         );
         console.log(res);
       } catch (err) {
@@ -364,7 +377,7 @@ export default {
 
 .sop-img {
   position: absolute;
-  width: 100%;
+  width: 60%;
   top: 2%;
   height: 100%;
   background-size: 60% auto;

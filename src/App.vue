@@ -2,26 +2,15 @@
   <div class="main-container">
     <SideBar></SideBar>
     <div class="contents">
-      <!-- <div class="header">
-          <h3 style="color: #daa520; font-weight: 800">
-            지능형 이상감지 - 대시보드
-            <div class="icon" style="float: right; color: #969696"></div>
-          </h3>
-        
-      </div> -->
-
       <div class="main-contents">
         <router-view></router-view>
       </div>
-      <!-- <div class="footer">2021 Smart Monitoring system</div> -->
     </div>
   </div>
 </template>
 
 <script>
 import SideBar from "./components/SideBar.vue";
-//import SideBar from "./views/SideBar";
-// import VueCookies from 'vue-cookies';
 
 export default {
   name: "App",

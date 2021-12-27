@@ -85,8 +85,9 @@ export default {
           'http://163.180.117.38:8281/api/e-sop/check-log?page=' + page +
             "&size=5&sort.sorted=true"
         )
-        this.checkLogList = res.data.data;
+        this.checkLogList = res.data.data.content;
         this.totalPages = res.data.data.totalPages;
+        
       } catch (err) {
         console.log(err);
       }

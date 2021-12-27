@@ -140,8 +140,15 @@
               menuOpen = 10;
             "
           >
-            <i v-if="menuOpen == 10" class="bi bi-chevron-right"></i> 이상 감지
-            이력
+            <i v-if="menuOpen == 10" class="bi bi-chevron-right"></i> 이상 감지 이력
+          </p>
+          <p
+            @click="
+              $router.push('/sensor-data-log');
+              menuOpen = 12;
+            "
+          >
+            <i v-if="menuOpen == 12" class="bi bi-chevron-right"></i> 센서 데이터 기록
           </p>
         </div>
       </div>

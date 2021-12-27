@@ -210,7 +210,6 @@ export default {
     },
 
   async getMoreInfo(sensor) {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     try {
       const res = await axios.get(
         "http://163.180.117.38:8281/api/sensor-range/" + sensor.ssId
@@ -224,7 +223,6 @@ export default {
         result.rlev4,
         result.rend
       ]
-      console.log(sensor.range_list);
     } catch(err) {
       console.log(err);
     }
@@ -254,36 +252,11 @@ export default {
             this.getPosSensor(this.warningInfo.posId);
             this.$refs.addAlarmLog.getAlarmLog();
           });
-
-/*
-          // 현재 보여지는 화면의 데이터값 가져오기
-          for (let i = 0; i < this.ssInfoList.length; i++) {
-            this.connected = true;
-            console.log("Socket Connection Success", frame);
-            // subscribe(destination, callback)
-            this.stompClient.subscribe(
-              "/send/" + this.ssInfoList[i].ssId,
-              (res, idx = i) => {
-                console.log("Sub Message.", res.body);
-                console.log(JSON.parse(res.body).inputData);
-                console.log(this.ssInfoList[idx].ssId);
-                // sensorState : ex) 심각 -> 4
-                // ["안전","관심","주의","경고","심각"]
-                const state = JSON.parse(res.body).sensorState;
-                this.ssInfoList[i].value = JSON.parse(res.body).inputData;
-                this.ssInfoList[i].color = this.infoList[state].color;
-                this.ssInfoList[i].icon = this.infoList[state].icon;
-                this.ssInfoList[i].status = this.infoList[state].status;
-              }
-            );
-          }
-*/
-
         },
         // errorCallback
         (error) => {
-          console.log("Socket Connection Fail", error);
           this.connected = false;
+          console.log(error);
         }
       );
       this.infSend();
@@ -295,7 +268,6 @@ export default {
 
     send() {
       for (var sensor of this.ssInfoList) {
-        //console.log("send : " + sensor.ssId);
         if (this.stompClient && this.stompClient.connected) {
           const msg = {
             ssId: sensor.ssId,
