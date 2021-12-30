@@ -63,7 +63,7 @@ def senddata():
 
             
 
-            url = "http://163.180.117.38:8281/api/sensor-data"
+            url = "/api/sensor-data"
         
 
             response = requests.post(url, headers= headers, data=json.dumps(a_temp))

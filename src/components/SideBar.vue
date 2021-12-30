@@ -163,7 +163,9 @@
         </div>
       </div>
       <div v-else class="user-info">
-        <div><i class="bi bi-lock"></i> 로그인 해주세요</div>
+        <div class="goto-login"
+        @click="$router.push('/login')"
+        ><i class="bi bi-lock"></i> 로그인 해주세요</div>
       </div>
     </div>
 
@@ -220,7 +222,7 @@ export default {
       let token = VueCookies.get("token");
       if (token != null) {
         try {
-          const res = await axios.get("http://163.180.117.38:8281/api/auth", {
+          const res = await axios.get("/api/auth", {
             headers: {
               Authorization: "Bearer " + token,
             }
@@ -303,5 +305,9 @@ p {
 p:hover {
   color: #517bcd;
   padding-left: 0.1rem;
+}
+
+.goto-login {
+  cursor: pointer;
 }
 </style>

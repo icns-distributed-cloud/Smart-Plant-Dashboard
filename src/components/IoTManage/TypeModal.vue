@@ -199,7 +199,7 @@ export default {
     async getSensorType() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-type"
+          "/api/sensor-type"
         );
         this.sensorTypeList = res.data.data.content;
       } catch (err) {
@@ -217,7 +217,7 @@ export default {
       this.action = "등록";
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/sensor-type",
+          "/api/sensor-type",
           {
             typeName: tName,
             typeDtl: tDtl,
@@ -239,7 +239,7 @@ export default {
       this.action = "수정"
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sensor-type/" + type.typeId,
+          "/api/sensor-type/" + type.typeId,
           {
             typeName: type.typeName,
             typeDtl: type.typeDtl,
@@ -262,7 +262,7 @@ export default {
       this.action = "삭제";
       try {
         const res = await axios.delete(
-          "http://163.180.117.38:8281/api/sensor-type/" + typeId
+          "/api/sensor-type/" + typeId
         );
         this.alertSuccess = true;
         console.log(res);

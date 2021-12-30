@@ -136,7 +136,7 @@ export default {
             try {
               // MODIFY !!!!!
               const res = await axios.get(
-                "http://163.180.117.38:8281/api/sop?level=1&typeId=3"
+                "/api/sop?level=1&typeId=3"
               );
 
               eventBus.$emit("initFlow", {

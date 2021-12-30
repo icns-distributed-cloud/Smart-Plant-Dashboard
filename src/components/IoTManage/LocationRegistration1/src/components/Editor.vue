@@ -11,7 +11,7 @@
       :style="{
         backgroundImage:
           'url(' +
-          'http://163.180.117.38:8281/api/image?path=' +
+          '/api/image?path=' +
           this.currPos.backgroundImgPath +
           ')',
         //backgroundSize: 'cover',

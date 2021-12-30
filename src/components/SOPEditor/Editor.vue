@@ -159,7 +159,7 @@ export default {
           var str = JSON.stringify(this.editor.getData());
           try {
             await axios.post(
-              "http://163.180.117.38:8281/api/sop?level="+ this.current.level +"&situationId=" + this.current.situationId,
+              "/api/sop?level="+ this.current.level +"&situationId=" + this.current.situationId,
               {
                 level: this.current.level,
                 situationId: this.current.situationId,
@@ -197,7 +197,7 @@ export default {
           for (var nodeId of this.deleteNodeIdList) {
             try {
               axios.delete(
-                "http://163.180.117.38:8281/api/sop-detail/" + nodeId
+                "/api/sop-detail/" + nodeId
               )
             } catch(err) {
               console.log(err);
@@ -219,7 +219,7 @@ export default {
                 );
                 try {
                   axios.post(
-                    "http://163.180.117.38:8281/api/sop?diagram="+ str +"&level="+ level +"&situationId=" + situationId,
+                    "/api/sop?diagram="+ str +"&level="+ level +"&situationId=" + situationId,
                     frm,
                     {
                       headers: {

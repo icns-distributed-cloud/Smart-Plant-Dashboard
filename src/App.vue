@@ -50,12 +50,13 @@ body {
 }
 
 .table-main {
+  height: fit-content;
+  min-height: 600px;
   margin: 20px;
-  color: #a9c7f0;
+  background-color: #272e48;
+  color: #bdd1f8;
   border-radius: 9px;
-  background-color: #1a233a;
-
-  height: 600px;
+  padding-bottom: 30px;
 }
 .table-main__header {
   padding: 20px;
@@ -94,18 +95,32 @@ body {
   text-align: right;
   padding-right: 15px;
 }
+
 .menu1 {
   color: #66cfcf;
   font-weight: bold;
   padding-left: 20px;
   font-size: 1rem;
 }
+
 .menu2 {
   font-size: 0.85rem;
   margin: 20px;
   padding-left: 20px;
   padding-bottom: 10px;
 }
+
+.scrollbar::-webkit-scrollbar {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 10px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

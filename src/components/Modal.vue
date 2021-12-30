@@ -175,7 +175,7 @@ export default {
     async getPosInfo() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
+          "/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
         this.posList = res.data.data.content;
       } catch (err) {
@@ -185,7 +185,7 @@ export default {
     async getTypeInfo() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-type"
+          "/api/sensor-type"
         );
         this.typeList = res.data.data.content;
       } catch (err) {

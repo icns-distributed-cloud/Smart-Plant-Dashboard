@@ -160,7 +160,7 @@ export default {
     async getPosSensor() {
       try {
         const res = await axios.get(
-          'http://163.180.117.38:8281/api/sensor-manage?posId=' + this.currPos.posId
+          '/api/sensor-manage?posId=' + this.currPos.posId
         )
         this.posSensorList = res.data.data.content;
         this.sensorStyle = { node:[] };

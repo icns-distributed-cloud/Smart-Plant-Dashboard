@@ -224,7 +224,7 @@ export default {
     async getSensorManage(page = 0) {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-manage?page=" +
+          "/api/sensor-manage?page=" +
             page +
             "&size=5&sort.sorted=true"
         );
@@ -250,7 +250,7 @@ export default {
       console.log(newSensor);
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sensor-manage/" + newSensor.ssId,
+          "/api/sensor-manage/" + newSensor.ssId,
           {
             sensorPosId: newSensor.sensorPosId,
             sensorTypeId: newSensor.sensorTypeId,
@@ -274,7 +274,7 @@ export default {
       this.action = "삭제";
       try {
         const res = await axios.delete(
-          "http://163.180.117.38:8281/api/sensor-manage/" + ssId
+          "/api/sensor-manage/" + ssId
         );
         console.log(res);
         this.alertSuccess = true;
@@ -289,7 +289,7 @@ export default {
       this.action = "등록";
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/sensor-manage/",
+          "/api/sensor-manage/",
           {
             sensorPosId: newSensor.sensorPosId,
             sensorTypeId: newSensor.sensorTypeId,
@@ -323,18 +323,7 @@ export default {
 .table {
   color: #464d5c;
 }
-.table-main {
-  margin: 20px;
-  background-color: #272e48;
-  color: #bdd1f8;
-  border-radius: 9px;
-  min-height: 600px;
-  height: fit-content;
-}
-.table-main__header {
-  padding: 20px;
-  font-size: 1rem;
-}
+
 
 .table-main__content {
   margin: 0 20px;

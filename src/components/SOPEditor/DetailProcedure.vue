@@ -4,8 +4,13 @@
     <button type="button"
             class="btn btn-primary"
             style="margin-bottom: 12px; margin-left: 12px; float: right"
-            @click="getSopDoc"><i class="bx bx-edit"></i> 시나리오 불러오기
+            @click="getSopDoc =true"><i class="bx bx-edit"></i>시나리오 불러오기
       </button>
+      <getSopDoc
+      v-if="getSopDoc"
+      @get-sop-doc="GetSopDoc"
+      @close-sop-doc="getSopDoc=false">
+      </getSopDoc>
       </h2>
     <div>
       <div class="accordion accordion-flush" id="accordionExample">
@@ -95,6 +100,7 @@
         </div>
       </div>
     </div>
+    
     <contentModal
       v-if="showModal"
       :titleId="titleId"
@@ -133,6 +139,7 @@ import EditContentModal from "@/components/SOPEditor/EditContentModal.vue";
 import AlertSuccess from "@/views/alert-success.vue";
 import AlertFail from "@/views/alert-fail.vue";
 import eventBus from "../../eventbus";
+import getSopDoc from "@/components/SOPEditor/getSopDoc.vue";
 
 export default {
   name: "addcontent",
@@ -141,6 +148,7 @@ export default {
     EditContentModal,
     AlertSuccess,
     AlertFail,
+    getSopDoc,
   },
   data() {
     return {
@@ -160,6 +168,7 @@ export default {
       alertFail: false,
       alertSuccess: false,
       action: "",
+      getSopDoc:false,
     };
   },
   props: {
@@ -182,7 +191,7 @@ export default {
     async getTitleInfo(current) {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sop-detail?level=" +
+          "/api/sop-detail?level=" +
             current.level +
             "&situationId=" +
             current.situationId
@@ -206,7 +215,7 @@ export default {
         this.ContentList = [];
         for (var i in titleIdList) {
           const res = await axios.get(
-            "http://163.180.117.38:8281/api/sop-detail/content?titleId=" +
+            "/api/sop-detail/content?titleId=" +
               titleIdList[i]
           );
           const tempContList = res.data.data;
@@ -223,7 +232,7 @@ export default {
       this.action = "등록";
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/sop-detail/content",
+          "/api/sop-detail/content",
           {
             efunction: newContent.efunction,
             info: newContent.info,
@@ -261,7 +270,7 @@ export default {
       this.action = "수정";
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sop-detail/content/" + newContent.id,
+          "/api/sop-detail/content/" + newContent.id,
           {
             efunction: newContent.efunction,
             info: newContent.info,
@@ -284,7 +293,7 @@ export default {
       this.action = "삭제";
       try {
         const res = await axios.delete(
-          "http://163.180.117.38:8281/api/sop-detail/content/" + contentid
+          "/api/sop-detail/content/" + contentid
         );
         console.log(res);
         this.alertSuccess = true;

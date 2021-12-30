@@ -82,7 +82,7 @@ export default {
     async getCheckLog(page = 0) {
       try {
         const res = await axios.get(
-          'http://163.180.117.38:8281/api/e-sop/check-log?page=' + page +
+          '/api/e-sop/check-log?page=' + page +
             "&size=5&sort.sorted=true"
         )
         this.checkLogList = res.data.data.content;

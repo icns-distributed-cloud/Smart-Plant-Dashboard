@@ -168,8 +168,8 @@ export default {
       sensorTypeName: "",
       infoList: [
         { color: "#5a8dee", status: "안전" },
-        { color: "#00cfdd", status: "관심" },
-        { color: "#39da8a", status: "주의" },
+        { color: "#39da8a", status: "관심" },
+        { color: "#fdce41", status: "주의" },
         { color: "#fdac41", status: "경고" },
         { color: "#ff5b5c", status: "심각" },
       ],
@@ -205,7 +205,7 @@ export default {
     async getPosInfo() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
+          "/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
         this.ssPosList = res.data.data.content;
       } catch (err) {
@@ -216,7 +216,7 @@ export default {
       this.ssRangeList = [];
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-range?pageNumber=1&pageSize=1&paged=false&posId=" +
+          "/api/sensor-range?pageNumber=1&pageSize=1&paged=false&posId=" +
             posId +
             "&sort.sorted=true&sort.unsorted=false"
         );
@@ -244,7 +244,7 @@ export default {
       console.log(newSensor);
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sensor-range/" + newSensor.ssId,
+          "/api/sensor-range/" + newSensor.ssId,
           {
             rstart: newSensor.range[0],
             rlev1: newSensor.range[1],
@@ -264,7 +264,7 @@ export default {
 };
 </script>
 
-<style>
+<style scpoe>
 .range {
   width: 100%;
   height: 10px;
@@ -304,17 +304,6 @@ export default {
 }
 .table {
   color: #464d5c;
-}
-.table-main {
-  margin: 20px;
-  background-color: #272e48;
-  color: #bdd1f8;
-  border-radius: 9px;
-  height: 600px;
-}
-.table-main__header {
-  padding: 20px;
-  font-size: 20px;
 }
 
 .table-main__content {

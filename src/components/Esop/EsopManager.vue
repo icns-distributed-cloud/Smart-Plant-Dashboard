@@ -172,7 +172,7 @@ export default {
     async getSensorPos() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-pos"
+          "/api/sensor-pos"
         );
         this.posList = res.data.data.content;
       } catch(err) {
@@ -183,7 +183,7 @@ export default {
     async getPosManager(posId=1) {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/contact?posId=" + posId
+          "/api/contact?posId=" + posId
         );
         this.managerList = res.data.data.content;
       } catch(err) {
@@ -193,7 +193,7 @@ export default {
     async getManager() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/contact"
+          "/api/contact"
         );
         this.managerList = res.data.data.content;
       } catch(err) {
@@ -206,7 +206,7 @@ export default {
       alert(manager.email);
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/contact",
+          "/api/contact",
           {
             email: manager.email,
             level: manager.level,
@@ -228,7 +228,7 @@ export default {
       this.action = "수정"
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/contact/" + manager.id,
+          "/api/contact/" + manager.id,
           {
             email: manager.email,
             level: manager.level,
@@ -250,7 +250,7 @@ export default {
       this.action = "삭제"
       try {
         const res = await axios.delete(
-          "http://163.180.117.38:8281/api/contact/" + this.deleteManagerId
+          "/api/contact/" + this.deleteManagerId
         );
         console.log(res);
         this.reloadManager();

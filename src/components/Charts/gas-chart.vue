@@ -150,8 +150,6 @@ export default {
             this.stompClient.subscribe(
               "/send/" + this.ssId,
               (res) => {
-                console.log("Sub Message.", res.body);
-                console.log(JSON.parse(res.body).inputData);
                 // sensorState : ex) 심각 -> 4
                 // ["안전","관심","주의","경고","심각"]
                 const state = JSON.parse(res.body).sensorState;

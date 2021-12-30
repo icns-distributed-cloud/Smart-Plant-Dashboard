@@ -1,20 +1,28 @@
 <template>
   <div class="background"
   :style="{
-    backgroundImage: 'url('+'http://163.180.117.38:8281/api/image?path='+this.currPos.positionImgPath+
-    '),url('+'http://163.180.117.38:8281/api/image?path='+this.currPos.backgroundImgPath+')',
+    backgroundImage: 'url('+'/api/image?path='+this.currPos.positionImgPath+
+    '),url('+'/api/image?path='+this.currPos.backgroundImgPath+')',
   }"
   >
   <div class="pos-nav-bar">
+    <div class="ssPos-wrapper">
       <div
         class="ssPos"
-        v-for="pos in ssPosList"
+        v-for="(pos, idx) in ssPosList"
         :key="pos.posId"
         @click="getPosSensor(pos.posId);
-        currPos = pos"
+        currPos = pos; currPosIdx = idx"
       >
         {{ pos.posName }}
       </div>
+    </div>
+    <div class="curr-ssPos-wrapper">
+      <div
+      class="curr-ssPos"
+      :style="{ left: (currPosIdx) * 80 + 'px' }"
+      ></div>
+    </div>
   </div>
 
   <div class="chart-wrapper">
@@ -107,6 +115,7 @@ export default {
       fireWarning : false,
       fireWarningInfo : {detectionUrl: ''},
       currPos: {},
+      currPosIdx: 0,
       infoList: [
         {
           color: "#5a8dee",
@@ -153,7 +162,7 @@ export default {
     async getPosList(isCreated=false) {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
+          "/api/sensor-pos?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
         this.ssPosList = res.data.data.content;
         if(isCreated) {
@@ -169,7 +178,7 @@ export default {
       this.displayGraph = "";
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-manage?posId=" + posId
+          "/api/sensor-manage?posId=" + posId
         );
         this.ssInfoList = res.data.data.content;
         this.makeSensorInfo();
@@ -179,7 +188,6 @@ export default {
     },
 
     makeSensorInfo() {
-      console.log(this.ssInfoList);
       for (var sensor of this.ssInfoList) {
         // default 값 설정
         sensor.value = 0;
@@ -212,7 +220,7 @@ export default {
   async getMoreInfo(sensor) {
     try {
       const res = await axios.get(
-        "http://163.180.117.38:8281/api/sensor-range/" + sensor.ssId
+        "/api/sensor-range/" + sensor.ssId
       )
       const result = res.data.data;
       sensor.range_list = [
@@ -238,13 +246,13 @@ export default {
         {},
         // connetCallback
         (frame) => {
-
+          console.log(frame)
           // 이상 데이터 발생하는 경우
           this.stompClient.subscribe("/alert", (res) => {
             console.log("======================WARNING======================");
-            console.log("Sub Message : ", res.body, frame);
             const state = JSON.parse(res.body).sensorState;
             this.warningInfo = JSON.parse(res.body);
+            console.log("~!~!~!~!",this.warningInfo);
             this.warningInfo.color = this.infoList[state].color;
             this.warningInfo.icon = this.infoList[state].icon;
             this.warningInfo.status = this.infoList[state].status;
@@ -327,12 +335,48 @@ export default {
 </script>
 <style>
 .pos-nav-bar {
-  display: flex;
   width: 100%;
   height: 50px;
+  display: flex;
+  flex-direction: column;
+  background-color: #00000024;
+}
+
+.ssPos-wrapper {
+  width: 100%;
+  height: 47px;
+  display: flex;
   align-items: center;
   justify-content: flex-start;
-  background-color: #00000024;
+}
+
+.ssPos {
+  width: 80px;
+  height: 100%;
+  line-height: 47px;
+  padding: 0px 15px;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.ssPos:hover {
+  background-color: #00000050;
+}
+
+.curr-ssPos-wrapper {
+  width: 100%;
+  height: 3px;
+}
+
+.curr-ssPos {
+  width: 80px;
+  height: 3px;
+  position: relative;
+  border-radius: 10px;
+  background-color: white;
+  transition: 0.2s;
 }
 
 .chart-wrapper {
@@ -432,6 +476,7 @@ export default {
   float: right;
   font-size: 18px;
   transition: text-shadow 0.5s;
+  cursor: pointer;
 }
 
 #hide_icon:hover {
@@ -490,8 +535,4 @@ export default {
   line-height: 25px;
 }
 
-.ssPos {
-  padding: 0px 15px;
-  color: white;
-}
 </style>

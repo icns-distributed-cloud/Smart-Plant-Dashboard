@@ -12,7 +12,7 @@
             </div>
             <div class="input-wrapper">
                 <label class="login-label" for="id">사용자 비밀번호(pw)</label>
-                <input type="text" class="form-control" placeholder="password" aria-label="password" aria-describedby="basic-addon1"
+                <input type="password" class="form-control" placeholder="password" aria-label="password" aria-describedby="basic-addon1"
                 style="width: 100%;"
                 v-model="currUser.password"
                 >
@@ -88,7 +88,7 @@ export default {
             console.log(userInfo);
             try {
                 const res = await axios.post(
-                    "http://163.180.117.38:8281/api/auth/signup",
+                    "/api/auth/signup",
                     {
                         email: userInfo.email,
                         name: userInfo.name,
@@ -108,7 +108,7 @@ export default {
             this.action = "로그인";
             try {
                 const res = await axios.post(
-                    "http://163.180.117.38:8281/api/auth/login",
+                    "/api/auth/login",
                     {
                         email: this.currUser.email,
                         password: this.currUser.password,

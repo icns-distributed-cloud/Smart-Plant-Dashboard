@@ -20,9 +20,9 @@
               <div class="col-12">
 
                 <div style="color: white; font-weight: bold; border-radius: 10px; padding: 5px; width: 100px; height: 30px;">
-                   센서 ID {{ ssId }}</div>
-                <div style="color: white; padding: 5px; font-weight: bold;">
-                  {{ sensorTypeName }} 센서</div>
+                   {{ sensorTypeName }} 센서</div>
+                <div style="color: #9fb0d6; padding: 5px; font-weight: 200;">
+                  센서의 이상 경고값 범위를 직접 입력해주세요</div>
 
                 <div class="block-wrapper">
                   <span class="block" v-for="(block, i) in infoList" :key="i"
@@ -104,17 +104,27 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-between;
-   
+  margin: 20px 0px;
 }
 
 .input-box {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
   width: 50px;
   height: 25px;
-  border-radius: 5px;
+  border-radius: 10px;
   text-align: center;
-  background-color: #00000010;
+  background-color: #ffffff20;
   color: white;
   font-weight: bold;
+  border: none;
+}
+
+.input-box:focus {
+  outline: none;
+  outline: 2px solid #9fb0d6;
 }
 
 .modal-wrapper {

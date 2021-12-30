@@ -42,7 +42,7 @@
         :style="{
           backgroundImage:
             'url(' +
-            'http://163.180.117.38:8281/api/image?path=' +
+            '/api/image?path=' +
             sopImgPath +
             ')',
         }"
@@ -211,7 +211,7 @@ export default {
     async getImagePath() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sop?level=" +
+          "/api/sop?level=" +
             this.levelId +
             "&situationId=" +
             this.situationId
@@ -224,7 +224,7 @@ export default {
     async getSituationName() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/situation/" + this.situationId
+          "/api/situation/" + this.situationId
         );
         console.log(res.data.data);
         this.situationName = res.data.data.name;
@@ -237,7 +237,7 @@ export default {
       this.situationId = this.$route.query.situationId;
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sop-detail?level=" +
+          "/api/sop-detail?level=" +
             this.$route.query.levelId +
             "&situationId=" +
             this.$route.query.situationId
@@ -257,7 +257,7 @@ export default {
         this.ContentList = [];
         for (var i in titleIdList) {
           const res = await axios.get(
-            "http://163.180.117.38:8281/api/sop-detail/content?titleId=" +
+            "/api/sop-detail/content?titleId=" +
               titleIdList[i]
           );
           const tempContList = res.data.data;
@@ -272,7 +272,7 @@ export default {
     async contentCheck(content) {
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sop-detail/content/complete/" +
+          "/api/sop-detail/content/complete/" +
             content.id
         );
         if (content.efunction == 1) {
@@ -290,7 +290,7 @@ export default {
     async sendMessage(contentId) {
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/message/send?contentId=" + contentId
+          "/api/message/send?contentId=" + contentId
         );
         console.log(res);
       } catch (err) {
@@ -300,7 +300,7 @@ export default {
     async sendEmail(contentId) {
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/mail/send?contentId=" + contentId
+          "/api/mail/send?contentId=" + contentId
         );
         console.log(res);
       } catch (err) {
@@ -310,7 +310,7 @@ export default {
     async SimulationEnd() {
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sop-detail/content/end?level=" +
+          "/api/sop-detail/content/end?level=" +
             this.$route.query.levelId +
             "&situationId=" +
             this.$route.query.situationId

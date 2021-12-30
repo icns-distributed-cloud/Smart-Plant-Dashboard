@@ -63,7 +63,7 @@
                   <label for="sensor_contact_ext">비밀번호</label>
                   <div class="main-input">
                     <input
-                      type="text"
+                      type="password"
                       class="form-control"
                       name="sensor_contact_ext"
                       placeholder="비밀번호"
@@ -82,7 +82,7 @@
                   <label for="sensor_contact_ext">비밀번호 확인</label>
                   <div class="main-input">
                     <input
-                      type="text"
+                      type="password"
                       class="form-control"
                       name="password_con"
                       placeholder="비밀번호 확인"

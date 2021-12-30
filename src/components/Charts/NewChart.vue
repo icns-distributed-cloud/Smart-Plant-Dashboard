@@ -11,21 +11,7 @@
         @click="smallView=false"
         ></i>
     </div>
-    <!--
-    <div class="chart-header">
-        <div class="chart-name-wrapper">
-            <i class="bi bi-bar-chart-fill"></i>
-            <span>{{ sensor.ssType.typeName }}</span>
-            <span>{{ sensor.ssCode }}</span>
-        </div>
-        <i v-if="!smallView" class="bi bi-caret-down-fill" id="hide_icon" style="margin-left: 10px; color: white;"
-        @click="smallView=true"
-        ></i>
-        <i v-if="smallView" id="hide_icon" class="bi bi-caret-up-fill" style="margin-left: 10px; color: white;"
-      @click="smallView=false"
-      ></i>
-    </div>
-    -->
+
     <div v-if="!smallView" class="large_view_content"
     style="position: relative; top: 10px; overflow: visible">
         <div class="value-wrapper">
@@ -115,15 +101,14 @@ export default {
 
     methods: {
         calculateBarVal() {
-            console.log("range_listlistlist",this.sensor.range_list);
             const maxLen = this.sensor.range_list[5] - this.sensor.range_list[0];
             for (var i = 0; i < 5; i++) {
                 var len = (this.sensor.range_list[i+1] - this.sensor.range_list[i]) / maxLen * 100 + "%";
                 this.bar_len_list[i] = len;
             }
-            console.log("bar_len_list",this.bar_len_list);
             this.calcVarPos();
         },
+
         calcVarPos() {
             const maxLen = this.sensor.range_list[5] - this.sensor.range_list[0];
             if (this.value < this.sensor.range_list[0]) {
@@ -134,10 +119,9 @@ export default {
         },
 
         async getMoreInfo() {
-            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             try {
             const res = await axios.get(
-                "http://163.180.117.38:8281/api/sensor-range/" + this.sensor.ssId
+                "/api/sensor-range/" + this.sensor.ssId
             )
             const result = res.data.data;
             this.sensor.range_list = [
@@ -148,7 +132,6 @@ export default {
                 result.rlev4,
                 result.rend
             ]
-            console.log(this.sensor.range_list);
             this.calculateBarVal();
             } catch(err) {
             console.log(err);
@@ -172,8 +155,6 @@ export default {
             this.stompClient.subscribe(
               "/send/" + this.ssId,
               (res) => {
-                console.log("Sub Message.", res.body);
-                console.log(JSON.parse(res.body).inputData);
                 // sensorState : ex) 심각 -> 4
                 // ["안전","관심","주의","경고","심각"]
                 const state = JSON.parse(res.body).sensorState;
@@ -198,7 +179,6 @@ export default {
     },
 
     send() {
-        //console.log("send : " + sensor.ssId);
         if (this.stompClient && this.stompClient.connected) {
           const msg = {
             ssId: this.ssId,
@@ -288,7 +268,6 @@ export default {
     font-size: 1rem;
     position: relative;
     margin-left: 10px;
-    /*top: 50%;*/
     line-height: 100px;
 }
 
@@ -318,7 +297,9 @@ export default {
 
 .status-triangle {
   width: 0px; height: 0px;
-  border-bottom:1rem solid none;
+  position: relative;
+  left: -20px;
+  border-bottom: 1rem solid none;
   border-top: 1rem solid rgba(26, 35, 58, 1);
   border-right: 0.35rem solid transparent;
   border-left: 0.35rem solid  transparent;

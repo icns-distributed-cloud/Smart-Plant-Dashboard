@@ -134,7 +134,7 @@ export default {
     async getCCTVInfo() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/cctv?pageSize=1&paged=true&sort.sorted=true"
+          "/api/cctv?pageSize=1&paged=true&sort.sorted=true"
         );
         this.cctvList = res.data.data.content;
         if (this.cctvList.length === 0) {
@@ -166,7 +166,7 @@ export default {
     async deleteCCTV(cctvId) {
       try {
         const res = await axios.delete(
-          "http://163.180.117.38:8281/api/cctv/" + cctvId
+          "/api/cctv/" + cctvId
         );
         console.log(res);
         this.getCCTVInfo();
@@ -197,7 +197,7 @@ export default {
           "ws://163.180.117.40:" + this.normalStreamPortNumber;
         var abnormal_websocket_string =
           "ws://163.180.117.40:" + this.abneormalStreamPortNumber;
-        const res = await axios.post("http://163.180.117.38:8281/api/cctv/", {
+        const res = await axios.post("/api/cctv/", {
           posId: newCCTV.posId,
           password: newCCTV.password,
           streamURL: newCCTV.streamURL,
@@ -241,17 +241,7 @@ export default {
 .table {
   color: #464d5c;
 }
-.table-main {
-  margin: 20px;
-  background-color: #272e48;
-  color: #bdd1f8;
-  border-radius: 9px;
-  height: 600px;
-}
-.table-main__header {
-  padding: 20px;
-  font-size: 20px;
-}
+
 .table-main__content {
   margin: 0 20px;
   color: #8a99b5;

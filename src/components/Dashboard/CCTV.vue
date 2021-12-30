@@ -95,7 +95,7 @@ export default {
     async getCCTVInfo() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/cctv?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
+          "/api/cctv?pageSize=1&paged=true&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
         this.cctvList = res.data.data.content;
         this.cctvListLength = this.cctvList.length;
@@ -213,18 +213,7 @@ export default {
   color: #727e8c;
   font-size: 20px;
 }
-.table-main {
-  margin: 20px;
-  background-color: #272e48;
-  color: #a9c7f0;
-  border-radius: 9px;
-  height: 600px;
-}
 
-.table-main__header {
-  padding: 20px;
-  font-size: 20px;
-}
 .cctv-view {
   margin: 0 10%;
 }

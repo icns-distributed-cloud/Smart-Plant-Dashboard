@@ -102,16 +102,4 @@ export default {
   color: #727e8c;
   font-size: 20px;
 }
-
-.table-main {
-  margin: 20px;
-  background-color: #272e48;
-  color: #a9c7f0;
-  border-radius: 9px;
-  height: 600px;
-}
-.table-main__header {
-  padding: 20px;
-  font-size: 20px;
-}
 </style>

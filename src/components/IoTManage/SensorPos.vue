@@ -55,7 +55,7 @@ export default {
     async getSensorPos() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-pos"
+          "/api/sensor-pos"
         );
         this.posList = res.data.data.content;
       } catch (err) {
@@ -66,7 +66,7 @@ export default {
     async getPosSensor(posId) {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-manage?posId=" + posId
+          "/api/sensor-manage?posId=" + posId
         );
         this.sensorList = res.data.data.content;
       } catch (err) {
@@ -105,15 +105,4 @@ export default {
   font-size: 20px;
 }
 
-.table-main {
-  margin: 20px;
-  background-color: #272e48;
-  color: #a9c7f0;
-  border-radius: 9px;
-}
-
-.table-main__header {
-  padding: 20px;
-  font-size: 20px;
-}
 </style>

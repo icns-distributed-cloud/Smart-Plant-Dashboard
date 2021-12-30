@@ -147,7 +147,7 @@ router.beforeEach(async (to, from, next) => {
       // 토큰이 있는 경우
       try {
         // 토큰의 유효성을 검사함
-        const res = await axios.get("http://163.180.117.38:8281/api/auth", {
+        const res = await axios.get("/api/auth", {
           headers: {
             Authorization: "Bearer " + token,
           },

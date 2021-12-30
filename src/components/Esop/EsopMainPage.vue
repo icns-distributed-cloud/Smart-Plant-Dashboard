@@ -125,7 +125,7 @@ export default {
     async getSituationInfo() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/situation/"
+          "/api/situation/"
         );
         this.situationList = res.data.data;
       } catch (err) {

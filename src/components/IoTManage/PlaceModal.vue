@@ -176,7 +176,7 @@ export default {
       var frm = new FormData();
       var imgFile = document.getElementById("position-img");
       frm.append("backgroundImg", imgFile.files[0]);
-      axios.post("http://163.180.117.38:8281/api/sensor-pos?posCode="+newPos.posCode
+      axios.post("/api/sensor-pos?posCode="+newPos.posCode
       +"&posDtl="+newPos.posDtl+"&posName="+newPos.posName,
       frm, {
         headers: {
@@ -202,7 +202,7 @@ export default {
     async getSensorPos() {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sensor-pos?paged=false&sort.sorted=true&sort.unsorted=false&unpaged=true"
+          "/api/sensor-pos?paged=false&sort.sorted=true&sort.unsorted=false&unpaged=true"
         );
         this.sensorPosList = res.data.data.content;
       } catch (err) {
@@ -217,7 +217,7 @@ export default {
       this.action="등록";
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/sensor-pos",
+          "/api/sensor-pos",
           {
             posName: pName,
             posDtl: pDtl,
@@ -246,7 +246,7 @@ export default {
       this.action = "수정";
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/sensor-pos/" + pos.posId,
+          "/api/sensor-pos/" + pos.posId,
           {
             posName: pos.posName,
             posDtl: pos.posDtl,
@@ -268,7 +268,7 @@ export default {
       var frm = new FormData();
       var imgFile = document.getElementById("position-img");
       frm.append("backgroundImg", imgFile.files[0]);
-      axios.post("http://163.180.117.38:8281/api/sensor-pos/background-img/"+newPos.posId,
+      axios.post("/api/sensor-pos/background-img/"+newPos.posId,
       frm, {
         headers: {
           'Content-Type' : 'multipart/form-data'
@@ -289,7 +289,7 @@ export default {
       this.action = "삭제";
       try {
         const res = await axios.delete(
-          "http://163.180.117.38:8281/api/sensor-pos/" + posId
+          "/api/sensor-pos/" + posId
         );
         console.log(res);
         this.alertSuccess=true;

@@ -495,7 +495,7 @@ export default {
       try {
         // MODIFY !!!!!
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/sop?level="+this.current.level
+          "/api/sop?level="+this.current.level
           +"&situationId="+this.current.situationId
         );
         if (res.data.data.diagram != null) {
@@ -516,7 +516,7 @@ export default {
     async getSituationList(created=false) {
       try {
         const res = await axios.get(
-          "http://163.180.117.38:8281/api/situation"
+          "/api/situation"
         );
         this.situationList = res.data.data;
         if (created && this.situationList.length != 0) {
@@ -530,7 +530,7 @@ export default {
     async addSituation() {
       try {
         const res = await axios.post(
-          "http://163.180.117.38:8281/api/situation",
+          "/api/situation",
           {
             name: this.newSituationName
           }
@@ -547,7 +547,7 @@ export default {
       console.log(situationId);
       try {
         const res = await axios.put(
-          "http://163.180.117.38:8281/api/situation/" + situationId,
+          "/api/situation/" + situationId,
           {
             name: this.currModifyName
           }
@@ -562,7 +562,7 @@ export default {
     async deleteSituation() {
       try {
         const res = await axios.delete(
-          "http://163.180.117.38:8281/api/situation/" + this.currDeleteId
+          "/api/situation/" + this.currDeleteId
         );
         console.log(res);
         this.getSituationList();

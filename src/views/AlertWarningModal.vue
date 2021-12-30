@@ -16,7 +16,7 @@
             <div class="row" style="text-align: center;">
                 <h4 style="color: white; font-weight: bold;">
                     <div style="padding-bottom: 15px;">{{ warningInfo.posName }} 구역에서</div>
-                    <div>{{ warningInfo.ssCode }} 센서가
+                    <div>{{ warningInfo.typeName }} 센서가
                         <span :style="{color: warningInfo.color}">{{ warningInfo.status }}</span>
                         상태입니다.</div>
                 </h4>

@@ -91,7 +91,7 @@ export default {
     async getPosList(created=false) {
       try {
         const res = await axios.get(
-          'http://163.180.117.38:8281/api/sensor-pos'
+          '/api/sensor-pos'
         );
         this.posList = res.data.data.content;
         if (created) {
@@ -143,10 +143,6 @@ li {
 }
 a {
   color: #42b983;
-}
-
-.table-main {
-  padding-bottom: 10px;
 }
 
 .MainPage{

@@ -4,29 +4,16 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">
-            {{ currPos.posName }} 구역 조감도 이미지 재등록
+            SOP 시나리오 불러오기
           </h5>
-          <button
-            type="button"
-            class="btn-close btn-close-white close"
-            aria-label="Close"
-            @click="$emit('close-add-modal')"
-          ></button>
         </div>
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="onSubmit" v-if="editing===true" id="add-pos-modal">
           <div class="modal-body">
             <div class="form-body" style="margin-top:10px">
               <div class="row">
                 <div class="col-12">
-                 <label for="pos_dtl">이전 이미지</label>
-                <div class="show-background-img"
-                :style="{ backgroundImage: 'url('+'/api/image?path='+this.newPos.backgroundImgPath+')' }"
-                ></div>
-                </div>
-
-                <div class="col-12">
                   <div class="form-label-group position-relative has-icon-left">
-                    <label for="pos_dtl">새로운 이미지 등록</label>
+                    <label for="pos_dtl">시나리오 선택</label>
                     <div class="main-input">
                       <input
                         autocomplete="off"
@@ -49,16 +36,17 @@
               type="submit"
               class="btn btn-primary"
               @click="
-                $emit('edit-pos-img', newPos);
-                $emit('close-edit-modal');
+                submitForm();
+                $emit('add-new-pos', newScenario);
+                $emit('close-add-modal');
               "
             >
-              저장
+              불러오기
             </button>
             <button
               type="button"
               class="btn btn-secondary"
-              @click="$emit('close-edit-modal')"
+              @click="$emit('close-sop-doc')"
             >
               닫기
             </button>
@@ -71,34 +59,22 @@
 
 <script>
 export default {
-    created(){
-        this.newPos.posId = this.currPos.posId;
-        this.newPos.posName = this.currPos.posName;
-        this.newPos.posDtl = this.currPos.posDtl;
-        this.newPos.posCode = this.currPos.posCode;
-        this.newPos.backgroundImgPath = this.currPos.backgroundImgPath;
-    },
-    data() {
-        return {
-        newPos: {},
-        };
-    },
-    props: {
-        currPos: Object,
+  data() {
+    return {
+      newPos: { posName: "", posDtl: "", posCode: "" },
+      editing: true,
+    };
+  },
+  methods: {
+    submitForm: () => {
+      var form = document.getElementById("add-pos-modal");
+      document.body.appendChild(form);
     }
+  }
 };
 </script>
 
 <style>
-.show-background-img {
-  width: 400px;
-  height: 225px;
-  background-size: 100% auto;
-  background-position: center top;
-  background-repeat: no-repeat;
-  margin: 0px auto;
-}
-
 .modal-wrapper {
   position: fixed;
   z-index: 100;
